@@ -1,0 +1,57 @@
+---
+import { getEvents } from "../lib/api/events";
+import type { Event } from "../lib/api/events";
+
+let response;
+let error;
+
+try {
+  console.log("Fetching events from Strapi...");
+  response = await getEvents({
+    pagination: {
+      pageSize: 10,
+      page: 1,
+    },
+  });
+
+  console.log("Response:", JSON.stringify(response, null, 2));
+} catch (err) {
+  error = err;
+  console.error("Error fetching events:", err);
+  if (err instanceof Error) {
+    console.log("Error details:", err.message);
+  }
+}
+---
+
+<div class="p-8">
+  <h1 class="text-2xl font-bold mb-4">API Test Page</h1>
+  <p>Check the terminal/console for the API response.</p>
+  <p class="mt-2 text-gray-600">
+    Open your browser's developer tools (F12) to see the console output.
+  </p>
+
+  {
+    error && (
+      <div class="mt-4 p-4 bg-red-100 text-red-700 rounded">
+        <p>
+          Error:{" "}
+          {error instanceof Error ? error.message : "Unknown error occurred"}
+        </p>
+      </div>
+    )
+  }
+
+  {
+    response && (
+      <div class="mt-4">
+        <h2 class="text-xl font-semibold mb-2">
+          Events Found: {response.data.length}
+        </h2>
+        <pre class="bg-gray-100 p-4 rounded overflow-auto">
+          {JSON.stringify(response, null, 2)}
+        </pre>
+      </div>
+    )
+  }
+</div>
