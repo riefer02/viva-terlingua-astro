@@ -1,26 +1,26 @@
 ---
-import strapi from "../lib/api/strapi-client";
+import strapi from '../lib/api/strapi-client';
 
 let response;
 let error;
 
 try {
-  console.log("Fetching events from Strapi...");
-  response = await strapi.find("events", {
+  console.log('Fetching events from Strapi...');
+  response = await strapi.find('events', {
     pagination: {
       page: 1,
       pageSize: 10,
     },
-    sort: ["startDateTime:desc"],
-    populate: "*",
+    sort: ['startDateTime:desc'],
+    populate: '*',
   });
 
-  console.log("Response:", JSON.stringify(response, null, 2));
+  console.log('Response:', JSON.stringify(response, null, 2));
 } catch (err) {
   error = err;
-  console.error("Error fetching events:", err);
+  console.error('Error fetching events:', err);
   if (err instanceof Error) {
-    console.log("Error details:", err.message);
+    console.log('Error details:', err.message);
   }
 }
 ---
@@ -32,10 +32,7 @@ try {
   {
     error && (
       <div class="mt-4 p-4 bg-red-100 text-red-700 rounded">
-        <p>
-          Error:{" "}
-          {error instanceof Error ? error.message : "Unknown error occurred"}
-        </p>
+        <p>Error: {error instanceof Error ? error.message : 'Unknown error occurred'}</p>
       </div>
     )
   }
@@ -43,9 +40,7 @@ try {
   {
     response && (
       <div class="mt-4">
-        <pre class="bg-gray-100 p-4 rounded overflow-auto">
-          {JSON.stringify(response, null, 2)}
-        </pre>
+        <pre class="bg-gray-100 p-4 rounded overflow-auto">{JSON.stringify(response, null, 2)}</pre>
       </div>
     )
   }

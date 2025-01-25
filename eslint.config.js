@@ -1,35 +1,36 @@
-import js from "@eslint/js";
-import tsParser from "@typescript-eslint/parser";
-import tsPlugin from "@typescript-eslint/eslint-plugin";
-import eslintPluginAstro from "eslint-plugin-astro";
-import astroParser from "astro-eslint-parser";
+import js from '@eslint/js';
+import tsParser from '@typescript-eslint/parser';
+import tsPlugin from '@typescript-eslint/eslint-plugin';
+import eslintPluginAstro from 'eslint-plugin-astro';
+import astroParser from 'astro-eslint-parser';
+import prettier from 'eslint-config-prettier';
 
 export default [
   js.configs.recommended,
   ...eslintPluginAstro.configs.recommended,
   {
-    files: ["**/*.ts", "**/*.tsx"],
+    files: ['**/*.ts', '**/*.tsx'],
     languageOptions: {
       parser: tsParser,
       parserOptions: {
-        project: "./tsconfig.json",
+        project: './tsconfig.json',
       },
     },
     plugins: {
-      "@typescript-eslint": tsPlugin,
+      '@typescript-eslint': tsPlugin,
     },
     rules: {
       ...tsPlugin.configs.recommended.rules,
     },
   },
   {
-    files: ["**/*.astro"],
+    files: ['**/*.astro'],
     languageOptions: {
       parser: astroParser,
       parserOptions: {
         parser: tsParser,
-        extraFileExtensions: [".astro"],
-        sourceType: "module",
+        extraFileExtensions: ['.astro'],
+        sourceType: 'module',
       },
     },
     plugins: {
@@ -37,14 +38,15 @@ export default [
     },
   },
   {
-    files: ["**/*.mjs", "**/*.cjs"],
+    files: ['**/*.mjs', '**/*.cjs'],
     languageOptions: {
       globals: {
-        require: "readonly",
+        require: 'readonly',
       },
     },
   },
   {
-    ignores: ["dist/**", "node_modules/**"],
+    ignores: ['dist/**', 'node_modules/**'],
   },
+  prettier,
 ];
