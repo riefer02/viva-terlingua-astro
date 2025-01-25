@@ -17,6 +17,7 @@
     "astro": "^5.1.7",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "strapi-sdk-js": "^2.3.3",
     "tailwindcss": "^3.4.17"
   }
 }
