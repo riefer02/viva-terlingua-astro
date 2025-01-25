@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
-# Run lint-staged
+# Run lint-staged (handles linting and formatting)
 pnpm lint-staged
 
 # Run tests
-pnpm vitest run --changed
+pnpm test:ci
