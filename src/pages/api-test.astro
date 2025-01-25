@@ -32,7 +32,10 @@ try {
   {
     error && (
       <div class="mt-4 p-4 bg-red-100 text-red-700 rounded">
-        <p>Error: {error instanceof Error ? error.message : 'Unknown error occurred'}</p>
+        <p>
+          Error:{' '}
+          {error instanceof Error ? error.message : 'Unknown error occurred'}
+        </p>
       </div>
     )
   }
@@ -40,7 +43,9 @@ try {
   {
     response && (
       <div class="mt-4">
-        <pre class="bg-gray-100 p-4 rounded overflow-auto">{JSON.stringify(response, null, 2)}</pre>
+        <pre class="bg-gray-100 p-4 rounded overflow-auto">
+          {JSON.stringify(response, null, 2)}
+        </pre>
       </div>
     )
   }
