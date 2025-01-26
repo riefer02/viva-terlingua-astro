@@ -1,5 +1,13 @@
 ---
-import strapi from '../lib/api/strapi-client';
+import Layout from '@/layouts/Layout.astro';
+import strapi from '@/lib/api/strapi-client';
+
+// SEO configuration for this page
+const seoConfig = {
+  title: 'API Test',
+  description: 'Testing Strapi API integration and responses',
+  noindex: true, // We don't want search engines to index this test page
+};
 
 let response;
 let error;
@@ -25,28 +33,30 @@ try {
 }
 ---
 
-<div class="p-8">
-  <h1 class="text-2xl font-bold mb-4">API Test Page</h1>
-  <p class="mb-4">Raw API Response:</p>
+<Layout {...seoConfig}>
+  <main class="container mx-auto px-4 py-8">
+    <h1 class="text-4xl font-bold mb-6">API Test Page</h1>
+    <p class="text-lg mb-6">Raw API Response:</p>
 
-  {
-    error && (
-      <div class="mt-4 p-4 bg-red-100 text-red-700 rounded">
-        <p>
-          Error:{' '}
-          {error instanceof Error ? error.message : 'Unknown error occurred'}
-        </p>
-      </div>
-    )
-  }
+    {
+      error && (
+        <div class="mt-4 p-4 bg-red-100 text-red-700 rounded-lg">
+          <p class="font-medium">
+            Error:{' '}
+            {error instanceof Error ? error.message : 'Unknown error occurred'}
+          </p>
+        </div>
+      )
+    }
 
-  {
-    response && (
-      <div class="mt-4">
-        <pre class="bg-gray-100 p-4 rounded overflow-auto">
-          {JSON.stringify(response, null, 2)}
-        </pre>
-      </div>
-    )
-  }
-</div>
+    {
+      response && (
+        <div class="mt-4">
+          <pre class="bg-gray-100 p-6 rounded-lg overflow-auto max-h-[600px] text-sm">
+            {JSON.stringify(response, null, 2)}
+          </pre>
+        </div>
+      )
+    }
+  </main>
+</Layout>

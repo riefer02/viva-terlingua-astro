@@ -1,12 +1,13 @@
 import Strapi from 'strapi-sdk-js';
+import config from '@/config/site';
 
 // Create a new instance of the Strapi client
 const strapi = new Strapi({
-  url: import.meta.env.STRAPI_URL || 'http://localhost:1337',
+  url: config.strapi.url,
   prefix: '/api',
   axiosOptions: {
     headers: {
-      Authorization: `Bearer ${import.meta.env.STRAPI_API_TOKEN}`,
+      Authorization: `Bearer ${config.strapi.apiToken}`,
     },
   },
 });

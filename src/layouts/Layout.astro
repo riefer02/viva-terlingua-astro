@@ -1,11 +1,11 @@
 ---
 import '@/styles/globals.css';
+import { generateSEO, type SEOProps } from '@/utils/seo';
 
-interface Props {
-  title?: string;
-}
+interface Props extends SEOProps {}
 
-const { title = 'A Bowl of Red' } = Astro.props;
+const props = Astro.props;
+const seo = generateSEO(props);
 ---
 
 <!doctype html>
@@ -15,13 +15,35 @@ const { title = 'A Bowl of Red' } = Astro.props;
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="prpeconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap"
       rel="stylesheet"
     />
     <meta name="generator" content={Astro.generator} />
-    <title>{title}</title>
+    <title>{seo.title}</title>
+    <meta name="description" content={seo.description} />
+    <meta name="robots" content={seo.robots} />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={seo.openGraph.title} />
+    <meta property="og:description" content={seo.openGraph.description} />
+    <meta property="og:type" content={seo.openGraph.type} />
+    <meta property="og:url" content={Astro.url} />
+    <meta property="og:image" content={seo.openGraph.images[0].url} />
+    <meta property="og:image:alt" content={seo.openGraph.images[0].alt} />
+    <meta
+      property="og:image:width"
+      content={seo.openGraph.images[0].width.toString()}
+    />
+    <meta
+      property="og:image:height"
+      content={seo.openGraph.images[0].height.toString()}
+    />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content={seo.twitter.card} />
+    <meta name="twitter:creator" content={seo.twitter.creator} />
   </head>
   <body>
     <slot />

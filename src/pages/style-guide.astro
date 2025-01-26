@@ -10,13 +10,25 @@ import {
   CardFooter,
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+
+// Example of custom SEO configuration for the style guide
+const customSEO = {
+  title: 'Style Guide',
+  description:
+    'A comprehensive guide to the design system and components used in the Original Terlingua International Championship Chili Cook-off website.',
+  // Example of how to override the default image
+  image: '/style-guide-preview.png',
+  noindex: true, // We don't want search engines to index this test page
+};
 ---
 
-<Layout title="Style Guide">
+<Layout {...customSEO}>
   <main class="container mx-auto p-4">
     <h1 class="text-4xl font-extrabold tracking-tight lg:text-5xl mb-8">
       Style Guide
     </h1>
+
+    <!-- Rest of the style guide content -->
     <div class="space-y-12">
       <!-- Typography Section -->
       <div class="space-y-6">
