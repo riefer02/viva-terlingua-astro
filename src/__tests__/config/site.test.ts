@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import config, { type SiteConfig } from '../site';
+import config, { type SiteConfig } from '../../config/site';
 
 describe('Site Configuration', () => {
   beforeEach(() => {
