@@ -2,11 +2,66 @@
 import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
 import config from '@/config/site';
+import strapi from '@/lib/api/strapi-client';
+import { getStrapiImageUrl, type StrapiImage } from '@/utils/image';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+interface HomePageData {
+  id: number;
+  title: string;
+  primaryText: string;
+  secondaryText: string;
+  updatedAt: string;
+  publishedAt: string;
+  documentId: string;
+  featured: {
+    id: number;
+    featuresList: any[];
+  };
+  meta: {
+    id: number;
+    title: string;
+    description: string;
+    image: StrapiImage;
+  };
+  marqueeImage: StrapiImage;
+  panelImage: StrapiImage;
+}
 
-// Using the default SEO configuration from site config
+const { data } = await strapi.find<HomePageData>('home-page', {
+  populate: {
+    featured: {
+      populate: {
+        featuresList: {
+          populate: {
+            image: {
+              populate: '*',
+            },
+          },
+        },
+      },
+    },
+    meta: {
+      populate: '*',
+    },
+    marqueeImage: {
+      populate: '*',
+    },
+    panelImage: {
+      populate: '*',
+    },
+  },
+});
+
+// Example of how to use the image utility
+const marqueeImageUrl = getStrapiImageUrl(data.marqueeImage);
+const marqueeImageThumbnail = getStrapiImageUrl(data.marqueeImage, 'thumbnail');
+const panelImageUrl = getStrapiImageUrl(data.panelImage);
+const metaImageUrl = getStrapiImageUrl(data.meta?.image);
+
+console.log('Full Marquee Image URL:', marqueeImageUrl);
+console.log('Thumbnail Marquee Image URL:', marqueeImageThumbnail);
+console.log('Panel Image URL:', panelImageUrl);
+console.log('Meta Image URL:', metaImageUrl);
 ---
 
 <Layout title={config.title} description={config.description}>
