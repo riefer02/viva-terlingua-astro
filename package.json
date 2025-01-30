@@ -29,6 +29,8 @@
   "dependencies": {
     "@astrojs/netlify": "^6.1.0",
     "@astrojs/react": "^4.2.0",
+    "@radix-ui/react-dialog": "^1.1.5",
+    "@radix-ui/react-navigation-menu": "^1.2.4",
     "@radix-ui/react-slot": "^1.1.1",
     "@strapi/sdk-js": "1.0.0-beta.0",
     "@tailwindcss/vite": "^4.0.1",
