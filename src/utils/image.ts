@@ -1,26 +1,17 @@
 import config from '@/config/site';
+import type { HomePage } from '@/types/strapi';
 
-export interface StrapiImage {
-  url: string;
-  width?: number;
-  height?: number;
-  formats?: {
-    thumbnail?: { url: string };
-    small?: { url: string };
-    medium?: { url: string };
-    large?: { url: string };
-  };
-}
+type StrapiImageType = NonNullable<HomePage['marqueeImage']>;
 
 export function getStrapiImageUrl(
-  image: StrapiImage | null | undefined,
+  image: StrapiImageType | null | undefined,
   format?: 'thumbnail' | 'small' | 'medium' | 'large'
 ): string {
-  if (!image) return '';
+  if (!image?.url) return '';
 
   let imageUrl = '';
 
-  if (format && image.formats && image.formats[format]) {
+  if (format && image.formats && image.formats[format]?.url) {
     imageUrl = image.formats[format].url;
   } else {
     imageUrl = image.url;

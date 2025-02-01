@@ -1,33 +1,11 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
+import HeroMarquee from '../components/HeroMarquee.astro';
 import config from '@/config/site';
 import strapi from '@/lib/api/strapi-client';
-import { getStrapiImageUrl, type StrapiImage } from '@/utils/image';
+import type { HomePageResponse, HomePage } from '@/types/strapi';
 
-interface HomePageData {
-  id: number;
-  title: string;
-  primaryText: string;
-  secondaryText: string;
-  updatedAt: string;
-  publishedAt: string;
-  documentId: string;
-  featured: {
-    id: number;
-    featuresList: any[];
-  };
-  meta: {
-    id: number;
-    title: string;
-    description: string;
-    image: StrapiImage;
-  };
-  marqueeImage: StrapiImage;
-  panelImage: StrapiImage;
-}
-
-const { data } = await strapi.find<HomePageData>('home-page', {
+const response = await strapi.find<HomePageResponse>('home-page', {
   populate: {
     featured: {
       populate: {
@@ -52,18 +30,13 @@ const { data } = await strapi.find<HomePageData>('home-page', {
   },
 });
 
-// Example of how to use the image utility
-const marqueeImageUrl = getStrapiImageUrl(data.marqueeImage);
-const marqueeImageThumbnail = getStrapiImageUrl(data.marqueeImage, 'thumbnail');
-const panelImageUrl = getStrapiImageUrl(data.panelImage);
-const metaImageUrl = getStrapiImageUrl(data.meta?.image);
+if (!response.data) {
+  throw new Error('Homepage data not found');
+}
 
-console.log('Full Marquee Image URL:', marqueeImageUrl);
-console.log('Thumbnail Marquee Image URL:', marqueeImageThumbnail);
-console.log('Panel Image URL:', panelImageUrl);
-console.log('Meta Image URL:', metaImageUrl);
+const pageData = response.data as HomePage;
 ---
 
 <Layout title={config.title} description={config.description}>
-  <Welcome />
+  <HeroMarquee data={pageData} />
 </Layout>
