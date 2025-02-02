@@ -3,6 +3,7 @@ import Layout from '@/layouts/Layout.astro';
 import HeroMarquee from '@/components/HeroMarquee.astro';
 import Sponsors from '@/components/Sponsors.astro';
 import Resources from '@/components/Resources.astro';
+import Quote from '@/components/Quote.astro';
 import config from '@/config/site';
 import strapi from '@/lib/api/strapi-client';
 import type { HomePageResponse, HomePage } from '@/types/strapi';
@@ -29,6 +30,9 @@ const response = await strapi.find<HomePageResponse>('home-page', {
     panelImage: {
       populate: '*',
     },
+    quoteContent: {
+      populate: '*',
+    },
   },
 });
 
@@ -42,5 +46,6 @@ const pageData = response.data as HomePage;
 <Layout title={config.title} description={config.description}>
   <HeroMarquee data={pageData} />
   <Sponsors />
+  {pageData.quoteContent && <Quote quote={pageData.quoteContent} />}
   <Resources />
 </Layout>
