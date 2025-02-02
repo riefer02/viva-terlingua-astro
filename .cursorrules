@@ -37,6 +37,7 @@ src/
 
    - Use Tailwind classes with design tokens from `globals.css`
    - Follow the established color scheme:
+   - Reference the style guide page (`/style-guide`) for typography examples and component usage demonstrations
 
    ```css
    /* Reference from src/styles/globals.css lines 98-123 */
@@ -58,6 +59,7 @@ src/
 - Use the Strapi client from `lib/api/strapi-client`
 - Reference type definitions in `types/strapi.ts`
 - Handle loading and error states appropriately
+- When using the Strapi SDK, always specify the response type (e.g. `strapi.find<SponsorsSponsorResponse>('sponsors', {...})`) to ensure proper typing of the response data
 
 ### Best Practices
 
