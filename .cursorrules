@@ -1,0 +1,105 @@
+# Project Guidelines and Structure
+
+## Project Overview
+
+This is an Astro project utilizing Tailwind CSS v4 and Shadcn/ui components, with a Strapi backend integration. The project follows a modern web architecture pattern with strong typing and comprehensive testing.
+
+## Code Style Principles
+
+- Write self-documenting code following senior engineering practices
+- Maintain strict TypeScript usage throughout
+- Reference `globals.css` for project-wide styling and design tokens
+- Utilize Strapi types from `@types/strapi.ts` for backend data structures
+- Follow the established commit convention (referenced in README.md, lines 80-89)
+
+## Project Structure
+
+```text
+src/
+├── assets/         # Static assets (images, fonts)
+├── components/     # Reusable UI components
+│   └── ui/        # Shadcn/ui components
+├── config/        # Project configuration (site.ts)
+├── layouts/       # Page layouts and templates
+├── lib/          # Core business logic and API clients
+├── utils/        # Helper functions (seo.ts, image.ts)
+├── pages/        # Astro pages and API routes
+├── styles/       # Global styles and Tailwind config
+├── types/        # TypeScript definitions
+└── tests/        # Test files and utilities
+```
+
+## Key Development Guidelines
+
+### Component Development
+
+1. **Styling**
+
+   - Use Tailwind classes with design tokens from `globals.css`
+   - Follow the established color scheme:
+
+   ```css
+   /* Reference from src/styles/globals.css lines 98-123 */
+   ```
+
+2. **Type Safety**
+
+   - Leverage generated Strapi types for data structures
+   - Run `pnpm generate:types` when Strapi schema changes
+   - Use strict typing for component props
+
+3. **Testing**
+   - Co-locate tests with components
+   - Follow testing conventions from README.md
+   - Ensure proper coverage for business logic
+
+### API Integration
+
+- Use the Strapi client from `lib/api/strapi-client`
+- Reference type definitions in `types/strapi.ts`
+- Handle loading and error states appropriately
+
+### Best Practices
+
+1. **Performance**
+
+   - Optimize images using Astro's built-in tools
+   - Implement proper loading states
+   - Use client directives sparingly
+   - Use Astro components (.astro) for static content without reactive state
+   - Use React components (.tsx) only when reactive state or client-side interactivity is required
+   - Leverage Astro v5 features and optimizations for best performance
+
+2. **SEO**
+
+   - Utilize the SEO utility from `src/utils/seo.ts`
+
+3. **Code Quality**
+   - Follow ESLint and Prettier configurations
+   - Use pre-commit hooks for code quality
+   - Follow the established commit convention
+
+## Environment Setup
+
+- Required Node.js version: 18+
+- Package manager: pnpm
+- Environment variables must be properly configured
+
+## Important Commands
+
+```bash
+pnpm dev          # Development server
+pnpm build        # Production build
+pnpm test         # Run tests
+pnpm generate:types # Generate Strapi types
+```
+
+## Additional Notes
+
+- Reference the style guide page for component examples
+- Consult `components.json` for Shadcn/ui configuration
+- Follow the established Git workflow and commit conventions
+- Ensure proper error handling and type safety
+- Keep the codebase lean and maintainable
+
+Remember to maintain code quality and consistency throughout the project while keeping the codebase lean and efficient.
