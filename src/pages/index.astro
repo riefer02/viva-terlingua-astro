@@ -2,6 +2,7 @@
 import Layout from '@/layouts/Layout.astro';
 import HeroMarquee from '@/components/HeroMarquee.astro';
 import Sponsors from '@/components/Sponsors.astro';
+import Resources from '@/components/Resources.astro';
 import config from '@/config/site';
 import strapi from '@/lib/api/strapi-client';
 import type { HomePageResponse, HomePage } from '@/types/strapi';
@@ -41,4 +42,5 @@ const pageData = response.data as HomePage;
 <Layout title={config.title} description={config.description}>
   <HeroMarquee data={pageData} />
   <Sponsors />
+  <Resources />
 </Layout>

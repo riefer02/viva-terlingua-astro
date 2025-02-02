@@ -98,6 +98,21 @@ export interface AboutPageRequest {
 export type AboutPageRequestCollection = StrapiCollection<AboutPageRequest>;
 export type AboutPageRequestEntity = StrapiEntity<AboutPageRequest>;
 
+export interface AboutPageListResponse {
+  data?: AboutPage[];
+  meta?: {
+    pagination?: {
+    page?: number;
+    pageSize?: number;
+    pageCount?: number;
+    total?: number;
+  };
+  };
+}
+
+export type AboutPageListResponseCollection = StrapiCollection<AboutPageListResponse>;
+export type AboutPageListResponseEntity = StrapiEntity<AboutPageListResponse>;
+
 export interface AboutPage {
   id?: number;
   documentId?: string;
@@ -491,6 +506,21 @@ export interface BlogRequest {
 export type BlogRequestCollection = StrapiCollection<BlogRequest>;
 export type BlogRequestEntity = StrapiEntity<BlogRequest>;
 
+export interface BlogListResponse {
+  data?: Blog[];
+  meta?: {
+    pagination?: {
+    page?: number;
+    pageSize?: number;
+    pageCount?: number;
+    total?: number;
+  };
+  };
+}
+
+export type BlogListResponseCollection = StrapiCollection<BlogListResponse>;
+export type BlogListResponseEntity = StrapiEntity<BlogListResponse>;
+
 export interface Blog {
   id?: number;
   documentId?: string;
@@ -661,6 +691,21 @@ export interface EventsEventRequest {
 
 export type EventsEventRequestCollection = StrapiCollection<EventsEventRequest>;
 export type EventsEventRequestEntity = StrapiEntity<EventsEventRequest>;
+
+export interface EventsEventListResponse {
+  data?: EventsEvent[];
+  meta?: {
+    pagination?: {
+    page?: number;
+    pageSize?: number;
+    pageCount?: number;
+    total?: number;
+  };
+  };
+}
+
+export type EventsEventListResponseCollection = StrapiCollection<EventsEventListResponse>;
+export type EventsEventListResponseEntity = StrapiEntity<EventsEventListResponse>;
 
 export interface EventsEvent {
   id?: number;
@@ -1145,6 +1190,21 @@ export interface FaqRequest {
 export type FaqRequestCollection = StrapiCollection<FaqRequest>;
 export type FaqRequestEntity = StrapiEntity<FaqRequest>;
 
+export interface FaqListResponse {
+  data?: Faq[];
+  meta?: {
+    pagination?: {
+    page?: number;
+    pageSize?: number;
+    pageCount?: number;
+    total?: number;
+  };
+  };
+}
+
+export type FaqListResponseCollection = StrapiCollection<FaqListResponse>;
+export type FaqListResponseEntity = StrapiEntity<FaqListResponse>;
+
 export interface Faq {
   id?: number;
   documentId?: string;
@@ -1298,6 +1358,21 @@ export interface GalleryImagesGalleryImageRequest {
 
 export type GalleryImagesGalleryImageRequestCollection = StrapiCollection<GalleryImagesGalleryImageRequest>;
 export type GalleryImagesGalleryImageRequestEntity = StrapiEntity<GalleryImagesGalleryImageRequest>;
+
+export interface GalleryImagesGalleryImageListResponse {
+  data?: GalleryImagesGalleryImage[];
+  meta?: {
+    pagination?: {
+    page?: number;
+    pageSize?: number;
+    pageCount?: number;
+    total?: number;
+  };
+  };
+}
+
+export type GalleryImagesGalleryImageListResponseCollection = StrapiCollection<GalleryImagesGalleryImageListResponse>;
+export type GalleryImagesGalleryImageListResponseEntity = StrapiEntity<GalleryImagesGalleryImageListResponse>;
 
 export interface GalleryImagesGalleryImage {
   id?: number;
@@ -1613,6 +1688,21 @@ export interface HomePageRequest {
 
 export type HomePageRequestCollection = StrapiCollection<HomePageRequest>;
 export type HomePageRequestEntity = StrapiEntity<HomePageRequest>;
+
+export interface HomePageListResponse {
+  data?: HomePage[];
+  meta?: {
+    pagination?: {
+    page?: number;
+    pageSize?: number;
+    pageCount?: number;
+    total?: number;
+  };
+  };
+}
+
+export type HomePageListResponseCollection = StrapiCollection<HomePageListResponse>;
+export type HomePageListResponseEntity = StrapiEntity<HomePageListResponse>;
 
 export interface HomePage {
   id?: number;
@@ -2080,6 +2170,21 @@ export interface LocalAttractionsLocalAttractionRequest {
 export type LocalAttractionsLocalAttractionRequestCollection = StrapiCollection<LocalAttractionsLocalAttractionRequest>;
 export type LocalAttractionsLocalAttractionRequestEntity = StrapiEntity<LocalAttractionsLocalAttractionRequest>;
 
+export interface LocalAttractionsLocalAttractionListResponse {
+  data?: LocalAttractionsLocalAttraction[];
+  meta?: {
+    pagination?: {
+    page?: number;
+    pageSize?: number;
+    pageCount?: number;
+    total?: number;
+  };
+  };
+}
+
+export type LocalAttractionsLocalAttractionListResponseCollection = StrapiCollection<LocalAttractionsLocalAttractionListResponse>;
+export type LocalAttractionsLocalAttractionListResponseEntity = StrapiEntity<LocalAttractionsLocalAttractionListResponse>;
+
 export interface LocalAttractionsLocalAttraction {
   id?: number;
   documentId?: string;
@@ -2491,6 +2596,21 @@ export interface MusicianRequest {
 export type MusicianRequestCollection = StrapiCollection<MusicianRequest>;
 export type MusicianRequestEntity = StrapiEntity<MusicianRequest>;
 
+export interface MusicianListResponse {
+  data?: Musician[];
+  meta?: {
+    pagination?: {
+    page?: number;
+    pageSize?: number;
+    pageCount?: number;
+    total?: number;
+  };
+  };
+}
+
+export type MusicianListResponseCollection = StrapiCollection<MusicianListResponse>;
+export type MusicianListResponseEntity = StrapiEntity<MusicianListResponse>;
+
 export interface Musician {
   id?: number;
   documentId?: string;
@@ -2894,6 +3014,21 @@ export interface ResourcesResourceRequest {
 export type ResourcesResourceRequestCollection = StrapiCollection<ResourcesResourceRequest>;
 export type ResourcesResourceRequestEntity = StrapiEntity<ResourcesResourceRequest>;
 
+export interface ResourcesResourceListResponse {
+  data?: ResourcesResource[];
+  meta?: {
+    pagination?: {
+    page?: number;
+    pageSize?: number;
+    pageCount?: number;
+    total?: number;
+  };
+  };
+}
+
+export type ResourcesResourceListResponseCollection = StrapiCollection<ResourcesResourceListResponse>;
+export type ResourcesResourceListResponseEntity = StrapiEntity<ResourcesResourceListResponse>;
+
 export interface ResourcesResource {
   id?: number;
   documentId?: string;
@@ -3197,6 +3332,21 @@ export interface SponsorsSponsorRequest {
 
 export type SponsorsSponsorRequestCollection = StrapiCollection<SponsorsSponsorRequest>;
 export type SponsorsSponsorRequestEntity = StrapiEntity<SponsorsSponsorRequest>;
+
+export interface SponsorsSponsorListResponse {
+  data?: SponsorsSponsor[];
+  meta?: {
+    pagination?: {
+    page?: number;
+    pageSize?: number;
+    pageCount?: number;
+    total?: number;
+  };
+  };
+}
+
+export type SponsorsSponsorListResponseCollection = StrapiCollection<SponsorsSponsorListResponse>;
+export type SponsorsSponsorListResponseEntity = StrapiEntity<SponsorsSponsorListResponse>;
 
 export interface SponsorsSponsor {
   id?: number;
@@ -3508,6 +3658,21 @@ export interface TagRequest {
 export type TagRequestCollection = StrapiCollection<TagRequest>;
 export type TagRequestEntity = StrapiEntity<TagRequest>;
 
+export interface TagListResponse {
+  data?: Tag[];
+  meta?: {
+    pagination?: {
+    page?: number;
+    pageSize?: number;
+    pageCount?: number;
+    total?: number;
+  };
+  };
+}
+
+export type TagListResponseCollection = StrapiCollection<TagListResponse>;
+export type TagListResponseEntity = StrapiEntity<TagListResponse>;
+
 export interface Tag {
   id?: number;
   documentId?: string;
@@ -3608,6 +3773,21 @@ export interface ThankYouRequest {
 
 export type ThankYouRequestCollection = StrapiCollection<ThankYouRequest>;
 export type ThankYouRequestEntity = StrapiEntity<ThankYouRequest>;
+
+export interface ThankYouListResponse {
+  data?: ThankYou[];
+  meta?: {
+    pagination?: {
+    page?: number;
+    pageSize?: number;
+    pageCount?: number;
+    total?: number;
+  };
+  };
+}
+
+export type ThankYouListResponseCollection = StrapiCollection<ThankYouListResponse>;
+export type ThankYouListResponseEntity = StrapiEntity<ThankYouListResponse>;
 
 export interface ThankYou {
   id?: number;
@@ -4008,6 +4188,21 @@ export interface TicketHolderRequest {
 export type TicketHolderRequestCollection = StrapiCollection<TicketHolderRequest>;
 export type TicketHolderRequestEntity = StrapiEntity<TicketHolderRequest>;
 
+export interface TicketHolderListResponse {
+  data?: TicketHolder[];
+  meta?: {
+    pagination?: {
+    page?: number;
+    pageSize?: number;
+    pageCount?: number;
+    total?: number;
+  };
+  };
+}
+
+export type TicketHolderListResponseCollection = StrapiCollection<TicketHolderListResponse>;
+export type TicketHolderListResponseEntity = StrapiEntity<TicketHolderListResponse>;
+
 export interface TicketHolder {
   id?: number;
   documentId?: string;
@@ -4174,6 +4369,21 @@ export interface TicketsTicketRequest {
 
 export type TicketsTicketRequestCollection = StrapiCollection<TicketsTicketRequest>;
 export type TicketsTicketRequestEntity = StrapiEntity<TicketsTicketRequest>;
+
+export interface TicketsTicketListResponse {
+  data?: TicketsTicket[];
+  meta?: {
+    pagination?: {
+    page?: number;
+    pageSize?: number;
+    pageCount?: number;
+    total?: number;
+  };
+  };
+}
+
+export type TicketsTicketListResponseCollection = StrapiCollection<TicketsTicketListResponse>;
+export type TicketsTicketListResponseEntity = StrapiEntity<TicketsTicketListResponse>;
 
 export interface TicketsTicket {
   id?: number;
@@ -4565,6 +4775,21 @@ export interface WinnersWinnerRequest {
 
 export type WinnersWinnerRequestCollection = StrapiCollection<WinnersWinnerRequest>;
 export type WinnersWinnerRequestEntity = StrapiEntity<WinnersWinnerRequest>;
+
+export interface WinnersWinnerListResponse {
+  data?: WinnersWinner[];
+  meta?: {
+    pagination?: {
+    page?: number;
+    pageSize?: number;
+    pageCount?: number;
+    total?: number;
+  };
+  };
+}
+
+export type WinnersWinnerListResponseCollection = StrapiCollection<WinnersWinnerListResponse>;
+export type WinnersWinnerListResponseEntity = StrapiEntity<WinnersWinnerListResponse>;
 
 export interface WinnersWinner {
   id?: number;

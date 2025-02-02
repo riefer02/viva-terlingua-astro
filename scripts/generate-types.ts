@@ -126,10 +126,7 @@ export type StrapiEntity<T> = {
     // Process each schema
     for (const [schemaName, schema] of Object.entries(schemas)) {
       // Skip internal Strapi types and Error responses
-      if (
-        schemaName.startsWith('Error') ||
-        schemaName.includes('ListResponse')
-      ) {
+      if (schemaName.startsWith('Error')) {
         continue;
       }
 

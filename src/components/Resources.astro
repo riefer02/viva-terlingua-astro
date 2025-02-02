@@ -1,0 +1,145 @@
+---
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import type {
+  ResourcesResource,
+  ResourcesResourceListResponse,
+} from '@/types/strapi';
+import strapi from '@/lib/api/strapi-client';
+import { Download, Eye } from 'lucide-react';
+import { getFileType, formatFileSize } from '@/utils/resources';
+import { getStrapiUrl } from '@/utils/strapi';
+
+interface Props {
+  className?: string;
+}
+
+const { className } = Astro.props;
+
+const response = await strapi.find<ResourcesResourceListResponse>('resources', {
+  populate: '*',
+});
+
+if (!response.data) {
+  throw new Error('Resources data not found');
+}
+
+const resources = response.data as ResourcesResource[];
+---
+
+<section class:list={['w-full py-12 bg-background', className]}>
+  <div class="container px-4 md:px-6 mx-auto max-w-7xl">
+    <div
+      class="flex flex-col items-center justify-center space-y-4 text-center"
+    >
+      <h2
+        class="text-3xl font-bold tracking-tighter text-foreground sm:text-4xl md:text-5xl lg:text-6xl"
+      >
+        Resources
+      </h2>
+      <p
+        class="max-w-[700px] text-muted-foreground text-base sm:text-lg md:text-xl"
+      >
+        Access our collection of helpful resources and documents.
+      </p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
+      {
+        resources.map((resource) => (
+          <Card className="flex flex-col h-full bg-card">
+            <CardHeader>
+              <CardTitle className="text-xl text-card-foreground">
+                {resource.name || resource.file?.name}
+              </CardTitle>
+              <CardDescription className="text-muted-foreground">
+                {resource.file?.alternativeText || 'Resource Document'}
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="flex-grow space-y-4">
+              <div class="flex flex-wrap gap-2">
+                {resource.file?.mime && (
+                  <Badge variant="secondary">
+                    {getFileType(resource.file.mime)}
+                  </Badge>
+                )}
+                {resource.file?.size && (
+                  <Badge variant="outline">
+                    {formatFileSize(resource.file.size)}
+                  </Badge>
+                )}
+              </div>
+            </CardContent>
+            <CardFooter className="flex justify-end gap-4 pt-6">
+              <Button
+                variant="outline"
+                size="sm"
+                data-action="view"
+                data-url={getStrapiUrl(resource.file?.url)}
+                className="group"
+                client:load
+              >
+                <Eye className="w-4 h-4 mr-2 transition-transform group-hover:scale-110" />
+                View
+              </Button>
+              <Button
+                variant="default"
+                size="sm"
+                data-action="download"
+                data-url={getStrapiUrl(resource.file?.url)}
+                data-filename={resource.name || resource.file?.name}
+                className="group"
+                client:load
+              >
+                <Download className="w-4 h-4 mr-2 transition-transform group-hover:scale-110" />
+                Download
+              </Button>
+            </CardFooter>
+          </Card>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<script>
+  // Handle button clicks
+  document.querySelectorAll('button[data-url]').forEach((button) => {
+    button.addEventListener('click', (e) => {
+      const target = e.currentTarget as HTMLButtonElement;
+      const url = target.dataset.url;
+      const filename = target.dataset.filename;
+      const action = target.dataset.action;
+
+      if (!url) {
+        console.error('No URL provided for resource');
+        return;
+      }
+
+      console.log(`${action} resource:`, { url, filename });
+
+      if (action === 'view') {
+        window.open(url, '_blank');
+      } else if (action === 'download') {
+        const link = document.createElement('a');
+        link.href = url;
+        if (filename) {
+          // Add file extension if not present in filename
+          const urlExt = url.split('.').pop();
+          const hasExt = filename.includes('.');
+          link.download = hasExt ? filename : `${filename}.${urlExt}`;
+        }
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    });
+  });
+</script>
