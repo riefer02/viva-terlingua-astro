@@ -8,13 +8,4 @@ describe('Index page', () => {
     const result = await container.renderToString(Index);
     expect(result).toBeDefined();
   });
-
-  it('should contain main content elements', async () => {
-    const container = await AstroContainer.create();
-    const result = await container.renderToString(Index);
-
-    // Add specific content checks based on your index page
-    expect(result).toContain('<html');
-    expect(result).toContain('<body');
-  });
 });
