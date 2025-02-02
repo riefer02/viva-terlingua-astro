@@ -1,3 +1,6 @@
+import { getStrapiUrl } from './strapi';
+import type { ResourcesResource } from '@/types/strapi';
+
 /**
  * Converts a MIME type to a friendly file type name
  * @param mime - The MIME type string
@@ -21,6 +24,20 @@ export const getFileType = (mime: string): string => {
     default:
       return type;
   }
+};
+
+/**
+ * Gets the download URL and filename for a resource
+ */
+export const getResourceDownloadInfo = (resource: ResourcesResource) => {
+  const url = getStrapiUrl(resource.file?.url);
+  const filename = `${resource.name}.pdf`;
+
+  return {
+    url,
+    filename,
+    size: resource.file?.size || 0,
+  };
 };
 
 /**

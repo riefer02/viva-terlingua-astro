@@ -15,8 +15,7 @@ import type {
 } from '@/types/strapi';
 import strapi from '@/lib/api/strapi-client';
 import { Download, Eye } from 'lucide-react';
-import { getFileType, formatFileSize } from '@/utils/resources';
-import { getStrapiUrl } from '@/utils/strapi';
+import { getResourceDownloadInfo, formatFileSize } from '@/utils/resources';
 
 interface Props {
   className?: string;
@@ -32,7 +31,10 @@ if (!response.data) {
   throw new Error('Resources data not found');
 }
 
-const resources = response.data as ResourcesResource[];
+// Filter out resources without files
+const resources = (response.data as ResourcesResource[]).filter(
+  (resource) => resource.file !== null
+);
 ---
 
 <section class:list={['w-full py-12 bg-background', className]}>
@@ -53,93 +55,62 @@ const resources = response.data as ResourcesResource[];
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
       {
-        resources.map((resource) => (
-          <Card className="flex flex-col h-full bg-card">
-            <CardHeader>
-              <CardTitle className="text-xl text-card-foreground">
-                {resource.name || resource.file?.name}
-              </CardTitle>
-              <CardDescription className="text-muted-foreground">
-                {resource.file?.alternativeText || 'Resource Document'}
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="flex-grow space-y-4">
-              <div class="flex flex-wrap gap-2">
-                {resource.file?.mime && (
-                  <Badge variant="secondary">
-                    {getFileType(resource.file.mime)}
-                  </Badge>
-                )}
-                {resource.file?.size && (
-                  <Badge variant="outline">
-                    {formatFileSize(resource.file.size)}
-                  </Badge>
-                )}
-              </div>
-            </CardContent>
-            <CardFooter className="flex justify-end gap-4 pt-6">
-              <Button
-                variant="outline"
-                size="sm"
-                data-action="view"
-                data-url={getStrapiUrl(resource.file?.url)}
-                className="group"
-                client:load
-              >
-                <Eye className="w-4 h-4 mr-2 transition-transform group-hover:scale-110" />
-                View
-              </Button>
-              <Button
-                variant="default"
-                size="sm"
-                data-action="download"
-                data-url={getStrapiUrl(resource.file?.url)}
-                data-filename={resource.name || resource.file?.name}
-                className="group"
-                client:load
-              >
-                <Download className="w-4 h-4 mr-2 transition-transform group-hover:scale-110" />
-                Download
-              </Button>
-            </CardFooter>
-          </Card>
-        ))
+        resources.map((resource) => {
+          const { url, filename, size } = getResourceDownloadInfo(resource);
+
+          return (
+            <Card className="flex flex-col h-full bg-card">
+              <CardHeader>
+                <CardTitle className="text-xl text-card-foreground">
+                  {resource.name}
+                </CardTitle>
+                <CardDescription className="text-muted-foreground">
+                  PDF Document • {formatFileSize(size)}
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="flex-grow space-y-4">
+                <div class="flex flex-wrap gap-2">
+                  <Badge variant="secondary">PDF Document</Badge>
+                  <Badge variant="outline">{formatFileSize(size)}</Badge>
+                </div>
+              </CardContent>
+              <CardFooter className="flex justify-end gap-4 pt-6">
+                <a
+                  href={url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex"
+                >
+                  <Button variant="outline" size="sm" className="group">
+                    <Eye className="w-4 h-4 mr-2 transition-transform group-hover:scale-110" />
+                    View
+                  </Button>
+                </a>
+                <a href={url} download={filename} class="inline-flex">
+                  <Button variant="default" size="sm" className="group">
+                    <Download className="w-4 h-4 mr-2 transition-transform group-hover:scale-110" />
+                    Download
+                  </Button>
+                </a>
+              </CardFooter>
+            </Card>
+          );
+        })
       }
     </div>
   </div>
 </section>
 
-<script>
-  // Handle button clicks
-  document.querySelectorAll('button[data-url]').forEach((button) => {
-    button.addEventListener('click', (e) => {
-      const target = e.currentTarget as HTMLButtonElement;
-      const url = target.dataset.url;
-      const filename = target.dataset.filename;
-      const action = target.dataset.action;
+<style>
+  .resource-download-btn {
+    transition: all 0.2s ease-in-out;
+  }
 
-      if (!url) {
-        console.error('No URL provided for resource');
-        return;
-      }
+  .resource-download-btn:hover {
+    transform: translateY(-1px);
+  }
 
-      console.log(`${action} resource:`, { url, filename });
-
-      if (action === 'view') {
-        window.open(url, '_blank');
-      } else if (action === 'download') {
-        const link = document.createElement('a');
-        link.href = url;
-        if (filename) {
-          // Add file extension if not present in filename
-          const urlExt = url.split('.').pop();
-          const hasExt = filename.includes('.');
-          link.download = hasExt ? filename : `${filename}.${urlExt}`;
-        }
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      }
-    });
-  });
-</script>
+  .resource-download-btn:active {
+    transform: translateY(0);
+  }
+</style>
