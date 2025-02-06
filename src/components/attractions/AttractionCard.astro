@@ -1,0 +1,22 @@
+---
+import type { LocalAttractionsLocalAttraction } from '@/types/strapi';
+import BaseCard from '../BaseCard.astro';
+import { getStrapiImageUrl } from '@/utils/image';
+
+interface Props {
+  attraction: LocalAttractionsLocalAttraction;
+  className?: string;
+}
+
+const { attraction, className } = Astro.props;
+const imageUrl = getStrapiImageUrl(attraction.marqueeImage);
+---
+
+<BaseCard
+  title={attraction.name || ''}
+  description={attraction.description || ''}
+  imageUrl={imageUrl}
+  link={`/attractions/${attraction.slug}`}
+  viewText="View Attraction"
+  className={className}
+/>

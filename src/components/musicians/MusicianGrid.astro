@@ -1,0 +1,18 @@
+---
+import type { Musician } from '@/types/strapi';
+import { cn } from '@/lib/utils';
+import MusicianCard from './MusicianCard.astro';
+
+interface Props {
+  musicians: Musician[];
+  className?: string;
+}
+
+const { musicians, className } = Astro.props;
+---
+
+<div
+  class={cn('grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3', className)}
+>
+  {musicians.map((musician) => <MusicianCard musician={musician} />)}
+</div>

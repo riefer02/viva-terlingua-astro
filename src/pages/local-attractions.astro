@@ -1,6 +1,6 @@
 ---
 import Layout from '@/layouts/Layout.astro';
-import CardGrid from '@/components/CardGrid.astro';
+import AttractionGrid from '@/components/attractions/AttractionGrid.astro';
 import strapi from '@/lib/api/strapi-client';
 import type {
   LocalAttractionsLocalAttractionListResponse,
@@ -23,16 +23,7 @@ if (!response?.data) {
   throw new Error('Local attractions data not found');
 }
 
-const attractions = (response.data as LocalAttractionsLocalAttraction[]).map(
-  (item) => ({
-    ...item,
-    id: item.id,
-    marqueeImage: item.marqueeImage,
-    name: item.name || '',
-    description: item.description || '',
-    slug: item.slug || '',
-  })
-);
+const attractions = response.data as LocalAttractionsLocalAttraction[];
 ---
 
 <Layout
@@ -41,6 +32,6 @@ const attractions = (response.data as LocalAttractionsLocalAttraction[]).map(
 >
   <main class="container mx-auto px-4 py-12">
     <h1 class="mb-8 text-4xl font-bold">Local Attractions</h1>
-    <CardGrid items={attractions} type="attraction" />
+    <AttractionGrid attractions={attractions} />
   </main>
 </Layout>

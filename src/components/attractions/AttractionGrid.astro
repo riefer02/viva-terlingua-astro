@@ -1,0 +1,18 @@
+---
+import type { LocalAttractionsLocalAttraction } from '@/types/strapi';
+import { cn } from '@/lib/utils';
+import AttractionCard from './AttractionCard.astro';
+
+interface Props {
+  attractions: LocalAttractionsLocalAttraction[];
+  className?: string;
+}
+
+const { attractions, className } = Astro.props;
+---
+
+<div
+  class={cn('grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3', className)}
+>
+  {attractions.map((attraction) => <AttractionCard attraction={attraction} />)}
+</div>

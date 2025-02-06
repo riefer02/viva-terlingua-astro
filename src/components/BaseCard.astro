@@ -1,0 +1,62 @@
+---
+import { cn } from '@/lib/utils';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
+import { Button } from '@/components/ui/button';
+
+interface Props {
+  title: string;
+  description?: string;
+  imageUrl?: string;
+  link: string;
+  viewText: string;
+  className?: string;
+}
+
+const { title, description, imageUrl, link, viewText, className } = Astro.props;
+---
+
+<Card
+  className={cn(
+    'group overflow-hidden transition-all hover:shadow-lg dark:hover:shadow-primary/20',
+    className
+  )}
+>
+  <CardHeader className="p-0">
+    <AspectRatio ratio={1}>
+      {
+        imageUrl && (
+          <img
+            src={imageUrl}
+            alt={title}
+            class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+          />
+        )
+      }
+    </AspectRatio>
+  </CardHeader>
+  <CardContent className="space-y-2.5 p-6">
+    <CardTitle className="line-clamp-2 text-2xl">{title}</CardTitle>
+    {
+      description && (
+        <CardDescription className="line-clamp-3">
+          {description}
+        </CardDescription>
+      )
+    }
+  </CardContent>
+  <CardFooter className="p-6 pt-0">
+    <a href={link} class="w-full">
+      <Button className="w-full">
+        {viewText}
+      </Button>
+    </a>
+  </CardFooter>
+</Card>

@@ -1,6 +1,6 @@
 ---
 import Layout from '@/layouts/Layout.astro';
-import CardGrid from '@/components/CardGrid.astro';
+import MusicianGrid from '@/components/musicians/MusicianGrid.astro';
 import strapi from '@/lib/api/strapi-client';
 import type { MusicianListResponse, Musician } from '@/types/strapi';
 
@@ -15,19 +15,12 @@ const response = await strapi.find<MusicianListResponse>('musicians', {
     },
   },
 });
-console.log('response', response);
-if (!response.data) {
+
+if (!response?.data) {
   throw new Error('Musicians data not found');
 }
 
-// Extract musicians from the response data
-const musicians = (response.data as Musician[]).map((item) => ({
-  ...item,
-  squareImage: item.squareImage,
-  name: item.name || '',
-  description: item.description || '',
-  slug: item.slug || '',
-}));
+const musicians = response.data as Musician[];
 ---
 
 <Layout
@@ -36,6 +29,6 @@ const musicians = (response.data as Musician[]).map((item) => ({
 >
   <main class="container mx-auto px-4 py-12">
     <h1 class="mb-8 text-4xl font-bold">Musicians</h1>
-    <CardGrid items={musicians} type="musician" />
+    <MusicianGrid musicians={musicians} />
   </main>
 </Layout>
