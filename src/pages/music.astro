@@ -1,0 +1,41 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import CardGrid from '@/components/CardGrid.astro';
+import strapi from '@/lib/api/strapi-client';
+import type { MusicianListResponse, Musician } from '@/types/strapi';
+
+// Fetch musicians data
+const response = await strapi.find<MusicianListResponse>('musicians', {
+  populate: {
+    squareImage: {
+      populate: '*',
+    },
+    meta: {
+      populate: '*',
+    },
+  },
+});
+console.log('response', response);
+if (!response.data) {
+  throw new Error('Musicians data not found');
+}
+
+// Extract musicians from the response data
+const musicians = (response.data as Musician[]).map((item) => ({
+  ...item,
+  squareImage: item.squareImage,
+  name: item.name || '',
+  description: item.description || '',
+  slug: item.slug || '',
+}));
+---
+
+<Layout
+  title="Musicians | A Bowl of Red"
+  description="Meet the talented musicians performing at A Bowl of Red"
+>
+  <main class="container mx-auto px-4 py-12">
+    <h1 class="mb-8 text-4xl font-bold">Musicians</h1>
+    <CardGrid items={musicians} type="musician" />
+  </main>
+</Layout>

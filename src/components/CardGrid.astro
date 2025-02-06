@@ -1,0 +1,80 @@
+---
+import { cn } from '@/lib/utils';
+import type { LocalAttractionsLocalAttraction, Musician } from '@/types/strapi';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
+import { getStrapiImageUrl } from '@/utils/image';
+
+interface Props {
+  items: (Musician | LocalAttractionsLocalAttraction)[];
+  type: 'musician' | 'attraction';
+  className?: string;
+}
+
+const { items, type, className } = Astro.props;
+
+// Helper function to determine if an item is a Musician
+const isMusician = (item: Props['items'][0]): item is Musician => {
+  return 'spotifyID' in item;
+};
+---
+
+<div
+  class={cn('grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3', className)}
+>
+  {
+    items.map((item) => {
+      // Get the appropriate image based on item type
+      const image = isMusician(item) ? item.squareImage : item.marqueeImage;
+      const imageUrl = getStrapiImageUrl(image);
+      const title = isMusician(item) ? item.name : item.name;
+      const description = isMusician(item)
+        ? item.description
+        : item.description;
+      const link = isMusician(item)
+        ? `/musicians/${item.slug}`
+        : `/attractions/${item.slug}`;
+
+      return (
+        <div>
+          <Card className="group overflow-hidden transition-all hover:shadow-lg dark:hover:shadow-primary/20">
+            <CardHeader className="p-0">
+              <AspectRatio ratio={1}>
+                {imageUrl && (
+                  <img
+                    src={imageUrl}
+                    alt={title || ''}
+                    class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                )}
+              </AspectRatio>
+            </CardHeader>
+            <CardContent className="space-y-2.5 p-6">
+              <CardTitle className="line-clamp-2 text-2xl">{title}</CardTitle>
+              {description && (
+                <CardDescription className="line-clamp-3">
+                  {description}
+                </CardDescription>
+              )}
+            </CardContent>
+            <CardFooter className="p-6 pt-0">
+              <a href={link} class="w-full">
+                <Button className="w-full">
+                  View {isMusician(item) ? 'Musician' : 'Attraction'}
+                </Button>
+              </a>
+            </CardFooter>
+          </Card>
+        </div>
+      );
+    })
+  }
+</div>
