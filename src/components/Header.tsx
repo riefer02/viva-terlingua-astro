@@ -35,7 +35,7 @@ export function Header({ className }: HeaderProps) {
                   key={item.href}
                   variant="ghost"
                   asChild
-                  className="text-primary-foreground hover:text-primary-foreground/90 hover:bg-primary-foreground/10"
+                  className="text-primary-foreground hover:text-primary-foreground/90 hover:bg-primary-foreground/10 focus-visible:bg-primary-foreground/20 focus-visible:ring-2 focus-visible:ring-primary-foreground"
                 >
                   <a href={item.href}>{item.label}</a>
                 </Button>
@@ -61,7 +61,7 @@ export function Header({ className }: HeaderProps) {
                       key={item.href}
                       variant="ghost"
                       asChild
-                      className="justify-start"
+                      className="justify-start focus-visible:bg-primary/10 focus-visible:ring-2 focus-visible:ring-primary"
                     >
                       <a href={item.href}>{item.label}</a>
                     </Button>
