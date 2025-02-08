@@ -1,0 +1,69 @@
+---
+import { cn } from '@/lib/utils';
+import CookoffPosterCard from './CookoffPosterCard.astro';
+import type {
+  GalleryImagesGalleryImage,
+  GalleryImagesGalleryImageListResponse,
+} from '@/types/strapi';
+import strapi from '@/lib/api/strapi-client';
+
+export interface Props {
+  className?: string;
+}
+
+const { className } = Astro.props;
+
+// Fetch gallery images filtered by type "poster"
+const response = await strapi.find<GalleryImagesGalleryImageListResponse>(
+  'gallery-images',
+  {
+    filters: {
+      role: {
+        $eq: 'poster',
+      },
+    },
+    populate: {
+      image: {
+        populate: '*',
+      },
+    },
+  }
+);
+
+const posters = (response.data || []) as GalleryImagesGalleryImage[];
+---
+
+<section class="w-full py-16 bg-background" aria-labelledby="posters-heading">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h2
+        id="posters-heading"
+        class="text-3xl font-bold tracking-tight text-foreground sm:text-4xl mb-4"
+      >
+        Cookoff Posters
+      </h2>
+      <p class="text-muted-foreground text-lg max-w-2xl mx-auto">
+        A collection of posters from our past cookoff events
+      </p>
+    </div>
+
+    <div
+      class={cn(
+        'grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3',
+        className
+      )}
+      role="list"
+    >
+      {
+        posters.map((poster) => {
+          if (!poster?.image) return null;
+          return (
+            <div role="listitem">
+              <CookoffPosterCard image={poster.image} />
+            </div>
+          );
+        })
+      }
+    </div>
+  </div>
+</section>
