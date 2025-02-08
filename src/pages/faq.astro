@@ -1,0 +1,29 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import FaqSection from '@/components/FaqSection';
+import strapi from '@/lib/api/strapi-client';
+import type { FaqListResponse, Faq } from '@/types/strapi';
+import { groupFaqsByCategory } from '@/utils/faq';
+
+// Fetch FAQs from Strapi
+const response = await strapi.find<FaqListResponse>('faqs', {
+  sort: ['order:asc', 'category:asc'],
+  populate: '*',
+});
+
+if (!response.data) {
+  throw new Error('FAQ data not found');
+}
+
+const faqs = response.data as Faq[];
+const groupedFaqs = groupFaqsByCategory(faqs);
+---
+
+<Layout title="FAQ" description="Frequently Asked Questions">
+  <main class="container mx-auto px-4 py-8 md:py-16">
+    <h1 class="text-4xl font-bold mb-8 text-center">
+      Frequently Asked Questions
+    </h1>
+    <FaqSection client:load groupedFaqs={groupedFaqs} />
+  </main>
+</Layout>
