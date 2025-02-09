@@ -1,0 +1,11 @@
+---
+description: When working with types in the project
+globs: *.ts, *.tsx, *.astro
+---
+
+2. **Type Safety**
+
+   - Leverage generated Strapi types for data structures
+   - Run `pnpm generate:types` when Strapi schema changes
+   - Use strict typing for component props
+   [strapi.ts](mdc:src/types/strapi.ts)

@@ -1,0 +1,12 @@
+---
+description: When fetching data for pages and components from the strapi backend
+globs: *.astro, *.ts, *.tsx
+---
+# Data Fetching With Strapi Backend
+
+### API Integration
+
+- Use the Strapi client from [strapi-client.ts](mdc:src/lib/api/strapi-client.ts)
+- Reference type definitions in [strapi.ts](mdc:src/types/strapi.ts)
+- Handle loading and error states appropriately
+- When using the Strapi SDK, always specify the response type (e.g. `strapi.find<SponsorsSponsorListResponse>('sponsors', {...})`) to ensure proper typing of the response data You can see similar patterns in other components [Sponsors.astro](mdc:src/components/Sponsors.astro)

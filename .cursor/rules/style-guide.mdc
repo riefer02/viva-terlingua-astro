@@ -1,0 +1,10 @@
+---
+description: When styling components pages and layouts 
+globs: *.tsx, *.astro
+---
+**Styling**
+
+- Use Tailwind classes with design tokens from [globals.css](mdc:src/styles/globals.css)
+- The project references and uses Shadcn components so see variables and styling
+- Reference the style guide page for typography examples and component usage demonstrations [style-guide.astro](mdc:src/pages/style-guide.astro)
+- Consult `components.json` for Shadcn/ui configuration

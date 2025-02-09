@@ -29,7 +29,7 @@ pnpm dev
 
 - **Framework:** [Astro](https://astro.build/) with [React](https://reactjs.org/)
 - **Styling:** [TailwindCSS](https://tailwindcss.com/)
-- **UI Components:** Custom components with [Radix UI](https://www.radix-ui.com/)
+- **UI Components:** Custom components with [Shadcn/ui](https://ui.shadcn.com/)
 - **Testing:** [Vitest](https://vitest.dev/) with [@testing-library/react](https://testing-library.com/docs/react-testing-library/intro/)
 - **API Integration:** [Strapi SDK](https://docs.strapi.io/dev-docs/api/sdk)
 
@@ -70,8 +70,6 @@ src/
 
 - Test files use `.test.ts` or `.test.tsx` extensions
 - Component tests use `@testing-library/react`
-- Tests are co-located with the code they're testing
-- Coverage reports are generated in the `coverage/` directory
 
 ## 📝 Git Workflow
 
@@ -119,13 +117,11 @@ abowlofred-astro/
 │   ├── lib/          # Utilities and helpers
 │   └── styles/       # Global styles
 ├── public/          # Static assets
-└── test/           # Test utilities and setup
 ```
 
 ## 🔧 Configuration Files
 
 - `astro.config.mjs` - Astro configuration
-- `tailwind.config.js` - TailwindCSS configuration
 - `vitest.config.ts` - Vitest test configuration
 - `eslint.config.js` - ESLint configuration
 - `prettier.config.js` - Prettier configuration
@@ -140,4 +136,8 @@ abowlofred-astro/
 
 ## 📄 License
 
-[Add your license information here]
+This project is proprietary and confidential. © 2024 OTICCC. All rights reserved.
+
+This software and its documentation are protected by copyright law and international treaties. Unauthorized reproduction, distribution, or use of this software, in whole or in part, is strictly prohibited.
+
+This software is intended for internal use within OTICCC, a registered non-profit organization, and its authorized partners only.

@@ -1,0 +1,26 @@
+---
+description: Helpful for understanding general scope of the project
+globs: **/*(!node_modules)
+---
+## Project Overview
+
+This is an Astro project utilizing Tailwind CSS v4 and Shadcn/ui components, with a Strapi backend integration. The project follows a modern web architecture pattern with strong typing and comprehensive testing.
+
+## Environment Setup
+
+- Required Node.js version: 18+
+- Package manager: pnpm
+- Environment variables must be properly configured
+
+## Important Commands
+
+```bash
+pnpm dev          # Development server
+pnpm build        # Production build
+pnpm test         # Run tests
+pnpm generate:types # Generate Strapi types
+```
+
+- Follow the established Git workflow and commit conventions
+- Ensure proper error handling and type safety
+- Keep the codebase lean and maintainable

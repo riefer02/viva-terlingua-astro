@@ -1,0 +1,6 @@
+---
+description: When writing tests
+globs: src/__tests__/*
+---
+**Testing**
+   - Ensure proper coverage for business logic

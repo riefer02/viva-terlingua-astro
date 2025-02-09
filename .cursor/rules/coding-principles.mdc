@@ -1,0 +1,17 @@
+---
+description: Helpful for general approach to work and philosophy on coding
+globs: **/*(!node_modules)
+---
+## Code Style Principles
+
+- Write self-documenting code following senior engineering practices
+- Maintain strict TypeScript usage throughout
+- Reference `globals.css` for project-wide styling and design tokens
+- Utilize Strapi types from `@types/strapi.ts` for backend data structures
+- Follow the established commit convention (referenced in README.md, lines 80-89)
+
+  **Code Quality**
+
+  - Follow ESLint and Prettier configurations
+  - Use pre-commit hooks for code quality
+  - Follow the established commit convention

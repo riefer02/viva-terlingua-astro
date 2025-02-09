@@ -1,0 +1,23 @@
+---
+description: For referencing where things should go and can be found
+globs: **/*(!node_modules)
+---
+## Project Structure
+
+```text
+src/
+├── assets/         # Static assets (images, fonts)
+├── components/     # Reusable UI components
+│   └── ui/        # Shadcn/ui components - Do not add anything to this unless using cli pnpm dlx shadcn@latest add <components>
+├── config/        # Project configuration (site.ts)
+├── layouts/       # Page layouts and templates
+├── lib/          # Core business logic and API clients, Shadcn utility
+├── utils/        # Helper functions for handling specific types and common patterns (seo.ts, image.ts)
+├── pages/        # Astro pages and API routes
+├── styles/       # Global styles and Tailwind v4 config
+├── types/        # TypeScript definitions generated programmatically do not modify manually
+└── __tests__/        # Test files and utilities
+public/          # astros where it get puts public assets
+scripts/               # for development scripts like fetching and generating types from strapi
+astro.config.mjs
+```

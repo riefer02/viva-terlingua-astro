@@ -1,0 +1,22 @@
+---
+description: Used for when working with astro files and specific astro framework
+globs: *.astro
+---
+Be sure to add fences at the top of astro components for dynamic server logic
+
+```astro
+---
+// I'm inside the fences
+const example = "example string"
+---
+
+<p>Templates String</p>
+```
+
+- Optimize images using Astro's built-in tools
+- Use client directives sparingly
+- Use Astro components (.astro) for static content without reactive state
+- Use React components (.tsx) only when reactive state or client-side interactivity is required
+- Leverage Astro v5 features and optimizations for best performance
+
+Use framework specific components for like images and other optimizations that astro has out of the box check the official documentation regularly.

@@ -1,0 +1,9 @@
+---
+description: When working with pages either static or generated dynamically
+globs: src/pages/*
+---
+**SEO**
+
+Utilize the SEO utility from [seo.ts](mdc:src/utils/seo.ts)
+
+in conjunction with the [Layout.astro](mdc:src/layouts/Layout.astro)
