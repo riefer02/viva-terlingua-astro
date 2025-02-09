@@ -43,12 +43,12 @@ describe('Site Configuration', () => {
 
   it('should have correct default values', () => {
     expect(config.title).toBe(
-      'Original Terlingua International Championship Chili Cook-off'
+      'Original Terlingua International Championship Chili Cook Off'
     );
     expect(config.defaultLanguage).toBe('en');
     expect(config.author.name).toBe('Andrew Riefenstahl');
     expect(config.author.twitter).toBe('@riefer02');
-    expect(config.seo.defaultImage).toBe('/oticcc-logo-black.png');
+    expect(config.seo.defaultImage).toBe('/og-image.png');
   });
 
   it('should use default strapi URL when environment variable is not set', () => {

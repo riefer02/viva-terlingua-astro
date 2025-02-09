@@ -28,7 +28,7 @@ export interface SiteConfig {
 }
 
 const config: SiteConfig = {
-  title: 'Original Terlingua International Championship Chili Cook-off',
+  title: 'Original Terlingua International Championship Chili Cook Off',
   description:
     'Official Website for the Wick Fowler, Frank X. Tolbert, Terlingua International Chili Cook Off - Behind the store.',
   defaultLanguage: 'en',
@@ -38,8 +38,8 @@ const config: SiteConfig = {
   },
   seo: {
     titleTemplate:
-      '%s | Original Terlingua International Championship Chili Cook-off',
-    defaultImage: '/oticcc-logo-black.png',
+      '%s | Original Terlingua International Championship Chili Cook Off',
+    defaultImage: '/og-image.png',
   },
   urls: {
     strapi: import.meta.env.STRAPI_URL || 'http://127.0.0.1:1337',
