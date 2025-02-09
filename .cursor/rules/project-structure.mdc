@@ -9,7 +9,7 @@ src/
 ├── assets/         # Static assets (images, fonts)
 ├── components/     # Reusable UI components
 │   └── ui/        # Shadcn/ui components - Do not add anything to this unless using cli pnpm dlx shadcn@latest add <components>
-├── config/        # Project configuration (site.ts)
+├── config/        # Project configuration such as site.ts configuration and redirects
 ├── layouts/       # Page layouts and templates
 ├── lib/          # Core business logic and API clients, Shadcn utility
 ├── utils/        # Helper functions for handling specific types and common patterns (seo.ts, image.ts)

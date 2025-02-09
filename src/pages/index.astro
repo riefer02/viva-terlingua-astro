@@ -5,6 +5,7 @@ import Sponsors from '@/components/Sponsors.astro';
 import Resources from '@/components/Resources.astro';
 import Quote from '@/components/Quote.astro';
 import CookoffPosterGrid from '@/components/posters/CookoffPosterGrid.astro';
+import PanelImage from '@/components/PanelImage.astro';
 import config from '@/config/site';
 import strapi from '@/lib/api/strapi-client';
 import type { HomePageResponse, HomePage } from '@/types/strapi';
@@ -48,6 +49,11 @@ const pageData = response.data as HomePage;
   <HeroMarquee data={pageData} />
   <Sponsors />
   {pageData.quoteContent && <Quote quote={pageData.quoteContent} />}
+
+  <PanelImage panelImage={pageData.panelImage} />
+
+  <PanelImage galleryImageName="2-Alarm Chili" />
+
   <CookoffPosterGrid />
   <Resources />
 </Layout>

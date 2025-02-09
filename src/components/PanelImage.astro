@@ -1,0 +1,83 @@
+---
+import type {
+  HomePage,
+  GalleryImagesGalleryImage,
+  GalleryImagesGalleryImageListResponse,
+} from '@/types/strapi';
+import { getStrapiImageUrl } from '@/utils/image';
+import strapi from '@/lib/api/strapi-client';
+
+export interface Props {
+  panelImage?: NonNullable<HomePage['marqueeImage']>;
+  galleryImageName?: string;
+  className?: string;
+  maxWidth?: string;
+}
+
+const {
+  panelImage,
+  galleryImageName,
+  className = '',
+  maxWidth = 'max-w-7xl',
+} = Astro.props;
+
+// Default image path
+const defaultImagePath = '/hillside-journey.jpg';
+
+// Function to get image URL based on the provided props
+async function getImageUrl(): Promise<string> {
+  // If panel image is provided, use it directly
+  if (panelImage?.url) {
+    return getStrapiImageUrl(panelImage);
+  }
+
+  // If gallery image name is provided, try to find it
+  if (galleryImageName) {
+    try {
+      const response = await strapi.find<GalleryImagesGalleryImageListResponse>(
+        'gallery-images',
+        {
+          filters: {
+            title: {
+              $eq: galleryImageName,
+            },
+          },
+          populate: {
+            image: {
+              populate: '*',
+            },
+          },
+        }
+      );
+      const responseData = (response.data || []) as GalleryImagesGalleryImage[];
+      const galleryImage = responseData[0];
+      if (galleryImage?.image) {
+        return getStrapiImageUrl(galleryImage.image);
+      }
+    } catch (error) {
+      console.error('Error fetching gallery image:', error);
+    }
+  }
+
+  // Fallback to default image
+  return defaultImagePath;
+}
+
+const imageUrl = await getImageUrl();
+
+// Base classes that can be overridden by className
+const baseImageClasses = 'w-full h-full object-cover rounded-lg shadow-lg';
+---
+
+<section class="w-full py-8">
+  <div class={`mx-auto ${maxWidth} px-4 sm:px-6 lg:px-8`}>
+    <div class="relative h-96">
+      <img
+        src={imageUrl}
+        alt="Panel image"
+        class={`${baseImageClasses} ${className}`}
+        loading="lazy"
+      />
+    </div>
+  </div>
+</section>
