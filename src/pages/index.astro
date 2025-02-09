@@ -6,6 +6,7 @@ import Resources from '@/components/Resources.astro';
 import Quote from '@/components/Quote.astro';
 import CookoffPosterGrid from '@/components/posters/CookoffPosterGrid.astro';
 import PanelImage from '@/components/PanelImage.astro';
+import Features from '@/components/Features.astro';
 import config from '@/config/site';
 import strapi from '@/lib/api/strapi-client';
 import type { HomePageResponse, HomePage } from '@/types/strapi';
@@ -47,6 +48,7 @@ const pageData = response.data as HomePage;
 
 <Layout title={'Home'} description={config.description}>
   <HeroMarquee data={pageData} />
+  {pageData.featured && <Features features={pageData.featured} />}
   <Sponsors />
   {pageData.quoteContent && <Quote quote={pageData.quoteContent} />}
 

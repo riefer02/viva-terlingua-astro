@@ -1,0 +1,100 @@
+---
+import type { PageComponentFeaturedSectionComponent } from '@/types/strapi';
+import { getStrapiImageUrl } from '@/utils/image';
+
+interface Props {
+  features: PageComponentFeaturedSectionComponent;
+}
+
+const { features } = Astro.props;
+const mainFeature = features.featuresList?.[0];
+const subFeatures = features.featuresList?.slice(1);
+---
+
+<section class="w-full py-12 md:py-24 lg:py-32 bg-background">
+  <div class="container px-4 md:px-6 mx-auto max-w-6xl">
+    {
+      mainFeature && (
+        <div class="grid gap-6 lg:grid-cols-2 lg:gap-12 items-center">
+          <div class="space-y-4">
+            <h2 class="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
+              {mainFeature.title}
+            </h2>
+            <p class="text-gray-500 dark:text-gray-400 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+              {mainFeature.description}
+            </p>
+            {mainFeature.calloutText && (
+              <a
+                href={mainFeature.slug}
+                class="inline-flex h-10 items-center justify-center rounded-md bg-primary px-8 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary disabled:pointer-events-none disabled:opacity-50"
+              >
+                {mainFeature.calloutText}
+              </a>
+            )}
+          </div>
+          {mainFeature.image && (
+            <div class="aspect-video overflow-hidden rounded-xl">
+              <img
+                src={getStrapiImageUrl(mainFeature.image, 'large')}
+                alt={mainFeature.image.alternativeText || mainFeature.title}
+                class="object-cover w-full h-full"
+                width={mainFeature.image.width}
+                height={mainFeature.image.height}
+              />
+            </div>
+          )}
+        </div>
+      )
+    }
+    {
+      subFeatures && subFeatures.length > 0 && (
+        <div class="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {subFeatures.map((feature) => (
+            <div class="group relative flex flex-col space-y-4">
+              {feature.image && (
+                <div class="aspect-video overflow-hidden rounded-lg">
+                  <img
+                    src={getStrapiImageUrl(feature.image, 'medium')}
+                    alt={feature.image.alternativeText || feature.title}
+                    class="object-cover w-full h-full transition-transform group-hover:scale-105"
+                    width={feature.image.width}
+                    height={feature.image.height}
+                  />
+                </div>
+              )}
+              <div class="space-y-2">
+                <h3 class="text-xl font-bold">{feature.title}</h3>
+                <p class="text-gray-500 dark:text-gray-400">
+                  {feature.description}
+                </p>
+                {feature.calloutText && (
+                  <a
+                    href={feature.slug}
+                    class="inline-flex items-center text-primary hover:underline"
+                  >
+                    {feature.calloutText}
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="ml-1 h-4 w-4"
+                    >
+                      <path d="M5 12h14" />
+                      <path d="m12 5 7 7-7 7" />
+                    </svg>
+                  </a>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      )
+    }
+  </div>
+</section>
