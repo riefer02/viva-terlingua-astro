@@ -1,0 +1,43 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import Layout from '@/layouts/Layout.astro';
+import BaseCard from '@/components/BaseCard.astro';
+import slugify from 'slugify';
+
+const blogPosts = await getCollection('blog');
+
+const sortedPosts = blogPosts.sort(
+  (a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) =>
+    new Date(b.data.publishedAt || '').getTime() -
+    new Date(a.data.publishedAt || '').getTime()
+);
+
+const posts = sortedPosts.map((post: CollectionEntry<'blog'>) => ({
+  ...post,
+  slug: slugify(post.data.title, {
+    lower: true,
+    strict: true,
+    trim: true,
+  }),
+}));
+---
+
+<Layout title="Blog" description="Read our latest blog posts and updates">
+  <main class="container mx-auto px-4 py-8">
+    <h1 class="text-4xl font-bold mb-8">Blog</h1>
+
+    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {
+        posts.map((post) => (
+          <BaseCard
+            title={post.data.title}
+            description={post.data.description || ''}
+            imageUrl={post.data.heroImage?.imageMedia?.url}
+            link={`/blog/${post.slug}`}
+            viewText="Read More"
+          />
+        ))
+      }
+    </div>
+  </main>
+</Layout>
