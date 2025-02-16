@@ -8,6 +8,7 @@ import strapi from '@/lib/api/strapi-client';
 import { getStrapiImageUrl } from '@/utils/image';
 import { ensureLeadingSlash, joinUrlSegments } from '@/utils/url';
 import { formatDate } from '@/utils/date';
+import { stripHtml } from '@/utils/markdown';
 import type {
   EventsEvent,
   EventsEventListResponse,
@@ -46,6 +47,7 @@ if (!eventsResponse.data) {
 }
 
 const events = eventsResponse.data;
+console.log('events', events);
 const galleryImage = (galleryResponse.data as GalleryImagesGalleryImage[])[0]
   ?.image;
 ---
@@ -68,7 +70,7 @@ const galleryImage = (galleryResponse.data as GalleryImagesGalleryImage[])[0]
           <BaseCard
             title={event.title || ''}
             description={`${formatDate(event.startDateTime, 'WITH_TIME')}${
-              event.description ? ` - ${event.description}` : ''
+              event.description ? ` - ${stripHtml(event.description)}` : ''
             }`}
             imageUrl={getStrapiImageUrl(
               event.squareImage || event.marqueeImage
