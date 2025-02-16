@@ -1,0 +1,44 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeroMarquee from '@/components/HeroMarquee.astro';
+import PanelImage from '@/components/PanelImage.astro';
+import strapi from '@/lib/api/strapi-client';
+import type { ThankYouResponse, ThankYou } from '@/types/strapi';
+
+const response = await strapi.single('thank-you').find({
+  populate: {
+    meta: {
+      populate: '*',
+    },
+    marqueeImage: {
+      populate: '*',
+    },
+    panelImage: {
+      populate: '*',
+    },
+  },
+});
+
+if (!response.data) {
+  throw new Error('Thank you page data not found');
+}
+
+const pageData = response.data as ThankYou;
+---
+
+<Layout
+  title="Thank You"
+  description={pageData.meta?.description || 'Thank you for your support'}
+>
+  <HeroMarquee data={pageData} />
+
+  <div class="container mx-auto px-4 py-12 md:py-16 lg:py-20">
+    <div class="prose prose-stone dark:prose-invert mx-auto">
+      <p class="text-xl md:text-2xl text-muted-foreground leading-relaxed">
+        {pageData.message}
+      </p>
+    </div>
+  </div>
+
+  {pageData.panelImage && <PanelImage panelImage={pageData.panelImage} />}
+</Layout>

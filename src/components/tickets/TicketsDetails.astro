@@ -1,0 +1,68 @@
+---
+import { Flame } from 'lucide-react';
+
+interface Props {
+  className?: string;
+}
+
+const CURRENT_YEAR = new Date().getFullYear();
+
+type TicketDetail = (typeof ticketDetails)[number];
+
+const ticketDetails = [
+  'Access to all 4 days of the event',
+  'Chili tasting opportunities',
+  'Live music and entertainment',
+  'Access to vendor area',
+  'Commemorative event program',
+  'Parking access',
+  'Camping area access (first come, first served)',
+] as const;
+
+const { className } = Astro.props;
+---
+
+<article class:list={['h-full', className]}>
+  <div class="prose prose-stone dark:prose-invert h-full">
+    <div class="space-y-6 bg-muted/50 p-6 rounded-lg shadow-sm">
+      <header class="space-y-4">
+        <div class="text-muted-foreground space-y-2">
+          <p class="text-lg font-medium">
+            The {CURRENT_YEAR} Ticket portal is now closed! Don't worry you can still
+            purchase tickets at the front gate with cash.
+          </p>
+          <p>Oct 30th - Nov 2nd, {CURRENT_YEAR}</p>
+          <p>
+            Price: <span class="text-primary font-semibold">$53</span> per Chilihead!
+          </p>
+        </div>
+      </header>
+
+      <section class="space-y-4">
+        <h2 class="text-2xl font-semibold tracking-tight">What's Included</h2>
+        <ul class="space-y-2">
+          {
+            ticketDetails.map((detail: TicketDetail) => (
+              <li class="flex items-center gap-2">
+                <Flame className="text-primary h-5 w-5" />
+                <span>{detail}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+
+      <section class="space-y-2">
+        <h2 class="text-2xl font-semibold tracking-tight">Physical Address:</h2>
+        <p>22970 FM 170 Terlingua, TX 79852</p>
+      </section>
+
+      <section class="space-y-2">
+        <h2 class="text-2xl font-semibold tracking-tight">Disclaimer:</h2>
+        <p class="italic">
+          Consumption of too much chili might result in a good time!
+        </p>
+      </section>
+    </div>
+  </div>
+</article>

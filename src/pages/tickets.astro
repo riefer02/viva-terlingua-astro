@@ -1,0 +1,51 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeroMarquee from '@/components/HeroMarquee.astro';
+import PanelImage from '@/components/PanelImage.astro';
+import TicketsDetails from '@/components/tickets/TicketsDetails.astro';
+import TicketsForm from '@/components/tickets/TicketsForm';
+import strapi from '@/lib/api/strapi-client';
+import type { TicketsTicket } from '@/types/strapi';
+
+const response = await strapi.single('ticket').find({
+  populate: {
+    meta: {
+      populate: '*',
+    },
+    marqueeImage: {
+      populate: '*',
+    },
+    panelImage: {
+      populate: '*',
+    },
+  },
+});
+
+if (!response.data) {
+  throw new Error('Ticket page data not found');
+}
+
+const pageData = response.data as TicketsTicket;
+
+const seoConfig = {
+  title:
+    'Join the OTICCC: Original Terlingua International Chili Cook Off - Get Your Tickets Now!',
+  description:
+    pageData.meta?.description ||
+    'Join us for the Original Terlingua International Championship Chili Cook-off. Get your tickets now for this legendary event!',
+  keywords: ['terlingua', 'chili', 'cook off', 'tickets', 'championship'],
+};
+---
+
+<Layout {...seoConfig}>
+  <HeroMarquee data={pageData} />
+
+  <div class="container mx-auto px-4 py-12 md:py-16 lg:py-20">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <TicketsDetails />
+      <TicketsForm client:load />
+    </div>
+  </div>
+
+  {pageData.panelImage && <PanelImage panelImage={pageData.panelImage} />}
+</Layout>
