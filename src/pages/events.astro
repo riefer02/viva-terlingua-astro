@@ -1,0 +1,87 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeroMarquee from '@/components/HeroMarquee.astro';
+import PanelImage from '@/components/PanelImage.astro';
+import BaseCard from '@/components/BaseCard.astro';
+
+import strapi from '@/lib/api/strapi-client';
+import { getStrapiImageUrl } from '@/utils/image';
+import { ensureLeadingSlash, joinUrlSegments } from '@/utils/url';
+import { formatDate } from '@/utils/date';
+import type {
+  EventsEvent,
+  EventsEventListResponse,
+  GalleryImagesGalleryImage,
+} from '@/types/strapi';
+
+const eventsResponse = await strapi
+  .collection<EventsEventListResponse>('events')
+  .find({
+    populate: {
+      marqueeImage: {
+        populate: '*',
+      },
+      squareImage: {
+        populate: '*',
+      },
+    },
+    sort: ['startDateTime:asc'],
+  });
+
+const galleryResponse = await strapi.collection('gallery-images').find({
+  filters: {
+    title: {
+      $eq: 'Camp and Sky',
+    },
+  },
+  populate: {
+    image: {
+      populate: '*',
+    },
+  },
+});
+
+if (!eventsResponse.data) {
+  throw new Error('Events data not found');
+}
+
+const events = eventsResponse.data;
+const galleryImage = (galleryResponse.data as GalleryImagesGalleryImage[])[0]
+  ?.image;
+---
+
+<Layout
+  title="News & Events"
+  description="Events, dates, times, and details for the Tolbert's International Chili Cook Off in Terlingua, Texas. How to enter, where to go, things to do around town, all will be listed here in the events page of the chili music festival. Beer, fun, sun, and friends."
+>
+  <HeroMarquee
+    data={{
+      title: 'News & Events',
+      marqueeImage: galleryImage,
+    }}
+  />
+
+  <div class="container mx-auto px-4 py-12">
+    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        events.map((event: EventsEvent) => (
+          <BaseCard
+            title={event.title || ''}
+            description={`${formatDate(event.startDateTime, 'WITH_TIME')}${
+              event.description ? ` - ${event.description}` : ''
+            }`}
+            imageUrl={getStrapiImageUrl(
+              event.squareImage || event.marqueeImage
+            )}
+            link={ensureLeadingSlash(
+              joinUrlSegments('events', event.slug || '')
+            )}
+            viewText="View Event"
+          />
+        ))
+      }
+    </div>
+  </div>
+
+  {galleryImage && <PanelImage panelImage={galleryImage} />}
+</Layout>

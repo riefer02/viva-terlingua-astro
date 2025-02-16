@@ -1,0 +1,77 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeroMarquee from '@/components/HeroMarquee.astro';
+import PanelImage from '@/components/PanelImage.astro';
+import config from '@/config/site';
+import strapi from '@/lib/api/strapi-client';
+import { ensureLeadingSlash } from '@/utils/url';
+import { formatDate } from '@/utils/date';
+import type { EventsEventListResponse } from '@/types/strapi';
+
+const { slug } = Astro.params;
+
+const querySlug = ensureLeadingSlash(slug || '');
+
+const response = await strapi
+  .collection<EventsEventListResponse>('events')
+  .find({
+    filters: {
+      slug: {
+        $eq: querySlug,
+      },
+    },
+    populate: {
+      meta: {
+        populate: '*',
+      },
+      marqueeImage: {
+        populate: '*',
+      },
+      panelImage: {
+        populate: '*',
+      },
+    },
+  });
+
+if (!response.data || response.data.length === 0) {
+  return Astro.redirect('/404');
+}
+
+const event = response.data[0];
+---
+
+<Layout
+  title={event.title || 'Event'}
+  description={event.meta?.description ||
+    event.description ||
+    config.description}
+>
+  <HeroMarquee
+    data={{
+      title: event.title || 'Event',
+      marqueeImage: event.marqueeImage,
+    }}
+  />
+
+  <div class="container mx-auto px-4 py-12">
+    <div class="prose prose-lg mx-auto">
+      <div class="mb-6">
+        <h2 class="text-2xl font-bold">Event Details</h2>
+        <p class="text-lg text-muted-foreground">
+          {formatDate(event.startDateTime, 'WITH_TIME')}
+        </p>
+        {
+          event.endDateTime && (
+            <p class="text-lg text-muted-foreground">
+              Ends: {formatDate(event.endDateTime, 'WITH_TIME')}
+            </p>
+          )
+        }
+      </div>
+
+      {event.description && <div set:html={event.description} />}
+    </div>
+  </div>
+
+  {event.panelImage && <PanelImage panelImage={event.panelImage} />}
+</Layout>

@@ -1,0 +1,12 @@
+---
+description: When working with pages and components either astro or react you will need all of these utility files for helpers
+globs: src/components/**/*, src/pages/**/*
+---
+[date.ts](mdc:src/utils/date.ts)
+[image.ts](mdc:src/utils/image.ts)
+@url.ts
+[seo.ts](mdc:src/utils/seo.ts)
+[resources.ts](mdc:src/utils/resources.ts)
+[markdown.ts](mdc:src/utils/markdown.ts)
+[faq.ts](mdc:src/utils/faq.ts)
+[strapi.ts](mdc:src/utils/strapi.ts)
