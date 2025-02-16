@@ -14,21 +14,18 @@ export interface Props {
 const { className } = Astro.props;
 
 // Fetch gallery images filtered by type "poster"
-const response = await strapi.find<GalleryImagesGalleryImageListResponse>(
-  'gallery-images',
-  {
-    filters: {
-      role: {
-        $eq: 'poster',
-      },
+const response = await strapi.collection('gallery-images').find({
+  filters: {
+    role: {
+      $eq: 'poster',
     },
-    populate: {
-      image: {
-        populate: '*',
-      },
+  },
+  populate: {
+    image: {
+      populate: '*',
     },
-  }
-);
+  },
+});
 
 const posters = (response.data || []) as GalleryImagesGalleryImage[];
 ---

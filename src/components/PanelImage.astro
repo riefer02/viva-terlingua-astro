@@ -34,21 +34,18 @@ async function getImageUrl(): Promise<string> {
   // If gallery image name is provided, try to find it
   if (galleryImageName) {
     try {
-      const response = await strapi.find<GalleryImagesGalleryImageListResponse>(
-        'gallery-images',
-        {
-          filters: {
-            title: {
-              $eq: galleryImageName,
-            },
+      const response = await strapi.collection('gallery-images').find({
+        filters: {
+          title: {
+            $eq: galleryImageName,
           },
-          populate: {
-            image: {
-              populate: '*',
-            },
+        },
+        populate: {
+          image: {
+            populate: '*',
           },
-        }
-      );
+        },
+      });
       const responseData = (response.data || []) as GalleryImagesGalleryImage[];
       const galleryImage = responseData[0];
       if (galleryImage?.image) {

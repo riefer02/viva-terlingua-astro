@@ -1,11 +1,11 @@
 import strapi from '@/lib/api/strapi-client';
 import { z, defineCollection } from 'astro:content';
-import type { BlogListResponse, Blog } from '@/types/strapi';
+import type { Blog } from '@/types/strapi';
 
 const blogCollection = defineCollection({
   loader: async () => {
     // TODO: Add populate for tags and bodyContent and all other fields
-    const response = await strapi.find<BlogListResponse>('blogs', {
+    const response = await strapi.collection('blogs').find({
       populate: '*',
     });
     const blogs = response.data as Blog[];

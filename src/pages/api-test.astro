@@ -14,7 +14,7 @@ let error;
 
 try {
   console.log('Fetching events from Strapi...');
-  response = await strapi.find('events', {
+  response = await strapi.collection('events').find({
     pagination: {
       page: 1,
       pageSize: 10,

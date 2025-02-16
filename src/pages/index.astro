@@ -11,7 +11,7 @@ import config from '@/config/site';
 import strapi from '@/lib/api/strapi-client';
 import type { HomePageResponse, HomePage } from '@/types/strapi';
 
-const response = await strapi.find<HomePageResponse>('home-page', {
+const response = await strapi.single('home-page').find({
   populate: {
     featured: {
       populate: {

@@ -4,7 +4,7 @@ import type { SponsorsSponsor, SponsorsSponsorResponse } from '@/types/strapi';
 import strapi from '@/lib/api/strapi-client';
 
 // Fetch sponsors data
-const response = await strapi.find<SponsorsSponsorResponse>('sponsors', {
+const response = await strapi.collection('sponsors').find({
   populate: {
     logo: {
       populate: '*',

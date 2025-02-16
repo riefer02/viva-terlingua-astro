@@ -8,16 +8,13 @@ import type {
 } from '@/types/strapi';
 
 // Fetch local attractions data
-const response = await strapi.find<LocalAttractionsLocalAttractionListResponse>(
-  'local-attractions',
-  {
-    populate: {
-      marqueeImage: {
-        populate: '*',
-      },
+const response = await strapi.collection('local-attractions').find({
+  populate: {
+    marqueeImage: {
+      populate: '*',
     },
-  }
-);
+  },
+});
 
 if (!response?.data) {
   throw new Error('Local attractions data not found');

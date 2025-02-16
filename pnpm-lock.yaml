@@ -29,9 +29,9 @@ importers:
       '@radix-ui/react-slot':
         specifier: ^1.1.1
         version: 1.1.1(@types/react@19.0.8)(react@19.0.0)
-      '@strapi/sdk-js':
-        specifier: 1.0.0-beta.0
-        version: 1.0.0-beta.0
+      '@strapi/client':
+        specifier: ^1.0.0
+        version: 1.0.0
       '@tailwindcss/vite':
         specifier: ^4.0.1
         version: 4.0.1(vite@6.0.11(@types/node@22.10.10)(jiti@2.4.2)(lightningcss@1.29.1)(tsx@4.19.2)(yaml@2.7.0))
@@ -71,9 +71,6 @@ importers:
       slugify:
         specifier: ^1.6.6
         version: 1.6.6
-      strapi-sdk-js:
-        specifier: ^2.3.3
-        version: 2.3.3
       tailwind-merge:
         specifier: ^2.6.0
         version: 2.6.0
@@ -1324,9 +1321,9 @@ packages:
   '@shikijs/vscode-textmate@10.0.1':
     resolution: {integrity: sha512-fTIQwLF+Qhuws31iw7Ncl1R3HUDtGwIipiJ9iU+UsDUwMhegFcQKQHd51nZjb7CArq0MvON8rbgCGQYWHUKAdg==}
 
-  '@strapi/sdk-js@1.0.0-beta.0':
-    resolution: {integrity: sha512-Gmug5ANk4VQ5ZFIsc+y6QOukLVxs1HQil2AFmjzJWE+CoLpeQwsymieMw0U7fVW8VxWqe2sAKWG0gadYDwGEOQ==}
-    engines: {node: '>=18.0.0 <=22.x.x', npm: '>=6.0.0'}
+  '@strapi/client@1.0.0':
+    resolution: {integrity: sha512-GA/UygidAy9zUKG97rVaBCKUmuNFnTb1AnD43jBD+w8ixMuFBe2CTlT2GS8jWxJy4Go36Pura9lLqfmEXzVReA==}
+    engines: {node: '>=20.18.2 <=22.x.x'}
 
   '@tailwindcss/node@4.0.1':
     resolution: {integrity: sha512-lc+ly6PKHqgCVl7eO8D2JlV96Lks5bmL6pdtM6UasyUHLU2zmrOqU6jfgln120IVnCh3VC8GG/ca24xVTtSokw==}
@@ -1470,9 +1467,6 @@ packages:
   '@types/hast@3.0.4':
     resolution: {integrity: sha512-WPs+bbQw5aCj+x6laNGWLH3wviHtoCv/P3+otBhbOhJgG8qtpdAMlTCxLtsTWA7LH1Oh/bFCHsBn0TPS5m30EQ==}
 
-  '@types/js-cookie@3.0.6':
-    resolution: {integrity: sha512-wkw9yd1kEXOPnvEeEV1Go1MmxtBJL0RR79aOTAApecWFVu7w0NNXNqhcWgvw2YgZDYadliXkl14pa3WXw5jlCQ==}
-
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
 
@@ -1487,9 +1481,6 @@ packages:
 
   '@types/node@22.10.10':
     resolution: {integrity: sha512-X47y/mPNzxviAGY5TcYPtYL8JsY3kAq2n8fMmKoRCxq/c4v4pyGNCzM2R6+M5/umG4ZfHuT+sgqDYqWc9rJ6ww==}
-
-  '@types/qs@6.9.18':
-    resolution: {integrity: sha512-kK7dgTYDyGqS+e2Q4aK9X3D7q234CIZ1Bv0q/7Z5IwRDoADNU81xXJK/YVyLbLTZCoIwUoDoffFeF+p/eIklAA==}
 
   '@types/react-dom@19.0.3':
     resolution: {integrity: sha512-0Knk+HJiMP/qOZgMyNFamlIjw9OFCsyC2ZbigmEEyXXixgre6IQpm/4V+r3qH4GC1JPvRJKInw+on2rV6YZLeA==}
@@ -1708,9 +1699,6 @@ packages:
 
   asynckit@0.4.0:
     resolution: {integrity: sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==}
-
-  axios@0.27.2:
-    resolution: {integrity: sha512-t+yRIyySRTp/wua5xEr+z1q60QmLq8ABsS5O9Me1AsE5dfKqgnCFzwiCZZ/cGNd1lq4/7akDWMxdhVlucjmnOQ==}
 
   axobject-query@4.1.0:
     resolution: {integrity: sha512-qIj0G9wZbMGNLjLmg1PT6v2mE9AH2zlnADJD/2tC6E00hgmhUOfEB6greHPAfLRSufHqROIUTkw6E+M3lH0PTQ==}
@@ -1973,9 +1961,6 @@ packages:
 
   deep-is@0.1.4:
     resolution: {integrity: sha512-oIPzksmTg4/MriiaYGO+okXDT7ztn/w3Eptv/+gSIdMdKsJo0u4CfYNFJPy+4SKMuCqGw2wxnA+URMg3t8a/bQ==}
-
-  defu@5.0.1:
-    resolution: {integrity: sha512-EPS1carKg+dkEVy3qNTqIdp2qV7mUP08nIsupfwQpz++slCVRw7qbQyWvSTig+kFPwz2XXp5/kIIkH+CwrJKkQ==}
 
   defu@6.1.4:
     resolution: {integrity: sha512-mEQCMmwJu317oSz8CwdIOdwf3xMif1ttiM8LTufzc3g6kR+9Pe236twL8j3IYT1F7GfRgGcW6MWxzZjLIkuHIg==}
@@ -2276,15 +2261,6 @@ packages:
     resolution: {integrity: sha512-9UbaD6XdAL97+k/n+N7JwX46K/M6Zc6KcFYskrYL8wbBV/Uyk0CTAMY0VT+qiK5PM7AIc9aTWYtq65U7T+aCNQ==}
     engines: {node: '>=8'}
 
-  follow-redirects@1.15.9:
-    resolution: {integrity: sha512-gew4GsXizNgdoRyqmyfMHyAmXsZDk6mHkSxZFCzW9gwlbtOW44CDtYavM+y+72qD/Vq2l550kMF52DT8fOLJqQ==}
-    engines: {node: '>=4.0'}
-    peerDependencies:
-      debug: '*'
-    peerDependenciesMeta:
-      debug:
-        optional: true
-
   foreground-child@3.3.0:
     resolution: {integrity: sha512-Ld2g8rrAyMYFXBhEqMz8ZAHBi4J4uS1i/CxGMDnjyFWddMXLVcDp051DZfu+t7+ab7Wv6SMqpWmyFIj5UbfFvg==}
     engines: {node: '>=14'}
@@ -2573,10 +2549,6 @@ packages:
   jiti@2.4.2:
     resolution: {integrity: sha512-rg9zJN+G4n2nfJl5MW3BMygZX56zKPNVEYYqq7adpmMh4Jn2QNEwhvQlFy6jPVdcod7txZtKHWnyZiA3a0zP7A==}
     hasBin: true
-
-  js-cookie@3.0.5:
-    resolution: {integrity: sha512-cEiJEAEoIbWfCZYKWhVwFuvPX1gETRYPw6LlaTKoxD3s2AkXzkCjnp6h0V77ozyqj0jakteJ4YqDJT830+lVGw==}
-    engines: {node: '>=14'}
 
   js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
@@ -3532,9 +3504,6 @@ packages:
 
   std-env@3.8.0:
     resolution: {integrity: sha512-Bc3YwwCB+OzldMxOXJIIvC6cPRWr/LxOp48CdQTOkPyk/t4JWWJbrilwBd7RJzKV8QW7tJkcgAmeuLLJugl5/w==}
-
-  strapi-sdk-js@2.3.3:
-    resolution: {integrity: sha512-q7IcW+joeqM5aVIaO35u/MU4AVk87GuCQs96t8oVdtT/xterP8uVylESsbs7f79R2HvFtwYLuHtDB4zr2hSXAw==}
 
   string-argv@0.3.2:
     resolution: {integrity: sha512-aqD2Q0144Z+/RqG52NeHEkZauTAUWJO8c6yTftGJKO3Tja5tUgIfmIl6kExvhtxSDP7fXB6DvzkfMpCd/F3G+Q==}
@@ -5168,7 +5137,12 @@ snapshots:
 
   '@shikijs/vscode-textmate@10.0.1': {}
 
-  '@strapi/sdk-js@1.0.0-beta.0': {}
+  '@strapi/client@1.0.0':
+    dependencies:
+      debug: 4.4.0
+      qs: 6.14.0
+    transitivePeerDependencies:
+      - supports-color
 
   '@tailwindcss/node@4.0.1':
     dependencies:
@@ -5313,8 +5287,6 @@ snapshots:
     dependencies:
       '@types/unist': 3.0.3
 
-  '@types/js-cookie@3.0.6': {}
-
   '@types/json-schema@7.0.15': {}
 
   '@types/mdast@4.0.4':
@@ -5330,8 +5302,6 @@ snapshots:
   '@types/node@22.10.10':
     dependencies:
       undici-types: 6.20.0
-
-  '@types/qs@6.9.18': {}
 
   '@types/react-dom@19.0.3(@types/react@19.0.8)':
     dependencies:
@@ -5706,13 +5676,6 @@ snapshots:
 
   asynckit@0.4.0: {}
 
-  axios@0.27.2:
-    dependencies:
-      follow-redirects: 1.15.9
-      form-data: 4.0.1
-    transitivePeerDependencies:
-      - debug
-
   axobject-query@4.1.0: {}
 
   bail@2.0.2: {}
@@ -5962,8 +5925,6 @@ snapshots:
   deep-eql@5.0.2: {}
 
   deep-is@0.1.4: {}
-
-  defu@5.0.1: {}
 
   defu@6.1.4: {}
 
@@ -6296,8 +6257,6 @@ snapshots:
 
   flattie@1.1.1: {}
 
-  follow-redirects@1.15.9: {}
-
   foreground-child@3.3.0:
     dependencies:
       cross-spawn: 7.0.6
@@ -6618,8 +6577,6 @@ snapshots:
       '@pkgjs/parseargs': 0.11.0
 
   jiti@2.4.2: {}
-
-  js-cookie@3.0.5: {}
 
   js-tokens@4.0.0: {}
 
@@ -7774,18 +7731,6 @@ snapshots:
   stackback@0.0.2: {}
 
   std-env@3.8.0: {}
-
-  strapi-sdk-js@2.3.3:
-    dependencies:
-      '@types/js-cookie': 3.0.6
-      '@types/qs': 6.9.18
-      axios: 0.27.2
-      defu: 5.0.1
-      js-cookie: 3.0.5
-      qs: 6.14.0
-      ufo: 1.5.4
-    transitivePeerDependencies:
-      - debug
 
   string-argv@0.3.2: {}
 

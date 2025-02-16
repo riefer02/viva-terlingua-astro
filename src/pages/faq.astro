@@ -6,7 +6,7 @@ import type { FaqListResponse, Faq } from '@/types/strapi';
 import { groupFaqsByCategory } from '@/utils/faq';
 
 // Fetch FAQs from Strapi
-const response = await strapi.find<FaqListResponse>('faqs', {
+const response = await strapi.collection('faqs').find({
   sort: ['order:asc', 'category:asc'],
   populate: '*',
 });
