@@ -1,32 +1,33 @@
 ---
-import { getCollection, type CollectionEntry } from 'astro:content';
+export const prerender = true;
+import { getCollection } from 'astro:content';
 import Layout from '@/layouts/Layout.astro';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import type { BlogComponentDynamicBlogContentComponent } from '@/types/strapi';
 import slugify from 'slugify';
 import { getStrapiImageUrl } from '@/utils/image';
+import DynamicBlogContent from '@/components/blog/DynamicBlogContent.astro';
+import { formatDate, getISODate } from '@/utils/date';
 
-// Get static paths for all blog posts
 export async function getStaticPaths() {
   const blogEntries = await getCollection('blog');
-  return blogEntries.map((entry) => {
-    const slug = slugify(entry.data.title, {
-      lower: true,
-      strict: true,
-      trim: true,
-    });
-    return {
-      params: { slug },
-      props: {
-        title: entry.data.title,
-        description: entry.data.description,
-        heroImage: entry.data.heroImage,
-        author: entry.data.author,
-        publishedAt: entry.data.publishedAt,
-        bodyContent: entry.data.bodyContent,
-      },
-    };
-  });
+  return blogEntries.map((entry) => ({
+    params: {
+      slug: slugify(entry.data.title, {
+        lower: true,
+        strict: true,
+        trim: true,
+      }),
+    },
+    props: {
+      title: entry.data.title,
+      description: entry.data.description,
+      heroImage: entry.data.heroImage,
+      author: entry.data.author,
+      publishedAt: entry.data.publishedAt,
+      bodyContent: entry.data.bodyContent,
+    },
+  }));
 }
 
 interface Props {
@@ -40,15 +41,8 @@ interface Props {
 
 const { title, description, heroImage, author, publishedAt, bodyContent } =
   Astro.props;
-
-// Format the date
-const formattedDate = publishedAt
-  ? new Date(publishedAt).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    })
-  : '';
+console.log('Astro.props', Astro.props);
+const formattedDate = formatDate(publishedAt);
 ---
 
 <Layout
@@ -58,13 +52,15 @@ const formattedDate = publishedAt
     ? getStrapiImageUrl(heroImage.imageMedia, 'large')
     : undefined}
 >
-  <article class="container mx-auto px-4 py-8 max-w-4xl dark:bg-background">
+  <article class="container mx-auto px-4 py-8 max-w-4xl bg-background">
     <header class="mb-8">
-      <h1 class="text-4xl font-bold mb-4">{title}</h1>
+      <h1 class="scroll-m-20 text-4xl font-bold tracking-tight mb-4">
+        {title}
+      </h1>
       <div class="text-muted-foreground">
         <span>By {author}</span>
         <span class="mx-2">•</span>
-        <time datetime={publishedAt}>{formattedDate}</time>
+        <time datetime={getISODate(publishedAt)}>{formattedDate}</time>
       </div>
     </header>
 
@@ -73,61 +69,17 @@ const formattedDate = publishedAt
         <div class="mb-8">
           <AspectRatio ratio={16 / 9}>
             <img
-              src={heroImage.imageMedia.url}
+              src={getStrapiImageUrl(heroImage.imageMedia, 'large')}
               alt={heroImage.imageAlt || title}
-              class="rounded-lg object-cover w-full h-full"
+              class="rounded-md border bg-muted object-cover w-full h-full"
             />
           </AspectRatio>
         </div>
       )
     }
 
-    <div class="prose prose-lg dark:prose-invert max-w-none">
-      {
-        bodyContent?.map(
-          (content: BlogComponentDynamicBlogContentComponent) => {
-            if (content.__component === 'blog-component.dynamic-blog-content') {
-              switch (content.layoutType) {
-                case 'text':
-                  return <div set:html={content.textContent} />;
-                case 'image':
-                  return (
-                    content.imageContent?.imageMedia && (
-                      <img
-                        src={content.imageContent.imageMedia.url}
-                        alt={content.imageContent.imageAlt || ''}
-                        class="rounded-lg"
-                      />
-                    )
-                  );
-                case 'textRightImageLeft':
-                case 'textLeftImageRight':
-                  return (
-                    <div
-                      class={`grid grid-cols-1 md:grid-cols-2 gap-8 items-center ${
-                        content.layoutType === 'textRightImageLeft'
-                          ? ''
-                          : 'md:flex-row-reverse'
-                      }`}
-                    >
-                      {content.imageContent?.imageMedia && (
-                        <img
-                          src={content.imageContent.imageMedia.url}
-                          alt={content.imageContent.imageAlt || ''}
-                          class="rounded-lg"
-                        />
-                      )}
-                      <div set:html={content.textContent} />
-                    </div>
-                  );
-                default:
-                  return null;
-              }
-            }
-            return null;
-          }
-        )
-      }
+    <div class="prose prose-stone max-w-none">
+      {bodyContent?.map((content) => <DynamicBlogContent content={content} />)}
     </div>
   </article>
 </Layout>

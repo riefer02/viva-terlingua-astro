@@ -4,6 +4,7 @@ import type { BlogListResponse, Blog } from '@/types/strapi';
 
 const blogCollection = defineCollection({
   loader: async () => {
+    // TODO: Add populate for tags and bodyContent and all other fields
     const response = await strapi.find<BlogListResponse>('blogs', {
       populate: '*',
     });
@@ -18,19 +19,21 @@ const blogCollection = defineCollection({
     documentId: z.string(),
     title: z.string(),
     author: z.string(),
-    description: z.string().optional(),
+    description: z.string().nullable().optional(),
     heroImage: z
       .object({
-        imageAlt: z.string().optional(),
+        imageAlt: z.string().nullable().optional(),
         imageMedia: z
           .object({
             url: z.string(),
-            width: z.number().optional(),
-            height: z.number().optional(),
-            alternativeText: z.string().optional(),
+            width: z.number().nullable().optional(),
+            height: z.number().nullable().optional(),
+            alternativeText: z.string().nullable().optional(),
           })
+          .nullable()
           .optional(),
       })
+      .nullable()
       .optional(),
     featuredPost: z.boolean().optional(),
     tags: z
@@ -41,6 +44,7 @@ const blogCollection = defineCollection({
           slug: z.string(),
         })
       )
+      .nullable()
       .optional(),
     bodyContent: z
       .array(
@@ -48,33 +52,40 @@ const blogCollection = defineCollection({
           __component: z.string(),
           layoutType: z
             .enum(['text', 'image', 'textRightImageLeft', 'textLeftImageRight'])
+            .nullable()
             .optional(),
-          textContent: z.string().optional(),
+          textContent: z.string().nullable().optional(),
           imageContent: z
             .object({
-              imageAlt: z.string().optional(),
+              imageAlt: z.string().nullable().optional(),
               imageMedia: z
                 .object({
                   url: z.string(),
-                  alternativeText: z.string().optional(),
+                  alternativeText: z.string().nullable().optional(),
                 })
+                .nullable()
                 .optional(),
             })
+            .nullable()
             .optional(),
         })
       )
+      .nullable()
       .optional(),
     createdAt: z
       .string()
       .transform((str) => new Date(str))
+      .nullable()
       .optional(),
     updatedAt: z
       .string()
       .transform((str) => new Date(str))
+      .nullable()
       .optional(),
     publishedAt: z
       .string()
       .transform((str) => new Date(str))
+      .nullable()
       .optional(),
   }),
 });

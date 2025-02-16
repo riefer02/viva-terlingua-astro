@@ -1,0 +1,90 @@
+---
+import type { BlogComponentDynamicBlogContentComponent } from '@/types/strapi';
+import { parseMarkdown } from '@/utils/markdown';
+
+interface Props {
+  content: BlogComponentDynamicBlogContentComponent;
+}
+
+const { content } = Astro.props;
+
+// Helper function to render content based on layout type
+const renderedContent = (() => {
+  if (content.__component !== 'blog-component.dynamic-blog-content') {
+    return null;
+  }
+
+  switch (content.layoutType) {
+    case 'text':
+      return {
+        type: 'text',
+        html: parseMarkdown(content.textContent),
+      };
+
+    case 'image':
+      if (!content.imageContent?.imageMedia) return null;
+      return {
+        type: 'image',
+        url: content.imageContent.imageMedia.url,
+        alt: content.imageContent.imageAlt || '',
+      };
+
+    case 'textRightImageLeft':
+    case 'textLeftImageRight':
+      if (!content.imageContent?.imageMedia) return null;
+      return {
+        type: 'mixed',
+        layout: content.layoutType,
+        imageUrl: content.imageContent.imageMedia.url,
+        imageAlt: content.imageContent.imageAlt || '',
+        html: parseMarkdown(content.textContent),
+      };
+
+    default:
+      return null;
+  }
+})();
+---
+
+<div class="w-full">
+  {
+    renderedContent?.type === 'text' && (
+      <div
+        class="prose prose-stone max-w-none"
+        set:html={renderedContent.html}
+      />
+    )
+  }
+
+  {
+    renderedContent?.type === 'image' && (
+      <img
+        src={renderedContent.url}
+        alt={renderedContent.alt}
+        class="aspect-video object-cover rounded-md border bg-muted"
+      />
+    )
+  }
+
+  {
+    renderedContent?.type === 'mixed' && (
+      <div
+        class={`grid md:grid-cols-2 gap-8 items-center ${
+          renderedContent.layout === 'textLeftImageRight'
+            ? 'md:flex-row-reverse'
+            : ''
+        }`}
+      >
+        <img
+          src={renderedContent.imageUrl}
+          alt={renderedContent.imageAlt}
+          class="aspect-video object-cover rounded-md border bg-muted"
+        />
+        <div
+          class="prose prose-stone max-w-none"
+          set:html={renderedContent.html}
+        />
+      </div>
+    )
+  }
+</div>
