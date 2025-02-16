@@ -4,9 +4,16 @@ import type { Blog } from '@/types/strapi';
 
 const blogCollection = defineCollection({
   loader: async () => {
-    // TODO: Add populate for tags and bodyContent and all other fields
     const response = await strapi.collection('blogs').find({
-      populate: '*',
+      populate: {
+        heroImage: {
+          populate: '*',
+        },
+        bodyContent: {
+          populate: '*',
+        },
+        tags: true,
+      },
     });
     const blogs = response.data as Blog[];
     return blogs.map(({ id, ...blog }) => ({
