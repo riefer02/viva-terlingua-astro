@@ -1,0 +1,90 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeroMarquee from '@/components/HeroMarquee.astro';
+import Quote from '@/components/Quote.astro';
+import PanelImage from '@/components/PanelImage.astro';
+import config from '@/config/site';
+import strapi from '@/lib/api/strapi-client';
+import type {
+  AboutPageResponse,
+  UtilityComponentLinkComponent,
+} from '@/types/strapi';
+
+const response = await strapi.single<AboutPageResponse>('about-page').find({
+  populate: {
+    meta: {
+      populate: '*',
+    },
+    marqueeImage: {
+      populate: '*',
+    },
+    pageContent: {
+      populate: '*',
+    },
+    quoteContent: {
+      populate: '*',
+    },
+  },
+});
+
+if (!response.data) {
+  throw new Error('About page data not found');
+}
+
+const pageData = response.data;
+---
+
+<Layout
+  title="About"
+  description={pageData.meta?.description || config.description}
+>
+  <HeroMarquee
+    data={{
+      title: pageData.title || 'About',
+      marqueeImage: pageData.marqueeImage,
+    }}
+  />
+
+  <div class="container mx-auto px-4 py-12">
+    {
+      pageData.pageContent && (
+        <div class="prose prose-lg mx-auto">
+          {pageData.pageContent.primaryText && (
+            <div set:html={pageData.pageContent.primaryText} />
+          )}
+
+          {pageData.pageContent.Links &&
+            pageData.pageContent.Links.length > 0 && (
+              <div class="mt-8">
+                <h3>Related Links</h3>
+                <ul>
+                  {pageData.pageContent.Links.map(
+                    (link: UtilityComponentLinkComponent) => (
+                      <li>
+                        <a
+                          href={link.url}
+                          class="text-primary hover:text-primary-dark"
+                          target={link.type === 'external' ? '_blank' : '_self'}
+                          rel={
+                            link.type === 'external'
+                              ? 'noopener noreferrer'
+                              : ''
+                          }
+                        >
+                          {link.label}
+                        </a>
+                      </li>
+                    )
+                  )}
+                </ul>
+              </div>
+            )}
+        </div>
+      )
+    }
+  </div>
+
+  {pageData.quoteContent && <Quote quote={pageData.quoteContent} />}
+
+  {pageData.marqueeImage && <PanelImage panelImage={pageData.marqueeImage} />}
+</Layout>
