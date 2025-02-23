@@ -5,12 +5,9 @@ import Quote from '@/components/Quote.astro';
 import PanelImage from '@/components/PanelImage.astro';
 import config from '@/config/site';
 import strapi from '@/lib/api/strapi-client';
-import type {
-  AboutPageResponse,
-  UtilityComponentLinkComponent,
-} from '@/types/strapi';
+import type { UtilityComponentLinkComponent } from '@/types/strapi';
 
-const response = await strapi.single<AboutPageResponse>('about-page').find({
+const response = await strapi.single('about-page').find({
   populate: {
     meta: {
       populate: '*',

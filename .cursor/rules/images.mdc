@@ -1,0 +1,5 @@
+---
+description: Whenever you working with images and trying to set the source correctly
+globs: *.tsx, *.astro
+---
+Whenever we need to get and handle an image from the strapi backend we most likely will always have to be using the utility helper `getStrapiImageUrl` located in this directory. [image.ts](mdc:src/utils/image.ts)

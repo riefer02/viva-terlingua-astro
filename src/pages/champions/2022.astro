@@ -3,6 +3,7 @@ import Layout from '@/layouts/Layout.astro';
 import ChampionsFilter from '@/components/ChampionsFilter';
 import strapi from '@/lib/api/strapi-client';
 import type { WinnersWinner, WinnersWinnerListResponse } from '@/types/strapi';
+import { getStrapiImageUrl } from '@/utils/image';
 
 // Fetch data for all competitions
 const saturdayChiliResponse = await strapi.collection('winners').find({
@@ -48,7 +49,7 @@ const transformWinners = (winners: WinnersWinner[]) => {
     rank: winner.rank || 0,
     competition: winner.competition || '',
     image: {
-      url: winner.image?.url || '',
+      url: getStrapiImageUrl(winner.image) || '',
       alternativeText: winner.image?.alternativeText,
     },
   }));

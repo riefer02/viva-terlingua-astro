@@ -1,0 +1,54 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import CollageItem from '@/components/collages/CollageItem.astro';
+import strapi from '@/lib/api/strapi-client';
+import { getStrapiImageUrl } from '@/utils/image';
+
+// Fetch collage images from Strapi
+const response = await strapi.collection('gallery-images').find({
+  filters: {
+    role: 'mural',
+    year: 2022,
+  },
+  populate: ['image'],
+});
+
+const collages = response.data || [];
+
+// SEO configuration
+const seoConfig = {
+  title: 'Collages for the 2022 Terlingua International Chili Cook Off',
+  description:
+    "Come witness the collages from different photographers for the 2022 Terlingua International Chili Cook Off, the greatest chili cook off in Texas! Discover the eyes and skills of the the talented photographers who brought them to life. Join us for a celebration of all things chili and an unforgettable views of Terlingua. Don't miss out on this beautiful event in Terlingua, Texas.",
+};
+---
+
+<Layout {...seoConfig}>
+  <main class="container mx-auto px-4 py-8 md:py-12">
+    <h1 class="scroll-m-20 text-4xl font-bold tracking-tight mb-8">
+      2022 Terlingua Chili Cook Off Collages
+    </h1>
+
+    {
+      collages.length === 0 && (
+        <div class="text-center py-12">
+          <p class="text-lg text-muted-foreground">
+            No collages found for 2022.
+          </p>
+        </div>
+      )
+    }
+
+    <div class="max-w-4xl mx-auto space-y-8">
+      {
+        collages.map((collage) => (
+          <CollageItem
+            photographer={collage.photographer || 'Unknown Photographer'}
+            imageUrl={getStrapiImageUrl(collage.image)}
+            downloadUrl={getStrapiImageUrl(collage.image)}
+          />
+        ))
+      }
+    </div>
+  </main>
+</Layout>
