@@ -1,0 +1,26 @@
+---
+import { ExploreDropdown } from './ExploreDropdown';
+import { MobileNavigation } from './MobileNavigation';
+import DesktopNavLinks from './DesktopNavLinks.astro';
+
+interface NavigationSection {
+  items: any[]; // Accept any array since Strapi responses vary by collection
+  path: string;
+}
+
+interface Props {
+  navigationData: Record<string, NavigationSection>;
+}
+
+const { navigationData } = Astro.props;
+---
+
+<nav>
+  <div class="hidden md:flex md:items-center md:space-x-2">
+    <div class="flex items-center space-x-2">
+      <DesktopNavLinks />
+      <ExploreDropdown client:load navigationData={navigationData} />
+    </div>
+  </div>
+  <MobileNavigation client:load />
+</nav>

@@ -1,0 +1,17 @@
+---
+import type { NavLink } from '@/config/navigation';
+import { desktopNavLinks } from '@/config/navigation';
+---
+
+<div class="flex items-center space-x-2">
+  {
+    desktopNavLinks.map((link: NavLink) => (
+      <a
+        href={link.href}
+        class="inline-flex h-9 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary-foreground/10 hover:text-primary-foreground/90 focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50"
+      >
+        {link.label}
+      </a>
+    ))
+  }
+</div>

@@ -3,6 +3,16 @@ import type { AstroConfig } from 'astro';
 type RedirectConfig = NonNullable<AstroConfig['redirects']>;
 
 export const redirects: RedirectConfig = {
+  // Blog redirects
+  '/blogs': {
+    destination: '/blog',
+    status: 301,
+  },
+  '/blogs/:slug': {
+    destination: '/blog/:slug',
+    status: 301,
+  },
+
   // Historical page redirects
   '/terlingua-international-chili-cook-off-2021': {
     destination: '/terlingua-international-chili-cook-off',

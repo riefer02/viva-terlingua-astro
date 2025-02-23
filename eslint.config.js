@@ -17,6 +17,8 @@ export default [
       },
       globals: {
         console: 'readonly',
+        document: 'readonly',
+        window: 'readonly',
       },
     },
     plugins: {
@@ -24,6 +26,7 @@ export default [
     },
     rules: {
       ...tsPlugin.configs.recommended.rules,
+      'no-undef': 'off', // TypeScript handles this better
     },
   },
   {
