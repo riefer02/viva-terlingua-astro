@@ -1,146 +1,98 @@
 ---
 import { getStrapiImageUrl } from '@/utils/image';
 import type { HomePage } from '@/types/strapi';
-import { Button } from '@/components/ui/button';
+import MarqueeSponsors from '@/components/sponsors/MarqueeSponsors.astro';
+import PrimarySponsor from '@/components/sponsors/PrimarySponsor.astro';
+import cookoffConfig from '@/config/cookoff';
 
 interface Props {
   data: HomePage;
+  showSponsors?: boolean;
+  showDates?: boolean;
+  showPrimarySponsor?: boolean;
 }
 
-const { data } = Astro.props;
+const {
+  data,
+  showSponsors = true,
+  showDates = true,
+  showPrimarySponsor = true,
+} = Astro.props;
 const imageUrl = getStrapiImageUrl(data.marqueeImage);
 const imageAlt = data.marqueeImage?.alternativeText || data.title || '';
+const { dates } = cookoffConfig;
 ---
 
-<section
-  class="relative w-full min-h-[60vh] lg:min-h-[80vh] flex items-center justify-center overflow-hidden"
-  aria-labelledby="hero-heading"
->
-  {/* Background Image or Gradient */}
-  {
-    imageUrl ? (
-      <img
-        src={imageUrl}
-        alt={imageAlt}
-        class="absolute inset-0 w-full h-full object-cover object-center scale-105"
-        aria-hidden="true"
-      />
-    ) : (
-      <div
-        class="absolute inset-0 w-full h-full bg-gradient-to-br from-primary/90 to-secondary/95"
-        aria-hidden="true"
-      />
-    )
-  }
-
-  {/* Dark Overlay for Better Text Contrast */}
+<div class="relative w-full bg-background">
+  {/* Main Container */}
   <div
-    class="absolute inset-0 bg-gradient-to-br from-background/80 via-background/60 to-transparent dark:from-[#000]/80 dark:via-[#000]/60 dark:to-transparent"
-    aria-hidden="true"
+    class="relative mx-auto max-w-[1920px] h-[500px] md:h-[600px] overflow-hidden"
   >
-  </div>
-
-  {/* Content Container */}
-  <div
-    class="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20"
-  >
-    <div class="text-center space-y-8">
-      <h1
-        id="hero-heading"
-        class="scroll-m-20 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-foreground dark:text-primary-foreground drop-shadow-md"
-      >
-        {data.title}
-      </h1>
-
+    {/* Background Image with Gradient Overlay */}
+    <div class="absolute inset-0">
       {
-        data.primaryText && (
-          <p class="text-lg sm:text-xl md:text-2xl text-foreground dark:text-primary-foreground leading-7 [&:not(:first-child)]:mt-6 font-medium max-w-3xl mx-auto drop-shadow">
-            {data.primaryText}
-          </p>
+        imageUrl && (
+          <img
+            src={imageUrl}
+            alt={imageAlt}
+            class="w-full h-full object-cover"
+          />
         )
       }
-
-      {
-        data.secondaryText && (
-          <p class="text-base sm:text-lg text-foreground/90 dark:text-primary-foreground/90 leading-7 max-w-2xl mx-auto drop-shadow">
-            {data.secondaryText}
-          </p>
-        )
-      }
-
-      {/* Call to Action Buttons */}
       <div
-        class="mt-10 flex flex-col sm:flex-row justify-center gap-4"
-        role="group"
-        aria-label="Hero actions"
+        class="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent"
       >
-        <Button
-          size="lg"
-          className="shadow-lg hover:-translate-y-1 transition-transform"
-        >
-          Get Started
-        </Button>
-        <Button
-          variant="secondary"
-          size="lg"
-          className="shadow-lg backdrop-blur-sm hover:-translate-y-1 transition-transform"
-        >
-          Learn More
-        </Button>
       </div>
     </div>
+
+    {/* Sponsors Bar */}
+    {showSponsors && <MarqueeSponsors />}
+
+    {/* Content Container - Centered both vertically and horizontally */}
+    <div class="absolute inset-0 flex items-center justify-center">
+      <div class="max-w-7xl w-full px-4">
+        {/* Title Section */}
+        <div class="max-w-4xl mx-auto space-y-8 text-center">
+          <h1
+            class="text-3xl md:text-4xl lg:text-[3.5rem] leading-[1.1] md:leading-[1.2] font-extrabold tracking-tight md:tracking-normal text-foreground max-w-[18ch] mx-auto"
+          >
+            {data.title}
+          </h1>
+          {
+            data.primaryText && (
+              <p class="text-lg md:text-xl lg:text-2xl leading-relaxed text-muted-foreground max-w-[35ch] mx-auto">
+                {data.primaryText}
+              </p>
+            )
+          }
+          {/* Date Display */}
+          {
+            showDates && (
+              <div class="inline-flex items-center gap-2 px-6 py-3 bg-primary/10 backdrop-blur-sm rounded-full border border-primary/20 text-primary">
+                <span class="text-lg font-medium">
+                  {dates.start} - {dates.end}, {dates.year}
+                </span>
+              </div>
+            )
+          }
+        </div>
+      </div>
+    </div>
+
+    {/* Primary Sponsor */}
+    {showPrimarySponsor && <PrimarySponsor />}
   </div>
-</section>
+</div>
 
 <style>
-  /* Image zoom effect */
-  img {
-    transition: transform 20s ease-out;
-    will-change: transform;
-  }
-
-  section:hover img {
-    transform: scale(110%);
-  }
-
-  /* Text optimizations */
-  h1,
-  p {
-    text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-shadow: 0 1px 2px rgb(0 0 0 / 0.1);
-  }
-
-  /* Fade in animations */
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  h1,
-  p,
-  :global(button) {
-    opacity: 0;
-    animation: fadeInUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-  }
-
-  p {
-    animation-delay: 0.2s;
-  }
-
-  :global(button) {
-    animation-delay: 0.4s;
-  }
-
-  /* Ensure proper dark mode transitions */
-  section {
+  /* Smooth transitions */
+  div {
     @apply transition-colors duration-300;
+  }
+
+  /* Text shadow for better readability */
+  h1,
+  p {
+    text-shadow: 0 1px 2px rgb(0 0 0 / 0.1);
   }
 </style>

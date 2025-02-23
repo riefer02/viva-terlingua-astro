@@ -1,0 +1,45 @@
+---
+import { getStrapiImageUrl } from '@/utils/image';
+import strapi from '@/lib/api/strapi-client';
+import type { SponsorsSponsor } from '@/types/strapi';
+
+// Fetch Liftmasters sponsor
+const response = await strapi.collection('sponsors').find({
+  filters: {
+    name: {
+      $eq: 'Liftmaster',
+    },
+  },
+  populate: ['logo'],
+});
+
+const sponsor = response.data?.[0];
+const logoUrl = sponsor ? getStrapiImageUrl(sponsor.logo, 'small') : '';
+---
+
+{
+  sponsor && (
+    <div class="hidden md:block absolute bottom-4 left-8 w-[120px] h-[60px]">
+      {sponsor.website ? (
+        <a
+          href={sponsor.website}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="hover:opacity-80 transition-opacity block h-full"
+        >
+          <img
+            src={logoUrl}
+            alt={`${sponsor.name} logo`}
+            class="w-full h-full object-contain"
+          />
+        </a>
+      ) : (
+        <img
+          src={logoUrl}
+          alt={`${sponsor.name} logo`}
+          class="w-full h-full object-contain"
+        />
+      )}
+    </div>
+  )
+}
