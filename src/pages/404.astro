@@ -1,0 +1,130 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import { Button } from '@/components/ui/button';
+
+// SEO configuration
+const seoConfig = {
+  title: '404 - Page Not Found',
+  description:
+    "Looks like you've wandered off the trail. Let's get you back to the cookoff!",
+  noindex: true,
+};
+---
+
+<Layout {...seoConfig}>
+  <main class="relative min-h-screen bg-background overflow-hidden">
+    {/* Background Image Container */}
+    <div class="absolute inset-0 scale-105 bg-container">
+      <div class="absolute inset-0 w-full h-full">
+        <img
+          src="/hillside-journey.jpg"
+          alt="Hillside Journey"
+          class="w-full h-full object-cover object-center"
+        />
+        {
+          /* Dark Overlay for Better Text Contrast - matching HeroMarquee pattern */
+        }
+        <div
+          class="absolute inset-0 bg-gradient-to-br from-background/80 via-background/60 to-transparent dark:from-[#000]/80 dark:via-[#000]/60 dark:to-transparent"
+          aria-hidden="true"
+        >
+        </div>
+      </div>
+    </div>
+
+    {/* Content Container */}
+    <div class="relative min-h-screen flex items-center justify-center px-4">
+      <div
+        class="max-w-2xl mx-auto text-center space-y-8 backdrop-blur-sm bg-background/20 p-8 rounded-lg shadow-lg"
+      >
+        <h1
+          class="scroll-m-20 text-8xl font-extrabold tracking-tighter text-primary drop-shadow-md"
+        >
+          404
+        </h1>
+        <div class="space-y-4">
+          <h2
+            class="text-4xl font-semibold tracking-tight text-foreground dark:text-primary-foreground"
+          >
+            Lost in the Desert?
+          </h2>
+          <p
+            class="text-xl text-muted-foreground leading-7 [&:not(:first-child)]:mt-6"
+          >
+            Looks like you've wandered off the trail. Don't worry, even the best
+            chili cooks get lost sometimes. Let's get you back to the cookoff!
+          </p>
+        </div>
+        <div
+          class="flex flex-col sm:flex-row gap-4 justify-center items-center"
+        >
+          <Button
+            asChild
+            size="lg"
+            className="shadow-lg hover:-translate-y-1 transition-transform"
+          >
+            <a href="/">Back to Home</a>
+          </Button>
+          <Button
+            variant="secondary"
+            asChild
+            size="lg"
+            className="shadow-lg backdrop-blur-sm hover:-translate-y-1 transition-transform"
+          >
+            <a href="/events">View Events</a>
+          </Button>
+        </div>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  /* Background container zoom effect */
+  .bg-container {
+    transition: transform 20s ease-out;
+    will-change: transform;
+  }
+
+  main:hover .bg-container {
+    transform: scale(120%);
+  }
+
+  /* Text optimizations */
+  h1,
+  h2,
+  p {
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-shadow: 0 1px 2px rgb(0 0 0 / 0.1);
+  }
+
+  /* Fade in animations - matching other pages */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  h1,
+  h2,
+  p,
+  :global(button) {
+    opacity: 0;
+    animation: fadeInUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+
+  p {
+    animation-delay: 0.2s;
+  }
+
+  :global(button) {
+    animation-delay: 0.4s;
+  }
+</style>
