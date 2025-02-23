@@ -1,0 +1,78 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import ChampionsFilter from '@/components/ChampionsFilter';
+import strapi from '@/lib/api/strapi-client';
+import type { WinnersWinner, WinnersWinnerListResponse } from '@/types/strapi';
+
+// Fetch data for all competitions
+const saturdayChiliResponse = await strapi.collection('winners').find({
+  filters: {
+    competition: 'saturdaychili',
+    year: 2022,
+  },
+  sort: ['rank:asc'],
+  populate: ['image'],
+});
+
+const limitedShowResponse = await strapi.collection('winners').find({
+  filters: {
+    competition: 'limitedshow',
+    year: 2022,
+  },
+  sort: ['rank:asc'],
+  populate: ['image'],
+});
+
+const openShowResponse = await strapi.collection('winners').find({
+  filters: {
+    competition: 'openshow',
+    year: 2022,
+  },
+  sort: ['rank:asc'],
+  populate: ['image'],
+});
+
+if (
+  !saturdayChiliResponse.data ||
+  !limitedShowResponse.data ||
+  !openShowResponse.data
+) {
+  throw new Error('Winners data not found');
+}
+
+// Transform data for the component
+const transformWinners = (winners: WinnersWinner[]) => {
+  return winners.map((winner) => ({
+    id: winner.id?.toString() || '',
+    name: winner.name || '',
+    rank: winner.rank || 0,
+    competition: winner.competition || '',
+    image: {
+      url: winner.image?.url || '',
+      alternativeText: winner.image?.alternativeText,
+    },
+  }));
+};
+
+const saturdayChili = transformWinners(saturdayChiliResponse.data);
+const limitedShow = transformWinners(limitedShowResponse.data);
+const openShow = transformWinners(openShowResponse.data);
+---
+
+<Layout
+  title="Champions and Winners of the 2022 Terlingua Chili Cook Off"
+  description="Come see the champions and winners of the 2022 Terlingua International Chili Cook Off, the greatest chili cook off in Texas! Discover the winning teams and meet the talented chefs who brought them to life. Join us for a celebration of all things chili and an unforgettable taste of the Southwest. Don't miss out on this annual culinary event in Terlingua, Texas."
+>
+  <main class="container mx-auto px-4 py-8 md:py-12">
+    <h1 class="scroll-m-20 text-4xl font-bold tracking-tight mb-8">
+      Cook Off Champions 2022
+    </h1>
+
+    <ChampionsFilter
+      client:load
+      saturdayChili={saturdayChili}
+      limitedShow={limitedShow}
+      openShow={openShow}
+    />
+  </main>
+</Layout>

@@ -1,0 +1,47 @@
+# Strapi Data Patterns
+
+## Data Structure Patterns
+
+1. **Content Types**
+   - Single Types: Used for unique content (e.g., About page, Home page)
+   - Collections: Used for repeatable content (e.g., Blog posts, Sponsors)
+
+2. **Component Types**
+   - Dynamic Components: Used for flexible content blocks
+   - Reusable Components: Shared across different content types
+   - Example: `blog-component.dynamic-blog-content`
+
+3. **Media Handling**
+   - Always check for media existence before use
+   - Use the `getStrapiImageUrl` utility for image URLs
+   - Handle alternative text and captions appropriately
+
+## Data Access Patterns
+
+1. **Nested Data**
+   - Use `populate: '*'` for complete nested data
+   - Access nested fields safely with optional chaining
+   - Example:
+     ```typescript
+     data?.fieldName?.nestedField
+     ```
+
+2. **Component References**
+   - Check component type with `__component` field
+   - Handle different layout types appropriately
+   - Example:
+     ```typescript
+     if (content.__component === 'component-name.type') {
+       // Handle specific component
+     }
+     ```
+
+3. **Error Boundaries**
+   - Always check for data existence
+   - Provide fallback content
+   - Handle loading states appropriately
+
+## Reference Examples
+- Single Type: [about.astro](mdc:src/pages/about.astro)
+- Collection: [Sponsors.astro](mdc:src/components/Sponsors.astro)
+- Dynamic Content: [DynamicBlogContent.astro](mdc:src/components/blog/DynamicBlogContent.astro) 

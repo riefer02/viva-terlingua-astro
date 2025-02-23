@@ -3,6 +3,40 @@ description: When working with types in the project
 globs: *.ts, *.tsx, *.astro
 ---
 
+# Type Safety Guidelines
+
+1. **Strapi Types**
+   - Leverage generated Strapi types from [strapi.ts](mdc:src/types/strapi.ts)
+   - Run `pnpm generate:types` when Strapi schema changes
+   - Use proper response types:
+     - Collections: `CollectionNameResponse`
+     - Single types: `SingleTypeNameResponse`
+     - Components: `ComponentNameComponent`
+
+2. **Type Assertions and Checks**
+   - Use optional chaining (`?.`) for potentially undefined fields
+   - Provide fallbacks for optional fields: `field || defaultValue`
+   - Type assert response data appropriately:
+     ```typescript
+     const data = response.data as DataType;
+     ```
+
+3. **Component Props**
+   - Use strict typing for component props
+   - Define interfaces for component props at the top of the file
+   - Example:
+     ```typescript
+     interface Props {
+       data: AboutPageData;
+       title?: string;
+     }
+     ```
+
+4. **Type References**
+   - Check [strapi.ts](mdc:src/types/strapi.ts) for available types
+   - Use utility types from Strapi SDK when needed
+   - Import specific types rather than using `any`
+
 2. **Type Safety**
 
    - Leverage generated Strapi types for data structures

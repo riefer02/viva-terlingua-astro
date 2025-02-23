@@ -4,9 +4,43 @@ globs: *.astro, *.ts, *.tsx
 ---
 # Data Fetching With Strapi Backend
 
-### API Integration
+### API Integration Patterns
 
-- Use the Strapi client from [strapi-client.ts](mdc:src/lib/api/strapi-client.ts)
-- Reference type definitions in [strapi.ts](mdc:src/types/strapi.ts)
-- Handle loading and error states appropriately
-- When using the Strapi SDK, always specify the response type (e.g. `strapi.find<SponsorsSponsorListResponse>('sponsors', {...})`) to ensure proper typing of the response data You can see similar patterns in other components [Sponsors.astro](mdc:src/components/Sponsors.astro)
+1. **Client Usage**
+   - Use the Strapi client from [strapi-client.ts](mdc:src/lib/api/strapi-client.ts)
+   - For collections: `strapi.collection('collection-name').find()`
+   - For single types: `strapi.single('single-type-name').find()`
+
+2. **Type Safety**
+   - Always specify response types: `strapi.find<ResponseType>(...)`
+   - Reference type definitions in [strapi.ts](mdc:src/types/strapi.ts)
+   - Use proper response types:
+     - Collections: `CollectionNameResponse`
+     - Single types: `SingleTypeNameResponse`
+
+3. **Populate Patterns**
+   - Use `populate: '*'` to get all nested fields
+   - Example structure:
+     ```typescript
+     const response = await strapi.single<AboutPageResponse>('about-page').find({
+       populate: {
+         fieldName: {
+           populate: '*'
+         }
+       }
+     });
+     ```
+
+4. **Error Handling**
+   - Always check for response.data existence
+   - Handle loading and error states appropriately
+   - Example:
+     ```typescript
+     if (!response.data) {
+       throw new Error('Data not found');
+     }
+     ```
+
+5. **Reference Components**
+   - See [Sponsors.astro](mdc:src/components/Sponsors.astro) for collection pattern
+   - See [about.astro](mdc:src/pages/about.astro) for single type pattern
