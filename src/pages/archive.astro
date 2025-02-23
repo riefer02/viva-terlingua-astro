@@ -1,0 +1,165 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+
+// Archive data structure
+const data = [
+  {
+    title: 'Frank X. Tolbert 2',
+    type: 'memorials',
+    link: '/memorials/frank-x-tolbert-2',
+    description:
+      'In memory of Frank X. Tolbert 2, artist and son of a Texas legend',
+  },
+  {
+    title: 'Laury McCullough',
+    type: 'memorials',
+    link: '/memorials/laury-mccullough',
+    description:
+      'Remembering Laury McCullough, a beloved member of the chili community',
+  },
+  {
+    title: '2022 Collages',
+    type: 'collages',
+    link: '/collages/2022',
+    description:
+      'Photo collages from the 2022 Terlingua International Chili Cook-off',
+  },
+  {
+    title: '2022 Champions',
+    type: 'champions',
+    link: '/champions/2022',
+    description: 'Winners and champions from the 2022 cook-off competitions',
+  },
+  {
+    title: 'Resources',
+    type: 'misc',
+    link: '/resources',
+    description: 'Helpful resources and information for cook-off participants',
+  },
+  {
+    title: '2022 Cook Off Announcement',
+    type: 'misc',
+    link: '/terlingua-international-chili-cook-off',
+    description:
+      'Official announcement and details for the 2022 cook-off event',
+  },
+];
+
+// SEO configuration
+const seoConfig = {
+  title: 'Archive | A Bowl of Red',
+  description:
+    'Browse our archive of memorials, collages, champions, and other content from past Terlingua International Chili Cook-offs.',
+};
+
+// Category metadata
+const categories = {
+  memorials: {
+    icon: '🕊️',
+    description: 'Remembering those who made our community special',
+  },
+  collages: {
+    icon: '📸',
+    description: 'Photo collections from past events',
+  },
+  champions: {
+    icon: '🏆',
+    description: 'Past winners and their achievements',
+  },
+  misc: {
+    icon: '📄',
+    description: 'Other important documents and announcements',
+  },
+};
+---
+
+<Layout {...seoConfig}>
+  <main class="container mx-auto px-4 py-8 md:py-12">
+    <div class="max-w-5xl mx-auto">
+      <header class="mb-12 text-center">
+        <h1
+          class="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl mb-4"
+        >
+          Archive
+        </h1>
+        <p class="text-xl text-muted-foreground">
+          A collection of memories, achievements, and moments from our history
+        </p>
+      </header>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {
+          Object.entries(categories).map(([type, meta]) => (
+            <div class="archive-category">
+              <Card className="h-full">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-2xl">
+                    <span class="text-2xl" aria-hidden="true">
+                      {meta.icon}
+                    </span>
+                    <span class="capitalize">{type}</span>
+                  </CardTitle>
+                  <p class="text-sm text-muted-foreground">
+                    {meta.description}
+                  </p>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {data
+                    .filter((page) => page.type === type)
+                    .map((page) => (
+                      <a href={page.link} class="block group">
+                        <div class="rounded-lg border bg-card p-4 transition-colors hover:bg-accent hover:text-accent-foreground">
+                          <h3 class="font-semibold mb-1 group-hover:text-primary">
+                            {page.title}
+                          </h3>
+                          <p class="text-sm text-muted-foreground">
+                            {page.description}
+                          </p>
+                        </div>
+                      </a>
+                    ))}
+                </CardContent>
+              </Card>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  /* Fade in animations for categories */
+  .archive-category {
+    opacity: 0;
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Stagger the animations */
+  .archive-category:nth-child(1) {
+    animation-delay: 0.1s;
+  }
+  .archive-category:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  .archive-category:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+  .archive-category:nth-child(4) {
+    animation-delay: 0.4s;
+  }
+</style>
