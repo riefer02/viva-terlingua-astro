@@ -1,0 +1,126 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import MemorialLayout from '@/layouts/MemorialLayout.astro';
+import strapi from '@/lib/api/strapi-client';
+import { getStrapiImageUrl } from '@/utils/image';
+
+// Fetch memorial image
+const response = await strapi.collection('gallery-images').find({
+  filters: {
+    title: 'Frank X. Tolbert 2',
+  },
+  populate: ['image'],
+});
+
+const memorialImage = response.data?.[0]?.image;
+
+// SEO configuration
+const seoConfig = {
+  title: 'In Loving Memory of Frank X. Tolbert 2 - July 13, 2023',
+  description:
+    'A dedicated page in honor of Frank X. Tolbert 2, a renowned artist and a beloved figure in the art community, who passed away on July 13, 2023. Read more about his life and contributions to the art world.',
+};
+---
+
+<Layout {...seoConfig}>
+  <main class="container mx-auto px-4 py-8 md:py-12">
+    <MemorialLayout
+      name="Frank X. Tolbert 2"
+      imageUrl={getStrapiImageUrl(memorialImage)}
+      imageAlt="Frank X. Tolbert 2"
+    >
+      <p>
+        Artist and son of a Texas legend, Frank X. Tolbert 2, continued the
+        legacy of his father, both in the artistic realm and the unique world of
+        Texas chili. His works have been showcased in renowned museums such as
+        the Modern of Fort Worth and Dallas Museum of Art (DMA). Tolbert 2's
+        work featured colorful, stylized renderings of birds, his unique
+        artistic eye captured in pieces such as
+        <a
+          href="https://foltzgallery.com/art/bluejay-with-peanut-by-frank-x-tolbert-2"
+          class="font-medium text-primary underline underline-offset-4"
+        >
+          "Bluejay with Peanut"
+        </a> (2017).
+      </p>
+
+      <p>
+        Frank X. Tolbert 2 embraced his Texas roots, reflected both in his
+        popularity as an artist and his personal connection to the state's
+        cultural events, most notably the Terlingua Chili Cookoff. This event
+        was the brainchild of his father,
+        <a
+          href="https://en.wikipedia.org/wiki/Frank_X._Tolbert"
+          class="font-medium text-primary underline underline-offset-4"
+        >
+          Frank X. Tolbert
+        </a>, who sought to immortalize the traditional Texas chili recipe and
+        engage the community in a light-hearted culinary competition. The
+        Cookoff, which began in 1967 in Terlingua, Texas, formed an integral
+        part of Tolbert 2's upbringing and offered a rich, cultural context that
+        influenced his later works.
+      </p>
+
+      <p>
+        On July 13, at his home in Houston, Tolbert passed away at the age of
+        77. Friends remember him as a man blessed with a legendary wit and
+        gentlemanly manners, a person who found humor in any situation. Despite
+        hailing from a legendary Texas family, Tolbert managed to carve out his
+        own identity, distinguishing himself through his distinctive artistic
+        style.
+      </p>
+
+      <p>
+        Former art critic for the Houston Post, Susan Chadwick, is among the
+        many mourning the loss of Tolbert 2, describing his work as "witty and
+        imaginative". His pieces often delved into themes of mortality, self,
+        birds, nature, and of course, his Texas roots.
+      </p>
+
+      <p>
+        Tolbert 2, along with his wife and fellow artist, Ann Stautberg, shared
+        decades of travel, crisscrossing the globe, always carrying their love
+        for their home state with them. In recent years, he turned his focus to
+        the
+        <a
+          href="https://www.frankxtolbert2.com/texas-bird-project-2022"
+          class="font-medium text-primary underline underline-offset-4"
+        >
+          Texas Bird Project
+        </a>, a series of colorful, stylized renderings of native Texas birds.
+      </p>
+
+      <p>
+        Despite being born in Washington, D.C., the younger Tolbert spent
+        considerable time exploring Texas with his legendary father. He followed
+        in his father's footsteps, contributing to the legacy of the Terlingua
+        Chili Cookoff and continuing the tradition of celebrating the unique
+        flavors of Texas.
+      </p>
+
+      <p>
+        The Tolbert family's commitment to Texas extends beyond chili. Kathleen
+        Tolbert Ryan, Frank 2's younger sister, continues to operate Tolbert's
+        Chili Parlor, initially founded by their father in downtown Dallas.
+      </p>
+
+      <p>
+        Frank 2, an alumnus of Thomas Jefferson High School in Dallas and Texas
+        Tech University where he studied art, is survived by his wife and
+        sister. The Tolbert family has asked for donations in Frank 2's memory
+        to be made to
+        <a
+          href="https://research.glasstire.com/"
+          class="font-medium text-primary underline underline-offset-4"
+        >
+          Glasstire
+        </a>, a nonprofit Texas visual art magazine, a fitting tribute to a man
+        who gave so much to the art world of Texas.
+      </p>
+
+      <p class="text-2xl text-center font-semibold">
+        Rest in peace, Frank X. Tolbert 2.
+      </p>
+    </MemorialLayout>
+  </main>
+</Layout>

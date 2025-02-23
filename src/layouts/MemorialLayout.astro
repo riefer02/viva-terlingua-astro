@@ -1,0 +1,25 @@
+---
+interface Props {
+  name: string;
+  imageUrl: string;
+  imageAlt: string;
+}
+
+const { name, imageUrl, imageAlt } = Astro.props;
+---
+
+<div class="max-w-5xl mx-auto w-full">
+  <div class="mb-8">
+    <h1 class="scroll-m-20 text-4xl font-bold tracking-tight">{name}</h1>
+  </div>
+
+  <div class="mb-8">
+    <div class="overflow-hidden rounded-lg border bg-muted">
+      <img src={imageUrl} alt={imageAlt} class="w-full h-auto object-cover" />
+    </div>
+  </div>
+
+  <div class="prose prose-stone max-w-none">
+    <slot />
+  </div>
+</div>
