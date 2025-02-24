@@ -15,19 +15,17 @@ import type {
   GalleryImagesGalleryImage,
 } from '@/types/strapi';
 
-const eventsResponse = await strapi
-  .collection<EventsEventListResponse>('events')
-  .find({
-    populate: {
-      marqueeImage: {
-        populate: '*',
-      },
-      squareImage: {
-        populate: '*',
-      },
+const eventsResponse = await strapi.collection('events').find({
+  populate: {
+    marqueeImage: {
+      populate: '*',
     },
-    sort: ['startDateTime:asc'],
-  });
+    squareImage: {
+      populate: '*',
+    },
+  },
+  sort: ['startDateTime:asc'],
+});
 
 const galleryResponse = await strapi.collection('gallery-images').find({
   filters: {
