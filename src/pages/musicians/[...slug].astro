@@ -1,54 +1,23 @@
 ---
 export const prerender = true;
 import Layout from '@/layouts/Layout.astro';
-import strapi from '@/lib/api/strapi-client';
 import { getStrapiImageUrl } from '@/utils/image';
-import type { Musician } from '@/types/strapi';
+import { getCollection } from 'astro:content';
+
 import { formatSlug } from '@/utils/url';
+
 export async function getStaticPaths() {
-  console.log('Fetching all musicians for static paths');
-
-  // First, fetch all musicians to generate all possible routes
-  const response = await strapi.collection('musicians').find({
-    populate: {
-      squareImage: {
-        populate: '*',
-      },
-      meta: {
-        populate: '*',
-      },
-      setTime: true,
-      description: true,
-      website: true,
-      spotifyID: true,
-      musicVideoID: true,
-      slug: true,
-      name: true,
+  const musicianEntries = await getCollection('musicians');
+  return musicianEntries.map((entry) => ({
+    params: {
+      slug: formatSlug(entry.data.slug), // Handle legacy slug format
     },
-  });
-
-  if (!response?.data) {
-    throw new Error('Failed to fetch musicians for static paths');
-  }
-
-  console.log(
-    'Found musicians:',
-    response.data.map((musician: Musician) => musician.slug)
-  );
-
-  // Return array of objects with params and props for each musician
-  return response.data.map((musician: Musician) => {
-    console.log('Musician:', musician);
-    return {
-      params: { slug: formatSlug(musician.slug) }, // This becomes the [slug] in the URL
-      props: { musician }, // This is passed to the page component
-    };
-  });
+    props: { musician: entry.data },
+  }));
 }
 
-// Props are passed from getStaticPaths
 const { musician } = Astro.props;
-console.log('Rendering musician page for:', musician?.name);
+console.log('Rendering musician page for:', musician);
 
 const imageUrl = musician?.squareImage
   ? getStrapiImageUrl(musician.squareImage)
