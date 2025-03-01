@@ -2,7 +2,7 @@
 import type { Musician } from '@/types/strapi';
 import BaseCard from '../BaseCard.astro';
 import { getStrapiImageUrl } from '@/utils/image';
-
+import { formatSlug } from '@/utils/url';
 interface Props {
   musician: Musician;
   className?: string;
@@ -16,7 +16,7 @@ const imageUrl = getStrapiImageUrl(musician.squareImage);
   title={musician.name || ''}
   description={musician.description || ''}
   imageUrl={imageUrl}
-  link={`/musicians/${musician.slug}`}
+  link={`/musicians/${formatSlug(musician.slug)}`}
   viewText="View Musician"
   className={className}
 />

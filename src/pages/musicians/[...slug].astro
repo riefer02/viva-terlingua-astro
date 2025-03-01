@@ -1,0 +1,148 @@
+---
+export const prerender = true;
+import Layout from '@/layouts/Layout.astro';
+import strapi from '@/lib/api/strapi-client';
+import { getStrapiImageUrl } from '@/utils/image';
+import type { Musician } from '@/types/strapi';
+import { formatSlug } from '@/utils/url';
+export async function getStaticPaths() {
+  console.log('Fetching all musicians for static paths');
+
+  // First, fetch all musicians to generate all possible routes
+  const response = await strapi.collection('musicians').find({
+    populate: {
+      squareImage: {
+        populate: '*',
+      },
+      meta: {
+        populate: '*',
+      },
+      setTime: true,
+      description: true,
+      website: true,
+      spotifyID: true,
+      musicVideoID: true,
+      slug: true,
+      name: true,
+    },
+  });
+
+  if (!response?.data) {
+    throw new Error('Failed to fetch musicians for static paths');
+  }
+
+  console.log(
+    'Found musicians:',
+    response.data.map((musician: Musician) => musician.slug)
+  );
+
+  // Return array of objects with params and props for each musician
+  return response.data.map((musician: Musician) => {
+    console.log('Musician:', musician);
+    return {
+      params: { slug: formatSlug(musician.slug) }, // This becomes the [slug] in the URL
+      props: { musician }, // This is passed to the page component
+    };
+  });
+}
+
+// Props are passed from getStaticPaths
+const { musician } = Astro.props;
+console.log('Rendering musician page for:', musician?.name);
+
+const imageUrl = musician?.squareImage
+  ? getStrapiImageUrl(musician.squareImage)
+  : null;
+
+// Fallback values for required fields
+const name = musician?.name || 'Musician';
+const description = musician?.description || 'Information coming soon...';
+---
+
+<Layout title={`${name} | A Bowl of Red`} description={description}>
+  <main class="container mx-auto px-4 py-12">
+    <div class="max-w-4xl mx-auto">
+      <div
+        class="bg-card rounded-lg shadow-lg overflow-hidden dark:bg-gray-800"
+      >
+        <div class="grid md:grid-cols-2 gap-8 p-8">
+          {/* Image Section */}
+          {
+            imageUrl && (
+              <div class="relative aspect-square rounded-lg overflow-hidden">
+                <img
+                  src={imageUrl}
+                  alt={name}
+                  class="object-cover w-full h-full"
+                />
+              </div>
+            )
+          }
+
+          {/* Content Section */}
+          <div class="flex flex-col justify-center space-y-6">
+            <h1 class="text-4xl font-bold dark:text-white">{name}</h1>
+
+            {
+              musician?.setTime && (
+                <div class="text-xl font-semibold text-primary dark:text-primary-400">
+                  Performance Time: {musician.setTime}
+                </div>
+              )
+            }
+
+            <div class="prose prose-lg dark:prose-invert">
+              <p>{description}</p>
+            </div>
+
+            {
+              musician?.website && (
+                <a
+                  href={musician.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-primary hover:text-primary/80 transition-colors dark:text-primary-400 dark:hover:text-primary-300"
+                >
+                  Visit Website
+                </a>
+              )
+            }
+          </div>
+        </div>
+
+        {/* Media Section - Only render if we have media content */}
+        {
+          (musician?.spotifyID || musician?.musicVideoID) && (
+            <div class="p-8 space-y-8">
+              {musician?.spotifyID && (
+                <div class="max-w-2xl mx-auto">
+                  <iframe
+                    src={`https://open.spotify.com/embed/artist/${musician.spotifyID}`}
+                    width="100%"
+                    height="352"
+                    allow="encrypted-media"
+                    loading="lazy"
+                    class="rounded-lg"
+                  />
+                </div>
+              )}
+
+              {musician?.musicVideoID && (
+                <div class="max-w-3xl mx-auto aspect-video">
+                  <iframe
+                    src={`https://www.youtube.com/embed/${musician.musicVideoID}`}
+                    title={`${name} music video`}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                    class="w-full h-full rounded-lg"
+                    loading="lazy"
+                  />
+                </div>
+              )}
+            </div>
+          )
+        }
+      </div>
+    </div>
+  </main>
+</Layout>
