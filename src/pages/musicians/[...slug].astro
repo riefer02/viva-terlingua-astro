@@ -1,34 +1,57 @@
 ---
 export const prerender = true;
 import Layout from '@/layouts/Layout.astro';
-import { getStrapiImageUrl } from '@/utils/image';
 import { getCollection } from 'astro:content';
-
 import { formatSlug } from '@/utils/url';
+import { getStrapiImageUrl } from '@/utils/image';
 
 export async function getStaticPaths() {
   const musicianEntries = await getCollection('musicians');
-  return musicianEntries.map((entry) => ({
-    params: {
-      slug: formatSlug(entry.data.slug), // Handle legacy slug format
-    },
-    props: { musician: entry.data },
-  }));
+
+  return musicianEntries.map((entry) => {
+    const musician = entry.data;
+    console.log(
+      'Processing musician for static paths:',
+      musician.name,
+      musician.squareImage
+    );
+
+    return {
+      params: {
+        slug: formatSlug(musician.slug),
+      },
+      props: {
+        name: musician.name,
+        description: musician.description || '',
+        setTime: musician.setTime || '',
+        website: musician.website || '',
+        spotifyID: musician.spotifyID || '',
+        musicVideoID: musician.musicVideoID || '',
+        squareImage: musician.squareImage,
+        meta: musician.meta || { title: '', description: '' },
+      },
+    };
+  });
 }
 
-const { musician } = Astro.props;
-console.log('Rendering musician page for:', musician);
+const {
+  name,
+  description,
+  setTime,
+  website,
+  spotifyID,
+  musicVideoID,
+  squareImage,
+  meta,
+} = Astro.props;
 
-const imageUrl = musician?.squareImage
-  ? getStrapiImageUrl(musician.squareImage)
-  : null;
-
-// Fallback values for required fields
-const name = musician?.name || 'Musician';
-const description = musician?.description || 'Information coming soon...';
+console.log('Rendering musician page for:', name, 'squareImage:', squareImage);
 ---
 
-<Layout title={`${name} | A Bowl of Red`} description={description}>
+<Layout
+  title={meta?.title || `${name} | A Bowl of Red`}
+  description={meta?.description || description || ''}
+>
   <main class="container mx-auto px-4 py-12">
     <div class="max-w-4xl mx-auto">
       <div
@@ -37,11 +60,11 @@ const description = musician?.description || 'Information coming soon...';
         <div class="grid md:grid-cols-2 gap-8 p-8">
           {/* Image Section */}
           {
-            imageUrl && (
+            squareImage?.imageMedia?.url && (
               <div class="relative aspect-square rounded-lg overflow-hidden">
                 <img
-                  src={imageUrl}
-                  alt={name}
+                  src={getStrapiImageUrl(squareImage.imageMedia)}
+                  alt={squareImage.imageAlt || name}
                   class="object-cover w-full h-full"
                 />
               </div>
@@ -53,9 +76,9 @@ const description = musician?.description || 'Information coming soon...';
             <h1 class="text-4xl font-bold dark:text-white">{name}</h1>
 
             {
-              musician?.setTime && (
+              setTime && (
                 <div class="text-xl font-semibold text-primary dark:text-primary-400">
-                  Performance Time: {musician.setTime}
+                  Performance Time: {setTime}
                 </div>
               )
             }
@@ -65,9 +88,9 @@ const description = musician?.description || 'Information coming soon...';
             </div>
 
             {
-              musician?.website && (
+              website && (
                 <a
-                  href={musician.website}
+                  href={website}
                   target="_blank"
                   rel="noopener noreferrer"
                   class="text-primary hover:text-primary/80 transition-colors dark:text-primary-400 dark:hover:text-primary-300"
@@ -79,14 +102,14 @@ const description = musician?.description || 'Information coming soon...';
           </div>
         </div>
 
-        {/* Media Section - Only render if we have media content */}
+        {/* Media Section */}
         {
-          (musician?.spotifyID || musician?.musicVideoID) && (
+          (spotifyID || musicVideoID) && (
             <div class="p-8 space-y-8">
-              {musician?.spotifyID && (
+              {spotifyID && (
                 <div class="max-w-2xl mx-auto">
                   <iframe
-                    src={`https://open.spotify.com/embed/artist/${musician.spotifyID}`}
+                    src={`https://open.spotify.com/embed/artist/${spotifyID}`}
                     width="100%"
                     height="352"
                     allow="encrypted-media"
@@ -96,10 +119,10 @@ const description = musician?.description || 'Information coming soon...';
                 </div>
               )}
 
-              {musician?.musicVideoID && (
+              {musicVideoID && (
                 <div class="max-w-3xl mx-auto aspect-video">
                   <iframe
-                    src={`https://www.youtube.com/embed/${musician.musicVideoID}`}
+                    src={`https://www.youtube.com/embed/${musicVideoID}`}
                     title={`${name} music video`}
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowfullscreen

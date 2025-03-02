@@ -107,9 +107,6 @@ const musicianCollection = defineCollection({
         meta: {
           populate: '*',
         },
-        image: {
-          populate: '*',
-        },
       },
     });
 
@@ -118,10 +115,34 @@ const musicianCollection = defineCollection({
     }
 
     const musicians = response.data as Musician[];
-    return musicians.map(({ id, ...musician }) => ({
-      id: String(id),
-      ...musician,
-    }));
+    console.log('musicians content loader raw data:', musicians[0]);
+
+    return musicians.map(({ id, squareImage, ...musician }) => {
+      // Transform the squareImage data to match our schema
+      const transformedSquareImage =
+        squareImage && Object.keys(squareImage).length > 0
+          ? {
+              imageAlt: squareImage.alternativeText || '',
+              imageMedia: {
+                url: squareImage.url,
+                width: squareImage.width,
+                height: squareImage.height,
+                alternativeText: squareImage.alternativeText,
+              },
+            }
+          : null;
+
+      console.log(
+        `Transformed image for ${musician.name}:`,
+        transformedSquareImage
+      );
+
+      return {
+        id: String(id),
+        ...musician,
+        squareImage: transformedSquareImage,
+      };
+    });
   },
   schema: z.object({
     id: z.string(),
