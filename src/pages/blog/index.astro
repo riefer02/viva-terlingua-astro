@@ -20,11 +20,6 @@ const posts = sortedPosts.map((post: CollectionEntry<'blog'>) => ({
     trim: true,
   }),
 }));
-
-console.log(
-  'posts.heroImage',
-  getStrapiImageUrl(posts[0].data.heroImage?.imageMedia)
-);
 ---
 
 <Layout title="Blog" description="Read our latest blog posts and updates">
@@ -37,7 +32,7 @@ console.log(
           <BaseCard
             title={post.data.title}
             description={post.data.description || ''}
-            imageUrl={getStrapiImageUrl(post.data.heroImage)}
+            imageUrl={getStrapiImageUrl(post.data.heroImage?.imageMedia)}
             link={`/blog/${post.slug}`}
             viewText="Read More"
           />
