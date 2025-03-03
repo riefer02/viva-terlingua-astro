@@ -3,7 +3,7 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 import Layout from '@/layouts/Layout.astro';
 import BaseCard from '@/components/BaseCard.astro';
 import slugify from 'slugify';
-
+import { getStrapiImageUrl } from '@/utils/image';
 const blogPosts = await getCollection('blog');
 
 const sortedPosts = blogPosts.sort(
@@ -20,6 +20,11 @@ const posts = sortedPosts.map((post: CollectionEntry<'blog'>) => ({
     trim: true,
   }),
 }));
+
+console.log(
+  'posts.heroImage',
+  getStrapiImageUrl(posts[0].data.heroImage?.imageMedia)
+);
 ---
 
 <Layout title="Blog" description="Read our latest blog posts and updates">
@@ -32,7 +37,7 @@ const posts = sortedPosts.map((post: CollectionEntry<'blog'>) => ({
           <BaseCard
             title={post.data.title}
             description={post.data.description || ''}
-            imageUrl={post.data.heroImage?.imageMedia?.url}
+            imageUrl={getStrapiImageUrl(post.data.heroImage)}
             link={`/blog/${post.slug}`}
             viewText="Read More"
           />

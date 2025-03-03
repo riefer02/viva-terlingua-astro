@@ -13,20 +13,19 @@ const { quote, className } = Astro.props;
 <blockquote
   class={cn(
     'relative my-8 max-w-3xl mx-auto px-8 py-6',
-    'bg-muted/50 rounded-lg shadow-lg',
+    'bg-card rounded-lg shadow-sm',
     'border-l-4 border-primary',
-    'dark:bg-muted/10',
     className
   )}
 >
   {/* Decorative quote mark */}
-  <span class="absolute -top-4 left-4 text-6xl text-primary/20 font-serif"
+  <span class="absolute -top-4 left-4 text-6xl text-primary/30 font-serif"
     >"</span
   >
 
   {/* Quote text */}
   <p
-    class="relative text-lg sm:text-xl md:text-2xl text-foreground/90 font-medium italic leading-relaxed mb-4"
+    class="relative text-lg sm:text-xl md:text-2xl text-card-foreground font-medium italic leading-relaxed mb-4"
   >
     {quote.text}
   </p>

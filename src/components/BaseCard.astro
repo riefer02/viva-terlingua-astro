@@ -21,11 +21,12 @@ interface Props {
 }
 
 const { title, description, imageUrl, link, viewText, className } = Astro.props;
+// console.log('imageUrl', imageUrl);
 ---
 
 <Card
   className={cn(
-    'group overflow-hidden transition-all hover:shadow-lg dark:hover:shadow-primary/20',
+    'group overflow-hidden transition-all hover:shadow-md dark:hover:shadow-primary/20',
     className
   )}
 >

@@ -42,7 +42,7 @@ function ChampionCard({ winner }: { winner: Champion }) {
         </div>
         <div className="space-y-1 text-center">
           <p className="text-sm text-muted-foreground">{ranking} Place</p>
-          <h3 className="font-semibold">{winner.name}</h3>
+          <h3 className="font-semibold text-foreground">{winner.name}</h3>
         </div>
       </CardContent>
     </Card>

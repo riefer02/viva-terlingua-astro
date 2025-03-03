@@ -20,7 +20,7 @@ const subFeatures = features.featuresList?.slice(1);
             <h2 class="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
               {mainFeature.title}
             </h2>
-            <p class="text-gray-500 dark:text-gray-400 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+            <p class="text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
               {mainFeature.description}
             </p>
             {mainFeature.calloutText && (
@@ -64,9 +64,7 @@ const subFeatures = features.featuresList?.slice(1);
               )}
               <div class="space-y-2">
                 <h3 class="text-xl font-bold">{feature.title}</h3>
-                <p class="text-gray-500 dark:text-gray-400">
-                  {feature.description}
-                </p>
+                <p class="text-muted-foreground">{feature.description}</p>
                 {feature.calloutText && (
                   <a
                     href={feature.slug}

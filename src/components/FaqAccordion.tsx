@@ -18,9 +18,9 @@ export default function FaqAccordion({ faqs }: FaqAccordionProps) {
         <AccordionItem
           key={faq.id}
           value={`faq-${faq.id}`}
-          className="border-b border-muted last:border-0"
+          className="border-b border-border last:border-0"
         >
-          <AccordionTrigger className="hover:no-underline text-lg font-medium tracking-tight text-foreground/90 hover:text-primary">
+          <AccordionTrigger className="hover:no-underline text-lg font-medium tracking-tight text-foreground hover:text-primary">
             {faq.question}
           </AccordionTrigger>
           <AccordionContent>
