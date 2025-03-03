@@ -1,0 +1,129 @@
+/* Blog styling - aligned with project color system */
+@layer components {
+  .blog-prose {
+    @apply prose max-w-none;
+    color: hsl(var(--foreground)) !important;
+  }
+
+  /* Override the default prose text color with more specific selectors */
+  .blog-prose * {
+    color: hsl(var(--foreground));
+  }
+
+  .blog-prose h1,
+  .blog-prose h2,
+  .blog-prose h3,
+  .blog-prose h4,
+  .blog-prose h5,
+  .blog-prose h6 {
+    color: hsl(var(--foreground)) !important;
+    @apply font-semibold;
+  }
+
+  .blog-prose p {
+    color: hsl(var(--foreground)) !important;
+  }
+
+  .blog-prose a {
+    color: hsl(var(--primary)) !important;
+    @apply no-underline font-medium;
+  }
+
+  .blog-prose a:hover {
+    @apply underline;
+  }
+
+  .blog-prose strong {
+    color: hsl(var(--foreground)) !important;
+  }
+
+  .blog-prose blockquote {
+    border-left-color: hsl(var(--primary)) !important;
+    color: hsl(var(--muted-foreground)) !important;
+  }
+
+  .blog-prose pre {
+    @apply bg-muted border border-border rounded-md;
+  }
+
+  .blog-prose code {
+    @apply bg-muted rounded-sm px-1 py-0.5 text-sm;
+    color: hsl(var(--foreground)) !important;
+  }
+
+  .blog-prose img {
+    @apply rounded-md border border-border;
+  }
+
+  .blog-prose hr {
+    @apply border-border;
+  }
+
+  .blog-prose ul,
+  .blog-prose ol {
+    color: hsl(var(--foreground)) !important;
+  }
+
+  .blog-prose li {
+    color: hsl(var(--foreground)) !important;
+  }
+
+  .blog-prose table {
+    @apply border-border;
+  }
+
+  .blog-prose thead {
+    @apply bg-muted;
+  }
+
+  .blog-prose thead th {
+    color: hsl(var(--foreground)) !important;
+  }
+
+  .blog-prose tbody tr {
+    @apply border-border;
+  }
+
+  .blog-prose tbody td {
+    color: hsl(var(--foreground)) !important;
+  }
+
+  /* Override Tailwind Typography's default text colors */
+  .prose {
+    --tw-prose-body: hsl(var(--foreground));
+    --tw-prose-headings: hsl(var(--foreground));
+    --tw-prose-lead: hsl(var(--foreground));
+    --tw-prose-links: hsl(var(--primary));
+    --tw-prose-bold: hsl(var(--foreground));
+    --tw-prose-counters: hsl(var(--muted-foreground));
+    --tw-prose-bullets: hsl(var(--muted-foreground));
+    --tw-prose-hr: hsl(var(--border));
+    --tw-prose-quotes: hsl(var(--muted-foreground));
+    --tw-prose-quote-borders: hsl(var(--primary));
+    --tw-prose-captions: hsl(var(--muted-foreground));
+    --tw-prose-code: hsl(var(--foreground));
+    --tw-prose-pre-code: hsl(var(--foreground));
+    --tw-prose-pre-bg: hsl(var(--muted));
+    --tw-prose-th-borders: hsl(var(--border));
+    --tw-prose-td-borders: hsl(var(--border));
+  }
+
+  .dark .prose {
+    --tw-prose-body: hsl(var(--foreground));
+    --tw-prose-headings: hsl(var(--foreground));
+    --tw-prose-lead: hsl(var(--foreground));
+    --tw-prose-links: hsl(var(--primary));
+    --tw-prose-bold: hsl(var(--foreground));
+    --tw-prose-counters: hsl(var(--muted-foreground));
+    --tw-prose-bullets: hsl(var(--muted-foreground));
+    --tw-prose-hr: hsl(var(--border));
+    --tw-prose-quotes: hsl(var(--muted-foreground));
+    --tw-prose-quote-borders: hsl(var(--primary));
+    --tw-prose-captions: hsl(var(--muted-foreground));
+    --tw-prose-code: hsl(var(--foreground));
+    --tw-prose-pre-code: hsl(var(--foreground));
+    --tw-prose-pre-bg: hsl(var(--muted));
+    --tw-prose-th-borders: hsl(var(--border));
+    --tw-prose-td-borders: hsl(var(--border));
+  }
+}

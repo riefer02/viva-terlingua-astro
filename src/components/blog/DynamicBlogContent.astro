@@ -49,10 +49,7 @@ const renderedContent = (() => {
 <div class="w-full">
   {
     renderedContent?.type === 'text' && (
-      <div
-        class="prose prose-stone max-w-none"
-        set:html={renderedContent.html}
-      />
+      <div class="blog-prose" set:html={renderedContent.html} />
     )
   }
 
@@ -80,10 +77,7 @@ const renderedContent = (() => {
           alt={renderedContent.imageAlt}
           class="aspect-video object-cover rounded-md border bg-muted"
         />
-        <div
-          class="prose prose-stone max-w-none"
-          set:html={renderedContent.html}
-        />
+        <div class="blog-prose" set:html={renderedContent.html} />
       </div>
     )
   }

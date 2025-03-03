@@ -54,7 +54,9 @@ const formattedDate = formatDate(publishedAt);
 >
   <article class="container mx-auto px-4 py-8 max-w-4xl bg-background">
     <header class="mb-8">
-      <h1 class="scroll-m-20 text-4xl font-bold tracking-tight mb-4">
+      <h1
+        class="scroll-m-20 text-4xl font-bold tracking-tight mb-4 text-foreground"
+      >
         {title}
       </h1>
       <div class="text-muted-foreground">
@@ -78,7 +80,7 @@ const formattedDate = formatDate(publishedAt);
       )
     }
 
-    <div class="prose prose-stone max-w-none">
+    <div class="blog-prose">
       {bodyContent?.map((content) => <DynamicBlogContent content={content} />)}
     </div>
   </article>
