@@ -141,3 +141,5 @@ This project is proprietary and confidential. © 2024 OTICCC. All rights reserve
 This software and its documentation are protected by copyright law and international treaties. Unauthorized reproduction, distribution, or use of this software, in whole or in part, is strictly prohibited.
 
 This software is intended for internal use within OTICCC, a registered non-profit organization, and its authorized partners only.
+
+# viva-terlingua-astro
