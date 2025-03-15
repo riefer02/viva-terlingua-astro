@@ -21,7 +21,7 @@ export const blogSchema = z.object({
     })
     .nullable()
     .optional(),
-  featuredPost: z.boolean().optional(),
+  featuredPost: z.boolean().nullable().optional(),
   tags: z
     .array(
       z.object({
