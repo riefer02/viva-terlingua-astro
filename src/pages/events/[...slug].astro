@@ -6,15 +6,48 @@ import config from '@/config/site';
 import strapi from '@/lib/api/strapi-client';
 import { ensureLeadingSlash } from '@/utils/url';
 import { formatDate } from '@/utils/date';
-import type { EventsEventListResponse } from '@/types/strapi';
+import type { EventsEvent, EventsEventListResponse } from '@/types/strapi';
 
+export async function getStaticPaths() {
+  // Fetch all events to generate static paths
+  const eventsResponse = await strapi.collection('events').find({
+    populate: {
+      meta: {
+        populate: '*',
+      },
+      marqueeImage: {
+        populate: '*',
+      },
+      panelImage: {
+        populate: '*',
+      },
+    },
+  });
+
+  if (!eventsResponse.data) {
+    return [];
+  }
+
+  // Map each event to a path with params
+  return eventsResponse.data.map((event: EventsEvent) => ({
+    params: {
+      slug: event.slug?.replace(/^\//, '') || '',
+    },
+    props: { event },
+  }));
+}
+
+// Get the props passed from getStaticPaths
+const { event } = Astro.props;
+
+// If accessed directly without going through getStaticPaths
+// This shouldn't happen with static generation, but helps with TypeScript
 const { slug } = Astro.params;
+// If we somehow get here directly (shouldn't happen with static generation)
+if (!event && slug) {
+  const querySlug = ensureLeadingSlash(slug);
 
-const querySlug = ensureLeadingSlash(slug || '');
-
-const response = await strapi
-  .collection<EventsEventListResponse>('events')
-  .find({
+  const response = await strapi.collection('events').find({
     filters: {
       slug: {
         $eq: querySlug,
@@ -33,11 +66,10 @@ const response = await strapi
     },
   });
 
-if (!response.data || response.data.length === 0) {
-  return Astro.redirect('/404');
+  if (!response.data || response.data.length === 0) {
+    return Astro.redirect('/404');
+  }
 }
-
-const event = response.data[0];
 ---
 
 <Layout
