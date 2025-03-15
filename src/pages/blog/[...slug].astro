@@ -41,7 +41,6 @@ interface Props {
 
 const { title, description, heroImage, author, publishedAt, bodyContent } =
   Astro.props;
-console.log('Astro.props', Astro.props);
 const formattedDate = formatDate(publishedAt);
 ---
 

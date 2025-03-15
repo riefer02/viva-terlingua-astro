@@ -10,11 +10,6 @@ export async function getStaticPaths() {
 
   return musicianEntries.map((entry) => {
     const musician = entry.data;
-    console.log(
-      'Processing musician for static paths:',
-      musician.name,
-      musician.squareImage
-    );
 
     return {
       params: {
@@ -44,8 +39,6 @@ const {
   squareImage,
   meta,
 } = Astro.props;
-
-console.log('Rendering musician page for:', name, 'squareImage:', squareImage);
 ---
 
 <Layout

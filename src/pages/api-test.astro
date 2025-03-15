@@ -13,7 +13,6 @@ let response;
 let error;
 
 try {
-  console.log('Fetching events from Strapi...');
   response = await strapi.collection('events').find({
     pagination: {
       page: 1,
@@ -22,14 +21,8 @@ try {
     sort: ['startDateTime:desc'],
     populate: '*',
   });
-
-  console.log('Response:', JSON.stringify(response, null, 2));
 } catch (err) {
   error = err;
-  console.error('Error fetching events:', err);
-  if (err instanceof Error) {
-    console.log('Error details:', err.message);
-  }
 }
 ---
 

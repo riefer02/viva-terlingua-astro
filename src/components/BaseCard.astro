@@ -20,8 +20,14 @@ interface Props {
   className?: string;
 }
 
-const { title, description, imageUrl, link, viewText, className } = Astro.props;
-// console.log('imageUrl', imageUrl);
+const {
+  title,
+  description,
+  imageUrl,
+  link,
+  viewText,
+  className = '',
+} = Astro.props;
 ---
 
 <Card
