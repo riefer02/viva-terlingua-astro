@@ -7,7 +7,7 @@ import { redirects } from './src/config/redirects';
 
 // https://astro.build/config
 export default defineConfig({
-  output: 'server',
+  output: 'static',
   adapter: netlify({
     imageCDN: true, // Enable Netlify's image CDN
     cacheOnDemandPages: true, // Enable caching for better performance
