@@ -11,17 +11,7 @@ import type { EventsEvent, EventsEventListResponse } from '@/types/strapi';
 export async function getStaticPaths() {
   // Fetch all events to generate static paths
   const eventsResponse = await strapi.collection('events').find({
-    populate: {
-      meta: {
-        populate: '*',
-      },
-      marqueeImage: {
-        populate: '*',
-      },
-      panelImage: {
-        populate: '*',
-      },
-    },
+    populate: '*',
   });
 
   if (!eventsResponse.data) {

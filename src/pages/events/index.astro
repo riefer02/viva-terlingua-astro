@@ -10,11 +10,7 @@ import { getStrapiImageUrl } from '@/utils/image';
 import { ensureLeadingSlash, joinUrlSegments } from '@/utils/url';
 import { formatDate } from '@/utils/date';
 import { stripHtml } from '@/utils/markdown';
-import type {
-  EventsEvent,
-  EventsEventListResponse,
-  GalleryImagesGalleryImage,
-} from '@/types/strapi';
+import type { EventsEvent, GalleryImagesGalleryImage } from '@/types/strapi';
 
 const eventsResponse = await strapi.collection('events').find({
   populate: '*',
