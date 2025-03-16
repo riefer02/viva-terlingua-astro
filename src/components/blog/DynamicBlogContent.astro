@@ -1,6 +1,7 @@
 ---
 import type { BlogComponentDynamicBlogContentComponent } from '@/types/strapi';
 import { parseMarkdown } from '@/utils/markdown';
+import { getStrapiImageUrl } from '@/utils/image';
 
 interface Props {
   content: BlogComponentDynamicBlogContentComponent;
@@ -25,7 +26,7 @@ const renderedContent = (() => {
       if (!content.imageContent?.imageMedia) return null;
       return {
         type: 'image',
-        url: content.imageContent.imageMedia.url,
+        url: content.imageContent.imageMedia,
         alt: content.imageContent.imageAlt || '',
       };
 
@@ -35,7 +36,7 @@ const renderedContent = (() => {
       return {
         type: 'mixed',
         layout: content.layoutType,
-        imageUrl: content.imageContent.imageMedia.url,
+        imageUrl: content.imageContent.imageMedia,
         imageAlt: content.imageContent.imageAlt || '',
         html: parseMarkdown(content.textContent),
       };
@@ -56,7 +57,7 @@ const renderedContent = (() => {
   {
     renderedContent?.type === 'image' && (
       <img
-        src={renderedContent.url}
+        src={getStrapiImageUrl(renderedContent.url)}
         alt={renderedContent.alt}
         class="aspect-video object-cover rounded-md border bg-muted"
       />
@@ -73,7 +74,7 @@ const renderedContent = (() => {
         }`}
       >
         <img
-          src={renderedContent.imageUrl}
+          src={getStrapiImageUrl(renderedContent.imageUrl)}
           alt={renderedContent.imageAlt}
           class="aspect-video object-cover rounded-md border bg-muted"
         />

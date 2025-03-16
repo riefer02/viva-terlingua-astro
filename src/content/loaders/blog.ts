@@ -8,11 +8,22 @@ export const loadBlogEntries = async () => {
         populate: '*',
       },
       bodyContent: {
-        populate: '*',
+        on: {
+          'blog-component.dynamic-blog-content': {
+            populate: {
+              imageContent: {
+                populate: '*',
+              },
+            },
+          },
+          // Add other component types here if needed
+          // 'blog-component.other-type': { ... }
+        },
       },
       tags: true,
     },
   });
+  // console.log('response', JSON.stringify(response, null, 2));
 
   const blogs = response.data as Blog[];
 
