@@ -5,11 +5,7 @@ import strapi from '@/lib/api/strapi-client';
 
 // Fetch sponsors data
 const response = await strapi.collection('sponsors').find({
-  populate: {
-    logo: {
-      populate: '*',
-    },
-  },
+  populate: '*',
   sort: ['priority:asc'],
 });
 
