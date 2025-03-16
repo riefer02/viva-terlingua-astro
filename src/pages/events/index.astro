@@ -26,11 +26,7 @@ const galleryResponse = await strapi.collection('gallery-images').find({
       $eq: 'Camp and Sky',
     },
   },
-  populate: {
-    image: {
-      populate: '*',
-    },
-  },
+  populate: '*',
 });
 
 if (!eventsResponse.data) {
