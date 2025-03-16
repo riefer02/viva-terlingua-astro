@@ -2,18 +2,11 @@
 import Layout from '@/layouts/Layout.astro';
 import AttractionGrid from '@/components/attractions/AttractionGrid.astro';
 import strapi from '@/lib/api/strapi-client';
-import type {
-  LocalAttractionsLocalAttractionListResponse,
-  LocalAttractionsLocalAttraction,
-} from '@/types/strapi';
+import type { LocalAttractionsLocalAttraction } from '@/types/strapi';
 
 // Fetch local attractions data
 const response = await strapi.collection('local-attractions').find({
-  populate: {
-    marqueeImage: {
-      populate: '*',
-    },
-  },
+  populate: '*',
 });
 
 if (!response?.data) {
