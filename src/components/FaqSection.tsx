@@ -14,7 +14,7 @@ export default function FaqSection({ groupedFaqs }: FaqSectionProps) {
       {Object.entries(groupedFaqs).map(([category, categoryFaqs]) => (
         <Card
           key={category}
-          className="transition-shadow duration-200 hover:shadow-md bg-background"
+          className="transition-shadow duration-200 hover:shadow-md bg-card border border-border"
         >
           <CardHeader className="pb-2">
             <CardTitle className="scroll-m-20 text-2xl font-semibold tracking-tight text-primary">

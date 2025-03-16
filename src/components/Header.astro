@@ -18,23 +18,23 @@ const [
 ] = await Promise.all([
   strapi.collection('events').find({
     sort: ['publishedAt:desc'],
-    pagination: { limit: 5 },
+    pagination: { limit: 10 },
   }),
   strapi.collection('musicians').find({
     sort: ['name:asc'],
-    pagination: { limit: 5 },
+    pagination: { limit: 10 },
   }),
   strapi.collection('local-attractions').find({
     sort: ['name:asc'],
-    pagination: { limit: 5 },
+    pagination: { limit: 10 },
   }),
   strapi.collection('sponsors').find({
     sort: ['priority:asc'],
-    pagination: { limit: 5 },
+    pagination: { limit: 10 },
   }),
   strapi.collection('blogs').find({
     sort: ['publishedAt:desc'],
-    pagination: { limit: 5 },
+    pagination: { limit: 10 },
   }),
 ]);
 
