@@ -48,7 +48,7 @@ describe('Site Configuration', () => {
     expect(config.defaultLanguage).toBe('en');
     expect(config.author.name).toBe('Andrew Riefenstahl');
     expect(config.author.twitter).toBe('@riefer02');
-    expect(config.seo.defaultImage).toBe('/og-image.png');
+    expect(config.seo.defaultImage).toBe('/og-image.jpg');
   });
 
   it('should use default strapi URL when environment variable is not set', () => {

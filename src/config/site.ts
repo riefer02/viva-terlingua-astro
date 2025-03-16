@@ -39,7 +39,7 @@ const config: SiteConfig = {
   seo: {
     titleTemplate:
       '%s | Original Terlingua International Championship Chili Cook Off',
-    defaultImage: '/og-image.png',
+    defaultImage: '/og-image.jpg',
   },
   urls: {
     strapi: import.meta.env.STRAPI_URL || 'http://127.0.0.1:1337',
