@@ -49,11 +49,8 @@ const pageData = response.data as HomePage;
   <HeroMarquee data={pageData} />
   {pageData.featured && <Features features={pageData.featured} />}
   <Sponsors />
-  {pageData.quoteContent && <Quote quote={pageData.quoteContent} />}
-
-  <PanelImage panelImage={pageData.panelImage} />
-
-  <!-- <PanelImage galleryImageName="2-Alarm Chili" /> -->
-
   <CookoffPosterGrid />
+  {pageData.quoteContent && <Quote quote={pageData.quoteContent} />}
+  <PanelImage panelImage={pageData.panelImage} />
+  <!-- <PanelImage galleryImageName="2-Alarm Chili" /> -->
 </Layout>

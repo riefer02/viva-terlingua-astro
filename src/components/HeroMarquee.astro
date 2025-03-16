@@ -40,7 +40,7 @@ const { dates } = cookoffConfig;
         )
       }
       <div
-        class="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent"
+        class="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-background/10"
       >
       </div>
     </div>
@@ -51,36 +51,41 @@ const { dates } = cookoffConfig;
     {/* Content Container - Centered both vertically and horizontally */}
     <div class="absolute inset-0 flex items-center justify-center">
       <div class="max-w-7xl w-full px-4">
-        {/* Title Section */}
-        <div class="max-w-4xl mx-auto space-y-8 text-center">
+        {/* Title Section with enhanced visibility */}
+        <div
+          class="max-w-4xl mx-auto space-y-8 text-center backdrop-blur-md bg-background/40 p-8 rounded-xl border border-border/30 shadow-lg"
+        >
           <h1
             class="text-3xl md:text-4xl lg:text-[3.5rem] leading-[1.1] md:leading-[1.2] font-extrabold tracking-tight md:tracking-normal text-foreground max-w-[18ch] mx-auto"
           >
             {data.title}
           </h1>
-          {
-            data.primaryText && (
-              <p class="text-lg md:text-xl lg:text-2xl leading-relaxed text-muted-foreground max-w-[35ch] mx-auto">
-                {data.primaryText}
+          <!-- {
+            data.secondaryText && (
+              <p class="text-lg md:text-xl lg:text-2xl leading-relaxed text-foreground max-w-[35ch] mx-auto">
+                {data.secondaryText}
               </p>
             )
-          }
-          {/* Date Display */}
-          {
-            showDates && (
-              <div class="inline-flex items-center gap-2 px-6 py-3 bg-primary/15 backdrop-blur-sm rounded-full border border-primary/30 text-primary font-medium">
-                <span class="text-lg">
-                  {dates.start} - {dates.end}, {dates.year}
-                </span>
-              </div>
-            )
-          }
+          } -->
         </div>
       </div>
     </div>
 
     {/* Primary Sponsor */}
     {showPrimarySponsor && <PrimarySponsor />}
+
+    {/* Date Display - Bottom Right */}
+    {
+      showDates && (
+        <div class="absolute bottom-4 right-4 md:bottom-8 md:right-8">
+          <div class="flex items-center gap-2 px-4 py-2 md:px-5 md:py-2.5 bg-primary/20 backdrop-blur-sm rounded-full border border-primary/40 text-primary font-medium shadow-md">
+            <span class="text-sm md:text-base">
+              {dates.start} - {dates.end}, {dates.year}
+            </span>
+          </div>
+        </div>
+      )
+    }
   </div>
 </div>
 
@@ -90,9 +95,12 @@ const { dates } = cookoffConfig;
     @apply transition-colors duration-300;
   }
 
-  /* Text shadow for better readability */
-  h1,
+  /* Enhanced text shadow for better readability */
+  h1 {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
   p {
-    text-shadow: 0 1px 2px rgb(0 0 0 / 0.1);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
   }
 </style>

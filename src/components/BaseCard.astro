@@ -32,7 +32,7 @@ const {
 
 <Card
   className={cn(
-    'group overflow-hidden transition-all hover:shadow-md dark:hover:shadow-primary/20',
+    'group overflow-hidden transition-all hover:shadow-md dark:hover:shadow-primary/20 flex flex-col h-full',
     className
   )}
 >
@@ -49,7 +49,7 @@ const {
       }
     </AspectRatio>
   </CardHeader>
-  <CardContent className="space-y-2.5 p-6">
+  <CardContent className="space-y-2.5 p-6 flex-grow">
     <CardTitle className="line-clamp-2 text-2xl">{title}</CardTitle>
     {
       description && (
@@ -59,7 +59,7 @@ const {
       )
     }
   </CardContent>
-  <CardFooter className="p-6 pt-0">
+  <CardFooter className="p-6 pt-0 mt-auto">
     <a href={link} class="w-full">
       <Button className="w-full">
         {viewText}
