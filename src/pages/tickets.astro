@@ -8,17 +8,7 @@ import strapi from '@/lib/api/strapi-client';
 import type { TicketsTicket } from '@/types/strapi';
 
 const response = await strapi.single('ticket').find({
-  populate: {
-    meta: {
-      populate: '*',
-    },
-    marqueeImage: {
-      populate: '*',
-    },
-    panelImage: {
-      populate: '*',
-    },
-  },
+  populate: '*',
 });
 
 if (!response.data) {
