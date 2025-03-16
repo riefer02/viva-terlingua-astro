@@ -10,7 +10,7 @@ const response = await strapi.collection('sponsors').find({
       $eq: 'Liftmaster',
     },
   },
-  populate: ['logo'],
+  populate: '*',
 });
 
 const sponsor = response.data?.[0];

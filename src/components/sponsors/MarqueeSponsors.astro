@@ -9,7 +9,7 @@ const response = await strapi.collection('sponsors').find({
   pagination: {
     limit: 8,
   },
-  populate: ['logo'],
+  populate: '*',
 });
 
 const sponsors = response.data || [];
