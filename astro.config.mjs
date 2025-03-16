@@ -5,6 +5,8 @@ import tailwindcss from '@tailwindcss/vite';
 import netlify from '@astrojs/netlify';
 import { redirects } from './src/config/redirects';
 
+import sitemap from '@astrojs/sitemap';
+
 // https://astro.build/config
 export default defineConfig({
   site: 'https://abowlofred.com', // Production site URL
@@ -16,6 +18,6 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
   },
-  integrations: [react()],
+  integrations: [react(), sitemap()],
   redirects,
 });
