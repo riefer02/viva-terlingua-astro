@@ -7,6 +7,7 @@ import { redirects } from './src/config/redirects';
 
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://abowlofred.com', // Production site URL
   output: 'static',
   adapter: netlify({
     imageCDN: true, // Enable Netlify's image CDN

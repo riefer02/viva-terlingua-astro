@@ -1,4 +1,5 @@
 import config from '../config/site';
+import { getSiteURL } from './url';
 
 export interface SEOProps {
   title?: string;
@@ -24,6 +25,12 @@ export function generateSEO({
     nofollow ? 'nofollow' : 'follow',
   ].join(',');
 
+  // Get the site URL to construct absolute URLs
+  const siteUrl = getSiteURL();
+
+  // Ensure image is an absolute URL
+  const imageUrl = image.startsWith('http') ? image : `${siteUrl}${image}`;
+
   return {
     title: seoTitle,
     description,
@@ -34,7 +41,7 @@ export function generateSEO({
       type: 'website',
       images: [
         {
-          url: image,
+          url: imageUrl,
           width: 1200,
           height: 630,
           alt: seoTitle,
