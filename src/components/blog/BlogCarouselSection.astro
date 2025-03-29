@@ -1,0 +1,63 @@
+---
+import { getCollection } from 'astro:content';
+import slugify from 'slugify';
+import BlogCarousel from './BlogCarousel';
+
+// Fetch the 10 most recent blog posts
+const blogPosts = await getCollection('blog');
+const sortedPosts = blogPosts
+  .sort(
+    (a, b) =>
+      new Date(b.data.publishedAt || '').getTime() -
+      new Date(a.data.publishedAt || '').getTime()
+  )
+  .slice(0, 10)
+  .map((post) => ({
+    ...post,
+    slug: slugify(post.data.title, {
+      lower: true,
+      strict: true,
+      trim: true,
+    }),
+  }));
+
+// Generate dummy posts if needed (development only)
+const generateDummyPosts = (count: number) => {
+  return Array.from({ length: count }, (_, i) => ({
+    data: {
+      title: `Dummy Post ${i + 1}`,
+      description: 'This is a placeholder post for development purposes.',
+      publishedAt: new Date().toISOString(),
+      heroImage: {
+        imageMedia: {
+          url: 'https://placehold.co/600x400',
+        },
+      },
+    },
+    slug: `dummy-post-${i}`,
+  }));
+};
+
+const posts =
+  sortedPosts.length < 3
+    ? [...sortedPosts, ...generateDummyPosts(3 - sortedPosts.length)]
+    : sortedPosts;
+---
+
+<section class="w-full py-16 bg-background" aria-labelledby="news-heading">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h2
+        id="news-heading"
+        class="text-3xl font-bold tracking-tight text-foreground sm:text-4xl mb-4"
+      >
+        News & Announcements
+      </h2>
+      <p class="text-muted-foreground text-lg max-w-2xl mx-auto">
+        Stay updated with our latest news and event announcements
+      </p>
+    </div>
+
+    <BlogCarousel client:load posts={sortedPosts} />
+  </div>
+</section>
