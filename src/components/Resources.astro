@@ -9,10 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import type {
-  ResourcesResource,
-  ResourcesResourceListResponse,
-} from '@/types/strapi';
+import type { ResourcesResource } from '@/types/strapi';
 import strapi from '@/lib/api/strapi-client';
 import { Download, Eye } from 'lucide-react';
 import { getResourceDownloadInfo, formatFileSize } from '@/utils/resources';
@@ -32,9 +29,13 @@ if (!response.data) {
 }
 
 // Filter out resources without files
-const resources = (response.data as ResourcesResource[]).filter(
-  (resource) => resource.file !== null
-);
+const resources = (response.data as ResourcesResource[])
+  .filter((resource) => resource.file !== null)
+  .sort((a, b) => {
+    const dateA = new Date(a.updatedAt || 0);
+    const dateB = new Date(b.updatedAt || 0);
+    return dateB.getTime() - dateA.getTime();
+  });
 ---
 
 <section class:list={['w-full', className]}>

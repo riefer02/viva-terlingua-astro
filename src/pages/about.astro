@@ -9,7 +9,7 @@ import type { UtilityComponentLinkComponent } from '@/types/strapi';
 
 const response = await strapi.single('about-page').find({
   populate: {
-    meta: {
+    seoMeta: {
       populate: '*',
     },
     marqueeImage: {
@@ -33,7 +33,7 @@ const pageData = response.data;
 
 <Layout
   title="About"
-  description={pageData.meta?.description || config.description}
+  description={pageData.seoMeta?.description || config.description}
 >
   <HeroMarquee
     data={{
