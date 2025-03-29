@@ -6,6 +6,9 @@ import TicketsDetails from '@/components/tickets/TicketsDetails.astro';
 import TicketsForm from '@/components/tickets/TicketsForm';
 import strapi from '@/lib/api/strapi-client';
 import type { TicketsTicket } from '@/types/strapi';
+import cookoffConfig from '@/config/cookoff';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 
 const response = await strapi.single('ticket').find({
   populate: '*',
@@ -33,7 +36,33 @@ const seoConfig = {
   <div class="container mx-auto px-4 py-12 md:py-16 lg:py-20">
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
       <TicketsDetails />
-      <TicketsForm client:load />
+      {
+        cookoffConfig.features.ticketsPageDisabled ? (
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-2xl font-bold text-center">
+                Ticket Portal Currently Closed
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div class="flex flex-col items-center space-y-6">
+                <p class="text-center text-muted-foreground">
+                  Our online ticket portal is currently closed. Please check
+                  back later for ticket availability, or purchase tickets at the
+                  gate during the event.
+                </p>
+                <a href="/">
+                  <Button size="lg" variant="default">
+                    Return Home
+                  </Button>
+                </a>
+              </div>
+            </CardContent>
+          </Card>
+        ) : (
+          <TicketsForm client:load />
+        )
+      }
     </div>
   </div>
 

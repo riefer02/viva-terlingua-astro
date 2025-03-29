@@ -13,6 +13,7 @@ export interface CookoffConfig {
   };
   features: {
     musicPageDisabled: boolean;
+    ticketsPageDisabled: boolean;
   };
 }
 
@@ -30,7 +31,8 @@ const config: CookoffConfig = {
     zip: '79852',
   },
   features: {
-    musicPageDisabled: false,
+    musicPageDisabled: true,
+    ticketsPageDisabled: true,
   },
 } as const;
 
