@@ -11,6 +11,9 @@ export interface CookoffConfig {
     state: string;
     zip: string;
   };
+  features: {
+    musicPageDisabled: boolean;
+  };
 }
 
 const config: CookoffConfig = {
@@ -25,6 +28,9 @@ const config: CookoffConfig = {
     city: 'Terlingua',
     state: 'TX',
     zip: '79852',
+  },
+  features: {
+    musicPageDisabled: false,
   },
 } as const;
 

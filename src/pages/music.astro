@@ -3,32 +3,78 @@ import Layout from '@/layouts/Layout.astro';
 import MusicianGrid from '@/components/musicians/MusicianGrid.astro';
 import strapi from '@/lib/api/strapi-client';
 import type { MusicianListResponse, Musician } from '@/types/strapi';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from '@/components/ui/card';
+import cookoffConfig from '@/config/cookoff';
 
-// Fetch musicians data
-const response = await strapi.collection('musicians').find({
-  populate: {
-    squareImage: {
-      populate: '*',
-    },
-    meta: {
-      populate: '*',
-    },
-  },
-});
+// Only fetch musicians if the music page is not disabled
+let musicians: Musician[] = [];
 
-if (!response?.data) {
-  throw new Error('Musicians data not found');
+if (!cookoffConfig.features.musicPageDisabled) {
+  // Fetch musicians data
+  const response = await strapi.collection('musicians').find({
+    populate: {
+      squareImage: {
+        populate: '*',
+      },
+      meta: {
+        populate: '*',
+      },
+    },
+  });
+
+  if (!response?.data) {
+    throw new Error('Musicians data not found');
+  }
+
+  musicians = response.data as Musician[];
+  console.log('musicians', musicians[0]?.meta);
 }
-
-const musicians = response.data as Musician[];
 ---
 
 <Layout
   title="Musicians | A Bowl of Red"
-  description="Meet the talented musicians performing at A Bowl of Red"
+  description="Live music lineup for the Original Terlingua International Championship Chili Cook-off. Check back for performance schedules and artist announcements."
 >
   <main class="container mx-auto px-4 py-12">
     <h1 class="mb-8 text-4xl font-bold">Musicians</h1>
-    <MusicianGrid musicians={musicians} />
+
+    {
+      cookoffConfig.features.musicPageDisabled ? (
+        <div class="flex flex-col items-center justify-center py-12">
+          <Card className="max-w-lg w-full">
+            <CardHeader>
+              <CardTitle className="text-2xl font-bold text-center">
+                {cookoffConfig.dates.year} Music Lineup Coming Soon
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div class="flex flex-col items-center space-y-6">
+                <p class="text-center text-muted-foreground">
+                  We're currently curating an exciting lineup of performers for
+                  this year's cook-off. Check back soon for artist announcements
+                  and schedules.
+                </p>
+                <div>
+                  <a href="/blog">
+                    <Button size="lg" variant="default">
+                      Explore Blogs
+                    </Button>
+                  </a>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      ) : (
+        <MusicianGrid musicians={musicians} />
+      )
+    }
   </main>
 </Layout>
