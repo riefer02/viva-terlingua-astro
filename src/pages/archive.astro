@@ -1,19 +1,21 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
+
 import strapi from '@/lib/api/strapi-client';
 import type { Musician } from '@/types/strapi';
+import { formatSlug } from '@/utils/url';
 
-// Fetch all musicians for archive
 const musicianResponse = await strapi.collection('musicians').find({
   pagination: {
     limit: 100,
   },
 });
 
-const musicians = musicianResponse?.data || [];
+const musicians = (musicianResponse?.data || []).map((musician: Musician) => ({
+  ...musician,
+  slug: formatSlug(musician.slug || ''), // Ensure slug is clean
+}));
 
 // Archive data structure
 const data = [
@@ -60,7 +62,7 @@ const data = [
   ...musicians.map((musician) => ({
     title: musician.name,
     type: 'musicians',
-    link: `/musicians/${musician.slug}`,
+    link: `/musicians/${musician.slug}`, // Using the already cleaned slug
     description:
       musician.description ||
       `Past performer at the Terlingua International Chili Cook-off`,

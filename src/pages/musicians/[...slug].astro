@@ -4,6 +4,7 @@ import Layout from '@/layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 import { formatSlug } from '@/utils/url';
 import { getStrapiImageUrl } from '@/utils/image';
+import cookoffConfig from '@/config/cookoff';
 
 export async function getStaticPaths() {
   const musicianEntries = await getCollection('musicians');
@@ -24,6 +25,7 @@ export async function getStaticPaths() {
         musicVideoID: musician.musicVideoID || '',
         squareImage: musician.squareImage,
         meta: musician.meta || { title: '', description: '' },
+        year: musician.year,
       },
     };
   });
@@ -38,7 +40,12 @@ const {
   musicVideoID,
   squareImage,
   meta,
+  year,
 } = Astro.props;
+
+console.log('Musician year:', year);
+console.log('Current year:', cookoffConfig.dates.year);
+const isArchived = !year || year !== cookoffConfig.dates.year;
 ---
 
 <Layout
@@ -47,6 +54,23 @@ const {
 >
   <main class="container mx-auto px-4 py-12">
     <div class="max-w-4xl mx-auto">
+      {
+        isArchived && (
+          <div class="mb-8 rounded-lg bg-muted p-4 text-muted-foreground">
+            <p class="text-center">
+              This is an archived musician page from {year}. For the current
+              year's lineup, please visit our{' '}
+              <a
+                href="/music"
+                class="text-primary hover:text-primary/80 underline transition-colors"
+              >
+                music page
+              </a>
+              .
+            </p>
+          </div>
+        )
+      }
       <div
         class="bg-card rounded-lg shadow-lg overflow-hidden dark:bg-gray-800"
       >

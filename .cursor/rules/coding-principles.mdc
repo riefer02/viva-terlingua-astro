@@ -1,9 +1,11 @@
 ---
 description: Helpful for general approach to work and philosophy on coding
-globs: **/*(!node_modules)
+globs: *.tsx,*.astro,*.ts
+alwaysApply: false
 ---
 ## Code Style Principles
 
+- Write small lean code modifications and do not be verbose or add things outside of the scope that is requested
 - Write self-documenting code following senior engineering practices
 - Maintain strict TypeScript usage throughout
 - Reference `globals.css` for project-wide styling and design tokens
