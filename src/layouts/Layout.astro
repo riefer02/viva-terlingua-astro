@@ -4,6 +4,7 @@ import { generateSEO, type SEOProps } from '@/utils/seo';
 import Header from '@/components/Header.astro';
 import Banner from '@/components/Banner.astro';
 import Footer from '@/components/Footer.astro';
+import config from '@/config/site';
 
 interface Props extends SEOProps {
   bannerMessage?: string;
@@ -51,6 +52,26 @@ const seo = generateSEO(props);
     <!-- Twitter -->
     <meta name="twitter:card" content={seo.twitter.card} />
     <meta name="twitter:creator" content={seo.twitter.creator} />
+
+    {/* Google Analytics */}
+    {
+      config.analytics.ga4Id && (
+        <>
+          <script
+            type="text/partytown"
+            src={`https://www.googletagmanager.com/gtag/js?id=${config.analytics.ga4Id}`}
+          />
+          <script type="text/partytown" define:vars={{ GA4_ID: config.analytics.ga4Id }}>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() {
+              dataLayer.push(arguments);
+            }
+            gtag('js', new Date());
+            gtag('config', GA4_ID);
+          </script>
+        </>
+      )
+    }
   </head>
   <body>
     <Banner message={bannerMessage} />

@@ -4,8 +4,8 @@ import react from '@astrojs/react';
 import tailwindcss from '@tailwindcss/vite';
 import netlify from '@astrojs/netlify';
 import { redirects } from './src/config/redirects';
-
 import sitemap from '@astrojs/sitemap';
+import partytown from '@astrojs/partytown';
 
 // https://astro.build/config
 export default defineConfig({
@@ -18,6 +18,15 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
   },
-  integrations: [react(), sitemap()],
+  integrations: [
+    react(),
+    sitemap(),
+    partytown({
+      config: {
+        debug: import.meta.env.DEV,
+        forward: ['dataLayer.push'], // Forward GA4 events
+      },
+    }),
+  ],
   redirects,
 });
