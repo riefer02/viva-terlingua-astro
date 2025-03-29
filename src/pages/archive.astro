@@ -3,6 +3,17 @@ import Layout from '@/layouts/Layout.astro';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import strapi from '@/lib/api/strapi-client';
+import type { Musician } from '@/types/strapi';
+
+// Fetch all musicians for archive
+const musicianResponse = await strapi.collection('musicians').find({
+  pagination: {
+    limit: 100,
+  },
+});
+
+const musicians = musicianResponse?.data || [];
 
 // Archive data structure
 const data = [
@@ -46,6 +57,14 @@ const data = [
     description:
       'Official announcement and details for the 2022 cook-off event',
   },
+  ...musicians.map((musician) => ({
+    title: musician.name,
+    type: 'musicians',
+    link: `/musicians/${musician.slug}`,
+    description:
+      musician.description ||
+      `Past performer at the Terlingua International Chili Cook-off`,
+  })),
 ];
 
 // SEO configuration
@@ -72,6 +91,10 @@ const categories = {
   misc: {
     icon: '📄',
     description: 'Other important documents and announcements',
+  },
+  musicians: {
+    icon: '🎵',
+    description: 'Past performers at our events',
   },
 };
 ---
@@ -111,7 +134,7 @@ const categories = {
                     .filter((page) => page.type === type)
                     .map((page) => (
                       <a href={page.link} class="block group">
-                        <div class="rounded-lg border bg-card p-4 transition-colors hover:bg-accent hover:text-accent-foreground">
+                        <div class="rounded-lg border bg-card p-4 transition-colors hover:bg-muted hover:text-foreground">
                           <h3 class="font-semibold mb-1 group-hover:text-primary">
                             {page.title}
                           </h3>
