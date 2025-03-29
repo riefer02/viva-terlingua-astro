@@ -4,20 +4,12 @@ import MusicianGrid from '@/components/musicians/MusicianGrid.astro';
 import strapi from '@/lib/api/strapi-client';
 import type { MusicianListResponse, Musician } from '@/types/strapi';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import cookoffConfig from '@/config/cookoff';
 
-// Only fetch musicians if the music page is not disabled
 let musicians: Musician[] = [];
 
 if (!cookoffConfig.features.musicPageDisabled) {
-  // Fetch musicians data
   const response = await strapi.collection('musicians').find({
     populate: {
       squareImage: {
@@ -27,6 +19,12 @@ if (!cookoffConfig.features.musicPageDisabled) {
         populate: '*',
       },
     },
+    filters: {
+      year: cookoffConfig.dates.year,
+    },
+    pagination: {
+      limit: 12,
+    },
   });
 
   if (!response?.data) {
@@ -34,13 +32,12 @@ if (!cookoffConfig.features.musicPageDisabled) {
   }
 
   musicians = response.data as Musician[];
-  console.log('musicians', musicians[0]?.meta);
 }
 ---
 
 <Layout
-  title="Musicians | A Bowl of Red"
-  description="Live music lineup for the Original Terlingua International Championship Chili Cook-off. Check back for performance schedules and artist announcements."
+  title="Live Music Lineup | Terlingua Chili Cook-off"
+  description="Experience the vibrant live music lineup at the Original Terlingua International Championship Chili Cook-off. Featuring talented performers and unforgettable entertainment."
 >
   <main class="container mx-auto px-4 py-12">
     <h1 class="mb-8 text-4xl font-bold">Musicians</h1>

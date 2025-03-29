@@ -9,6 +9,7 @@ export const musicianSchema = z.object({
   website: z.string().nullable().optional(),
   spotifyID: z.string().nullable().optional(),
   musicVideoID: z.string().nullable().optional(),
+  year: z.number().nullable().optional(),
   squareImage: z
     .object({
       imageAlt: z.string().nullable().optional(),
