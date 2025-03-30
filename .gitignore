@@ -29,3 +29,6 @@ netlify/
 
 # additional build outputs that might be generated
 .output/
+
+# cursor
+.cursor/mcp.json

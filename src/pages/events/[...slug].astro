@@ -44,7 +44,7 @@ if (!event && slug) {
       },
     },
     populate: {
-      meta: {
+      seoMeta: {
         populate: '*',
       },
       marqueeImage: {
@@ -63,8 +63,8 @@ if (!event && slug) {
 ---
 
 <Layout
-  title={event.title || 'Event'}
-  description={event.meta?.description ||
+  title={event.seoMeta?.title || event.title || 'Event'}
+  description={event.seoMeta?.description ||
     event.description ||
     config.description}
 >

@@ -24,7 +24,7 @@ const response = await strapi.single('home-page').find({
         },
       },
     },
-    meta: {
+    seoMeta: {
       populate: '*',
     },
     marqueeImage: {
@@ -46,7 +46,10 @@ if (!response.data) {
 const pageData = response.data as HomePage;
 ---
 
-<Layout title={'Home'} description={config.description}>
+<Layout
+  title={pageData.seoMeta?.title || 'Home'}
+  description={pageData.seoMeta?.description || config.description}
+>
   <HeroMarquee data={pageData} />
   {pageData.featured && <Features features={pageData.featured} />}
   <BlogCarouselSection />

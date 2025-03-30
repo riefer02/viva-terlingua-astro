@@ -20,7 +20,7 @@ export interface CookoffConfig {
 const config: CookoffConfig = {
   dates: {
     start: 'Oct 30th',
-    end: 'Nov 2nd',
+    end: 'Nov 1st',
     year: new Date().getFullYear(),
   },
   location: {

@@ -25,7 +25,7 @@ export const musicianSchema = z.object({
     })
     .nullable()
     .optional(),
-  meta: z
+  seoMeta: z
     .object({
       title: z.string().nullable().optional(),
       description: z.string().nullable().optional(),

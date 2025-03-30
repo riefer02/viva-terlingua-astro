@@ -24,7 +24,7 @@ export async function getStaticPaths() {
         spotifyID: musician.spotifyID || '',
         musicVideoID: musician.musicVideoID || '',
         squareImage: musician.squareImage,
-        meta: musician.meta || { title: '', description: '' },
+        seoMeta: musician.seoMeta || { title: '', description: '' },
         year: musician.year,
       },
     };
@@ -39,18 +39,16 @@ const {
   spotifyID,
   musicVideoID,
   squareImage,
-  meta,
+  seoMeta,
   year,
 } = Astro.props;
 
-console.log('Musician year:', year);
-console.log('Current year:', cookoffConfig.dates.year);
 const isArchived = !year || year !== cookoffConfig.dates.year;
 ---
 
 <Layout
-  title={meta?.title || `${name} | A Bowl of Red`}
-  description={meta?.description || description || ''}
+  title={seoMeta?.title || `${name} | A Bowl of Red`}
+  description={seoMeta?.description || description || ''}
 >
   <main class="container mx-auto px-4 py-12">
     <div class="max-w-4xl mx-auto">

@@ -7,7 +7,7 @@ export const loadMusicianEntries = async () => {
       squareImage: {
         populate: '*',
       },
-      meta: {
+      seoMeta: {
         populate: '*',
       },
     },
@@ -19,7 +19,7 @@ export const loadMusicianEntries = async () => {
 
   const musicians = response.data as Musician[];
 
-  return musicians.map(({ id, squareImage, ...musician }) => {
+  return musicians.map(({ id, squareImage, seoMeta, ...musician }) => {
     // Transform the squareImage data to match our schema
     const transformedSquareImage =
       squareImage && Object.keys(squareImage).length > 0
@@ -38,6 +38,7 @@ export const loadMusicianEntries = async () => {
       id: String(id),
       ...musician,
       squareImage: transformedSquareImage,
+      seoMeta,
     };
   });
 };

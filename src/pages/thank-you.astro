@@ -3,11 +3,11 @@ import Layout from '@/layouts/Layout.astro';
 import HeroMarquee from '@/components/HeroMarquee.astro';
 import PanelImage from '@/components/PanelImage.astro';
 import strapi from '@/lib/api/strapi-client';
-import type { ThankYouResponse, ThankYou } from '@/types/strapi';
+import type { ThankYou } from '@/types/strapi';
 
 const response = await strapi.single('thank-you').find({
   populate: {
-    meta: {
+    seoMeta: {
       populate: '*',
     },
     marqueeImage: {
@@ -27,8 +27,8 @@ const pageData = response.data as ThankYou;
 ---
 
 <Layout
-  title="Thank You"
-  description={pageData.meta?.description || 'Thank you for your support'}
+  title={pageData.seoMeta?.title || 'Thank You'}
+  description={pageData.seoMeta?.description || 'Thank you for your support'}
 >
   <HeroMarquee data={pageData} />
 

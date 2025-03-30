@@ -22,9 +22,10 @@ const pageData = response.data as TicketsTicket;
 
 const seoConfig = {
   title:
+    pageData.seoMeta?.title ||
     'Join the OTICCC: Original Terlingua International Chili Cook Off - Get Your Tickets Now!',
   description:
-    pageData.meta?.description ||
+    pageData.seoMeta?.description ||
     'Join us for the Original Terlingua International Championship Chili Cook-off. Get your tickets now for this legendary event!',
   keywords: ['terlingua', 'chili', 'cook off', 'tickets', 'championship'],
 };
