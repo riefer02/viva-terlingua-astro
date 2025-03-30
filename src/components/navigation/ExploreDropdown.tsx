@@ -106,7 +106,9 @@ export function ExploreDropdown({ navigationData }: ExploreDropdownProps) {
                         category === 'Sponsors';
                       const href = isExternalLink
                         ? item.website || item.url || '#'
-                        : `/${formatSlug(section.path)}/${formatSlug(item.slug || '')}`;
+                        : category === 'Music'
+                          ? `/musicians/${formatSlug(item.slug || '')}`
+                          : `/${formatSlug(section.path)}/${formatSlug(item.slug || '')}`;
                       const label = item.title || item.name || '';
 
                       return (
