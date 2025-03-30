@@ -1,6 +1,7 @@
 ---
 import Navigation from './navigation/Navigation.astro';
 import strapi from '@/lib/api/strapi-client';
+import { Image } from 'astro:assets';
 
 interface Props {
   className?: string;
@@ -69,10 +70,14 @@ const navigationData = {
       <div class="flex h-16 items-center justify-between">
         {/* Logo */}
         <a href="/" class="flex items-center space-x-3">
-          <img
+          <Image
             src="/oticcc-logo-white-sm.png"
             alt="Original Terlingua International Championship Chili Cookoff Logo"
+            width={32}
+            height={32}
             class="h-8 w-auto"
+            loading="eager"
+            format="webp"
           />
           <span class="text-lg font-semibold hidden md:inline-block">
             The Tolbert Chili Cook Off Group
