@@ -23,7 +23,7 @@ const sponsors = response.data || [];
       sponsors.map((sponsor: SponsorsSponsor) => {
         const logoUrl = getStrapiImageUrl(sponsor.logo, 'small');
         return (
-          <div class="flex-shrink-0 w-20 h-20 flex items-center justify-center">
+          <div class="flex-shrink-0 w-16 h-16 flex items-center justify-center">
             {sponsor.website ? (
               <a
                 href={sponsor.website}
