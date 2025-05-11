@@ -4,38 +4,34 @@ import { cleanup } from '@testing-library/react';
 import { afterEach, beforeEach, vi } from 'vitest';
 import { experimental_AstroContainer as AstroContainer } from 'astro/container';
 
-// Mock TextEncoder and TextDecoder for Node environment
-class NodeTextEncoder implements TextEncoder {
-  encoding = 'utf-8';
-  encode(input?: string): Uint8Array {
-    return new Uint8Array(Buffer.from(input || ''));
-  }
-  encodeInto(
-    source: string,
-    destination: Uint8Array
-  ): TextEncoderEncodeIntoResult {
-    const encoded = this.encode(source);
-    destination.set(encoded);
-    return {
-      read: source.length,
-      written: encoded.length,
-    };
-  }
-}
+/**
+ * Test setup file for Vitest
+ *
+ * This file handles necessary polyfills and global setup for tests.
+ *
+ * The main issues addressed here:
+ * 1. TextEncoder/Decoder - esbuild checks require proper implementations
+ * 2. Clipboard API - needed for user-event in happy-dom environment
+ * 3. Astro Container - needed for testing Astro components
+ */
 
-class NodeTextDecoder implements TextDecoder {
-  encoding = 'utf-8';
-  fatal = false;
-  ignoreBOM = false;
-  decode(input?: BufferSource | undefined): string {
-    if (!input) return '';
-    return Buffer.from(input as Uint8Array).toString();
+// Mock clipboard API for happy-dom
+// This prevents errors with @testing-library/user-event which tries to use clipboard API
+if (typeof navigator !== 'undefined' && !navigator.clipboard) {
+  try {
+    Object.defineProperty(navigator, 'clipboard', {
+      value: {
+        writeText: vi.fn(),
+        readText: vi.fn(),
+      },
+      configurable: true,
+    });
+  } catch (e) {
+    console.warn('Failed to mock clipboard API:', e);
   }
 }
 
-globalThis.TextEncoder = NodeTextEncoder as unknown as typeof TextEncoder;
-globalThis.TextDecoder = NodeTextDecoder as unknown as typeof TextDecoder;
-
+// Setup for Astro Container testing
 let container: Awaited<ReturnType<typeof AstroContainer.create>> | null = null;
 
 beforeEach(async () => {
@@ -44,9 +40,5 @@ beforeEach(async () => {
 
 afterEach(() => {
   container = null;
-});
-
-// runs a cleanup after each test case
-afterEach(() => {
   cleanup();
 });
