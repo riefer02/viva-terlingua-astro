@@ -12,7 +12,7 @@ import stripe from '@/lib/api/stripe-client';
 const { stripeMock } = setupStripeMocks();
 
 // Import the API handler after mocking
-import { post } from '@/pages/api/create-checkout-session';
+import { POST } from '@/pages/api/create-checkout-session';
 
 // Set up environment variables
 const envMock = setupEnvMocks({
@@ -75,7 +75,7 @@ describe('create-checkout-session API', () => {
     request.json = vi.fn().mockResolvedValue(testData);
 
     // Call API handler
-    const response = await post({ request, redirect: vi.fn() } as any);
+    const response = await POST({ request, redirect: vi.fn() } as any);
     const responseData = await response.json();
 
     // Verify response
@@ -152,7 +152,7 @@ describe('create-checkout-session API', () => {
     request.json = vi.fn().mockResolvedValue(testData);
 
     // Call API handler
-    const response = await post({ request, redirect: vi.fn() } as any);
+    const response = await POST({ request, redirect: vi.fn() } as any);
 
     // Verify Stripe was called with gift recipient data by checking specific properties
     const createCall = stripeMock.checkout.sessions.create.mock
@@ -199,7 +199,7 @@ describe('create-checkout-session API', () => {
     request.json = vi.fn().mockResolvedValue(testData);
 
     // Call API handler
-    const response = await post({ request, redirect: vi.fn() } as any);
+    const response = await POST({ request, redirect: vi.fn() } as any);
     const responseData = await response.json();
 
     // Verify error response
