@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
-import { setupEnvMocks } from '../setup/mocks/env-mocks';
-import config, { type SiteConfig } from '../../config/site';
+import { setupEnvMocks } from '@tests/setup/mocks/env-mocks';
+import config, { type SiteConfig } from '@/config/site';
 
 describe('Site Configuration', () => {
   // Store the original module so we can re-import it with different env vars
@@ -76,17 +76,17 @@ describe('Site Configuration', () => {
     expect(config.strapi.identifier).toBe('');
   });
 
-  it('should use environment variables when set', () => {
+  it('should use environment variables when set', async () => {
     // Setup environment with our centralized mock system
     const envMock = setupEnvMocks({
-      PUBLIC_STRAPI_URL: 'https://cms.example.com',
-      PUBLIC_STRIPE_PUBLISHABLE_KEY: 'pk_test_custom',
-      PUBLIC_TICKET_PRICE_ID: 'price_custom123',
+      STRAPI_URL: 'https://cms.example.com',
+      STRIPE_PUBLIC_KEY: 'pk_test_custom',
+      TICKET_PRICE: 'price_custom123',
     });
 
     // Re-import the module to get the new environment values
     vi.resetModules();
-    const updatedConfig = require('../../config/site').default;
+    const { default: updatedConfig } = await import('@/config/site');
 
     // Check that environment variables are properly used
     expect(updatedConfig.urls.strapi).toBe('https://cms.example.com');

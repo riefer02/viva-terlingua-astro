@@ -1,6 +1,7 @@
 /// <reference types="vitest" />
 /// <reference types="vite/client" />
 import { getViteConfig } from 'astro/config';
+import path from 'path';
 
 /**
  * Vitest configuration for testing
@@ -19,5 +20,13 @@ export default getViteConfig({
     environment: 'happy-dom', // Default environment for component tests
     include: ['src/**/*.{test,spec}.{js,ts,jsx,tsx}'],
     setupFiles: ['./vitest.setup.ts'],
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, './src'),
+        '@tests': path.resolve(__dirname, './src/__tests__'),
+      },
+    },
   },
+  // If we needed to pass Astro-specific config for tests, it would be a second argument here.
+  // For now, loading the default astro.config.mjs should be sufficient.
 });

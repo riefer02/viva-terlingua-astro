@@ -1,49 +1,87 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { post } from '@/pages/api/webhooks/stripe';
+import { describe, it, expect, vi, beforeEach, afterAll } from 'vitest';
 import { setupEnvMocks } from '../../../setup/mocks/env-mocks';
+import { setupStripeMocks } from '../../../setup/mocks/api-mocks';
 
-// Pre-define mocks before vi.mock() calls to avoid hoisting issues
-const constructEventMock = vi.fn();
-const stripeMock = {
-  webhooks: {
-    constructEvent: constructEventMock,
-  },
-};
-
-// Create a more robust mock for Strapi
-const createMock = vi.fn().mockResolvedValue({ data: { id: 1 } });
-const strapiMock = {
-  collection: vi.fn().mockReturnValue({
-    create: createMock,
-  }),
-};
-
-// Mock stripe and strapi clients
-vi.mock('@/lib/api/stripe-client', () => ({
-  default: stripeMock,
-}));
-
-vi.mock('@/lib/api/strapi-client', () => ({
-  default: strapiMock,
-  __createMock: createMock, // Export mock for reference
-}));
-
-// Import after mocking
+// First import the modules we want to mock
 import stripe from '@/lib/api/stripe-client';
 import strapi from '@/lib/api/strapi-client';
+
+// Use the setupStripeMocks helper to mock Stripe
+const { stripeMock } = setupStripeMocks();
+
+// Mock the strapi client with a factory function to avoid initialization errors
+vi.mock('@/lib/api/strapi-client', () => {
+  return {
+    default: {
+      collection: vi.fn(),
+    },
+  };
+});
+
+// Import the component after mocking
+import { post } from '@/pages/api/webhooks/stripe';
 
 // Setup environment variables
 const envMock = setupEnvMocks({
   STRIPE_WEBHOOK_SECRET: 'whsec_test123',
+  PUBLIC_STRAPI_URL: 'https://test-cms.example.com',
+  PUBLIC_STRAPI_API_TOKEN: 'test-token-123',
+  SITE_URL: 'https://test.example.com',
+  PUBLIC_TICKET_PRICE_ID: 'price_test123',
+  PUBLIC_STRIPE_PUBLISHABLE_KEY: 'pk_test_mock',
+  STRIPE_SECRET_KEY: 'sk_test_mock',
 });
 
 describe('stripe-webhook API', () => {
   beforeEach(() => {
     vi.resetAllMocks();
 
-    // Reset specific mocks
-    createMock.mockClear();
-    constructEventMock.mockReset();
+    // Set up mock implementations - use the properly typed stripeMock
+    stripeMock.webhooks.constructEvent.mockImplementation(
+      (payload, signature, secret) => {
+        // Basic validation to simulate Stripe behavior
+        if (!signature || signature === 'invalid_signature') {
+          throw new Error('Invalid signature');
+        }
+
+        // Return a default event or parse the payload if it's a string
+        const defaultEvent = {
+          type: 'checkout.session.completed',
+          data: {
+            object: {
+              id: 'cs_test_123',
+              metadata: {},
+              line_items: {
+                data: [{ quantity: 1 }],
+              },
+              amount_total: 5000,
+              payment_intent: 'pi_123',
+            },
+          },
+          id: 'evt_test',
+          object: 'event',
+          api_version: '2020-08-27',
+          created: 1661000000,
+          livemode: false,
+          pending_webhooks: 0,
+          request: { id: null, idempotency_key: null },
+        };
+
+        return typeof payload === 'string'
+          ? { ...defaultEvent, ...JSON.parse(payload) }
+          : defaultEvent;
+      }
+    );
+
+    // Create a mock for Strapi
+    const createMock = vi.fn().mockResolvedValue({ data: { id: 1 } });
+
+    // Mock collection method with proper type assertion
+    const mockCollectionReturn = {
+      create: createMock,
+    };
+
+    vi.mocked(strapi.collection).mockReturnValue(mockCollectionReturn as any);
   });
 
   afterAll(() => {
@@ -72,18 +110,26 @@ describe('stripe-webhook API', () => {
           payment_intent: 'pi_123',
         },
       },
+      id: 'evt_test',
+      object: 'event',
+      api_version: '2020-08-27',
+      created: 1661000000,
+      livemode: false,
+      pending_webhooks: 0,
+      request: { id: null, idempotency_key: null },
     };
 
-    // Mock webhook verification
-    constructEventMock.mockReturnValue(mockEvent);
+    // Mock webhook verification with proper type assertion
+    stripeMock.webhooks.constructEvent.mockReturnValue(mockEvent as any);
 
-    // Create request with signature
+    // Create request with signature - maintain consistency with port 4321
     const request = new Request('http://localhost:4321/api/webhooks/stripe', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'stripe-signature': 'sig_test123',
       },
+      body: JSON.stringify(mockEvent),
     });
 
     // Mock request.text to return raw body
@@ -98,7 +144,7 @@ describe('stripe-webhook API', () => {
     expect(responseData.received).toBe(true);
 
     // Verify signature verification
-    expect(stripe.webhooks.constructEvent).toHaveBeenCalledWith(
+    expect(stripeMock.webhooks.constructEvent).toHaveBeenCalledWith(
       expect.any(String),
       'sig_test123',
       expect.any(String)
@@ -106,6 +152,9 @@ describe('stripe-webhook API', () => {
 
     // Verify Strapi was called to create a ticket record
     expect(strapi.collection).toHaveBeenCalledWith('ticket-purchases');
+
+    // Get the create mock directly from our implementation
+    const createMock = vi.mocked(strapi.collection('ticket-purchases').create);
     expect(createMock).toHaveBeenCalledWith({
       data: expect.objectContaining({
         sessionId: 'cs_test_123',
@@ -123,7 +172,7 @@ describe('stripe-webhook API', () => {
   });
 
   it('handles missing stripe signature', async () => {
-    // Create request without signature
+    // Create request without signature - ensure consistent URL
     const request = new Request('http://localhost:4321/api/webhooks/stripe', {
       method: 'POST',
       headers: {
@@ -143,17 +192,18 @@ describe('stripe-webhook API', () => {
 
   it('handles signature verification errors', async () => {
     // Mock webhook verification throwing an error
-    constructEventMock.mockImplementation(() => {
+    stripeMock.webhooks.constructEvent.mockImplementation(() => {
       throw new Error('Invalid signature');
     });
 
-    // Create request with invalid signature
+    // Create request with invalid signature - ensure consistent URL
     const request = new Request('http://localhost:4321/api/webhooks/stripe', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'stripe-signature': 'invalid_signature',
       },
+      body: '{}',
     });
 
     // Mock request.text
@@ -180,18 +230,26 @@ describe('stripe-webhook API', () => {
           id: 'pi_test_123',
         },
       },
+      id: 'evt_test',
+      object: 'event',
+      api_version: '2020-08-27',
+      created: 1661000000,
+      livemode: false,
+      pending_webhooks: 0,
+      request: { id: null, idempotency_key: null },
     };
 
-    // Mock webhook verification
-    constructEventMock.mockReturnValue(mockEvent);
+    // Mock webhook verification with proper type assertion
+    stripeMock.webhooks.constructEvent.mockReturnValue(mockEvent as any);
 
-    // Create request
+    // Create request - ensure consistent URL
     const request = new Request('http://localhost:4321/api/webhooks/stripe', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'stripe-signature': 'sig_test123',
       },
+      body: JSON.stringify(mockEvent),
     });
 
     // Mock request.text

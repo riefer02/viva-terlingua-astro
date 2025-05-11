@@ -5,9 +5,9 @@ import { afterEach, beforeEach, vi } from 'vitest';
 import { experimental_AstroContainer as AstroContainer } from 'astro/container';
 
 // Import centralized mocks
-import { setupBrowserEnvironment } from './src/__tests__/setup/mocks/browser-mocks';
-import { setupFetchMock } from './src/__tests__/setup/mocks/api-mocks';
-import { setupEnvMocks } from './src/__tests__/setup/mocks/env-mocks';
+import { setupBrowserEnvironment } from '@tests/setup/mocks/browser-mocks';
+import { setupFetchMock } from '@tests/setup/mocks/api-mocks';
+import { setupEnvMocks } from '@tests/setup/mocks/env-mocks';
 
 /**
  * Test setup file for Vitest
@@ -23,36 +23,33 @@ import { setupEnvMocks } from './src/__tests__/setup/mocks/env-mocks';
  * 5. Astro Container - needed for testing Astro components
  */
 
-// Setup the browser environment with all mocks
-setupBrowserEnvironment();
+// Clear React testing library's render
+afterEach(() => {
+  cleanup();
+});
 
-// Setup fetch API mock
-setupFetchMock();
+// Initialize browser environment before each test
+beforeEach(() => {
+  // Setup centralized mocks
+  setupBrowserEnvironment();
+  setupFetchMock();
+  setupEnvMocks();
 
-// Setup environment variables
-const envMock = setupEnvMocks();
-
-// Setup for Astro Container testing
-let container: Awaited<ReturnType<typeof AstroContainer.create>> | null = null;
-
-beforeEach(async () => {
   // Reset all mocks before each test
   vi.resetAllMocks();
-
-  // Create a fresh Astro container
-  container = await AstroContainer.create();
 });
 
-afterEach(() => {
-  // Clean up Astro container
-  container = null;
+// Polyfill TextEncoder/Decoder for esbuild checks
+if (typeof global.TextEncoder === 'undefined') {
+  const { TextEncoder, TextDecoder } = require('util');
+  global.TextEncoder = TextEncoder;
+  global.TextDecoder = TextDecoder;
+  global.ArrayBuffer = ArrayBuffer;
+}
 
-  // Clean up React testing library
-  cleanup();
-
-  // Reset all mocks
-  vi.resetAllMocks();
-});
-
-// Export the container for tests that need direct access
-export { container };
+// Make AstroContainer available to tests - avoid directly manipulating global
+try {
+  (global as any).AstroContainer = AstroContainer;
+} catch (e) {
+  console.warn('Could not set AstroContainer:', e);
+}
