@@ -28,9 +28,9 @@
     ]
   },
   "dependencies": {
-    "@astrojs/netlify": "^6.3.1",
+    "@astrojs/netlify": "^6.3.2",
     "@astrojs/partytown": "^2.1.4",
-    "@astrojs/react": "^4.2.5",
+    "@astrojs/react": "^4.2.7",
     "@astrojs/sitemap": "^3.3.1",
     "@hookform/resolvers": "^4.1.0",
     "@radix-ui/react-accordion": "^1.2.3",
@@ -46,7 +46,7 @@
     "@tailwindcss/vite": "^4.0.1",
     "@types/react": "^19.0.7",
     "@types/react-dom": "^19.0.3",
-    "astro": "^5.7.5",
+    "astro": "^5.7.12",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "embla-carousel-autoplay": "^8.5.2",
