@@ -3,8 +3,13 @@ import Layout from '@/layouts/Layout.astro';
 import HeroMarquee from '@/components/HeroMarquee.astro';
 import PanelImage from '@/components/PanelImage.astro';
 import strapi from '@/lib/api/strapi-client';
+import stripe from '@/lib/api/stripe-client';
 import type { ThankYou } from '@/types/strapi';
 
+// Disable static generation for this page
+export const prerender = false;
+
+// Get page data from Strapi
 const response = await strapi.single('thank-you').find({
   populate: {
     seoMeta: {
@@ -24,6 +29,29 @@ if (!response.data) {
 }
 
 const pageData = response.data as ThankYou;
+
+// Get session data from Stripe if session_id is provided
+let sessionData = null;
+const sessionId = Astro.url.searchParams.get('session_id');
+
+if (sessionId) {
+  try {
+    const session = await stripe.checkout.sessions.retrieve(sessionId, {
+      expand: ['line_items', 'customer_details'],
+    });
+
+    sessionData = {
+      customerName: session.customer_details?.name || 'Valued Customer',
+      customerEmail: session.customer_details?.email,
+      ticketCount: session.line_items?.data[0]?.quantity || 0,
+      totalAmount: session.amount_total
+        ? (session.amount_total / 100).toFixed(2)
+        : '0.00',
+    };
+  } catch (error) {
+    console.error('Error retrieving Stripe session:', error);
+  }
+}
 ---
 
 <Layout
@@ -34,9 +62,27 @@ const pageData = response.data as ThankYou;
 
   <div class="container mx-auto px-4 py-12 md:py-16 lg:py-20">
     <div class="prose prose-stone dark:prose-invert mx-auto">
-      <p class="text-xl md:text-2xl text-muted-foreground leading-relaxed">
-        {pageData.message}
-      </p>
+      {
+        sessionData ? (
+          <div class="bg-muted p-6 rounded-lg space-y-4">
+            <h2 class="text-2xl font-bold">Order Confirmation</h2>
+            <p>Thank you, {sessionData.customerName}!</p>
+            <p>Your ticket purchase has been confirmed.</p>
+            <p>
+              We've sent a confirmation email to {sessionData.customerEmail}
+            </p>
+            <div class="border-t border-border pt-4 mt-4">
+              <h3 class="text-xl font-semibold">Order Details</h3>
+              <p>Tickets: {sessionData.ticketCount}</p>
+              <p>Total: ${sessionData.totalAmount}</p>
+            </div>
+          </div>
+        ) : (
+          <p class="text-xl md:text-2xl text-muted-foreground leading-relaxed">
+            {pageData.message}
+          </p>
+        )
+      }
     </div>
   </div>
 

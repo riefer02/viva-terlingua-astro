@@ -10,7 +10,7 @@ import partytown from '@astrojs/partytown';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://abowlofred.com', // Production site URL
-  output: 'static',
+  output: 'static', // Updated from 'hybrid' to 'static' for Astro v5 compatibility
   adapter: netlify({
     imageCDN: true, // Enable Netlify's image CDN
     cacheOnDemandPages: true, // Enable caching for better performance

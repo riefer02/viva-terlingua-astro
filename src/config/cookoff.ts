@@ -32,7 +32,7 @@ const config: CookoffConfig = {
   },
   features: {
     musicPageDisabled: true,
-    ticketsPageDisabled: true,
+    ticketsPageDisabled: false,
   },
 } as const;
 
