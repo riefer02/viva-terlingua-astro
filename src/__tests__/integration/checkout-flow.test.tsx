@@ -1,9 +1,19 @@
-import { describe, it, expect, vi, beforeAll, afterAll, afterEach } from 'vitest';
+import React from 'react';
+import {
+  describe,
+  it,
+  expect,
+  vi,
+  beforeAll,
+  afterAll,
+  afterEach,
+} from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { setupServer } from 'msw/node';
 import { rest } from 'msw';
 import TicketsForm from '@/components/tickets/TicketsForm';
+import { setupBrowserEnvironment } from '../setup/mocks/browser-mocks';
 
 // Create a mock MSW server to intercept API requests
 const server = setupServer(
@@ -21,57 +31,59 @@ const server = setupServer(
 describe('Checkout Flow Integration', () => {
   // Start MSW server before tests
   beforeAll(() => {
-    // Mock window.location before tests run
-    Object.defineProperty(global, 'window', {
-      value: {
-        location: {
-          href: '',
-        },
-      },
-      writable: true,
-    });
-    
+    // Use our centralized browser mocks
+    setupBrowserEnvironment();
+
+    // Start MSW server
     server.listen();
   });
-  
+
   // Reset handlers after each test
-  afterEach(() => server.resetHandlers());
-  
+  afterEach(() => {
+    vi.resetAllMocks();
+    server.resetHandlers();
+  });
+
   // Clean up after all tests
   afterAll(() => server.close());
-  
+
   it('completes the entire form submission and checkout flow', async () => {
     const user = userEvent.setup();
     render(<TicketsForm />);
-    
+
     // Fill out the complete form with valid data
     await user.type(screen.getByLabelText(/first name/i), 'John');
     await user.type(screen.getByLabelText(/last name/i), 'Doe');
     await user.type(screen.getByLabelText(/^email$/i), 'john@example.com');
-    await user.type(screen.getByLabelText(/confirm email/i), 'john@example.com');
+    await user.type(
+      screen.getByLabelText(/confirm email/i),
+      'john@example.com'
+    );
     await user.type(screen.getByLabelText(/phone/i), '(555) 555-5555');
-    
+
     // Select 2 tickets
     await user.clear(screen.getByLabelText(/number of tickets/i));
     await user.type(screen.getByLabelText(/number of tickets/i), '2');
-    
+
     // Check gift checkbox
     await user.click(screen.getByLabelText(/gift/i));
-    
+
     // Fill gift recipient info
     await user.type(screen.getByLabelText(/recipient's first name/i), 'Jane');
     await user.type(screen.getByLabelText(/recipient's last name/i), 'Smith');
-    
+
     // Submit the form
     await user.click(screen.getByRole('button', { name: /purchase/i }));
-    
+
     // Verify the form submission
     await waitFor(() => {
       // Should call API with correct data
-      expect(window.location.href).toBe('https://checkout.stripe.com/pay/cs_test_integration');
+      expect(window.location.href).toBe(
+        'https://checkout.stripe.com/pay/cs_test_integration'
+      );
     });
   });
-  
+
   it('handles server errors during checkout', async () => {
     // Override default handler to simulate server error
     server.use(
@@ -82,23 +94,28 @@ describe('Checkout Flow Integration', () => {
         );
       })
     );
-    
+
     const user = userEvent.setup();
     render(<TicketsForm />);
-    
+
     // Fill out form with valid data (minimal version)
     await user.type(screen.getByLabelText(/first name/i), 'John');
     await user.type(screen.getByLabelText(/last name/i), 'Doe');
     await user.type(screen.getByLabelText(/^email$/i), 'john@example.com');
-    await user.type(screen.getByLabelText(/confirm email/i), 'john@example.com');
+    await user.type(
+      screen.getByLabelText(/confirm email/i),
+      'john@example.com'
+    );
     await user.type(screen.getByLabelText(/phone/i), '(555) 555-5555');
-    
+
     // Submit the form
     await user.click(screen.getByRole('button', { name: /purchase/i }));
-    
+
     // Verify error handling
     await waitFor(() => {
-      expect(screen.getByText('Server error during checkout')).toBeInTheDocument();
+      expect(
+        screen.getByText('Server error during checkout')
+      ).toBeInTheDocument();
     });
   });
-}); 
+});

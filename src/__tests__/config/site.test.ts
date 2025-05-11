@@ -1,10 +1,22 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
+import { setupEnvMocks } from '../setup/mocks/env-mocks';
 import config, { type SiteConfig } from '../../config/site';
 
 describe('Site Configuration', () => {
+  // Store the original module so we can re-import it with different env vars
+  let originalModule: typeof config;
+
   beforeEach(() => {
     // Clear any mocked environment variables between tests
     vi.resetModules();
+    vi.unstubAllEnvs();
+
+    // Store original module
+    originalModule = { ...config };
+  });
+
+  afterEach(() => {
+    // Clean up any environment mocks
     vi.unstubAllEnvs();
   });
 
@@ -62,6 +74,28 @@ describe('Site Configuration', () => {
     expect(config.stripe.ticketPrice).toBe('');
     expect(config.strapi.apiToken).toBe('');
     expect(config.strapi.identifier).toBe('');
+  });
+
+  it('should use environment variables when set', () => {
+    // Setup environment with our centralized mock system
+    const envMock = setupEnvMocks({
+      PUBLIC_STRAPI_URL: 'https://cms.example.com',
+      PUBLIC_STRIPE_PUBLISHABLE_KEY: 'pk_test_custom',
+      PUBLIC_TICKET_PRICE_ID: 'price_custom123',
+    });
+
+    // Re-import the module to get the new environment values
+    vi.resetModules();
+    const updatedConfig = require('../../config/site').default;
+
+    // Check that environment variables are properly used
+    expect(updatedConfig.urls.strapi).toBe('https://cms.example.com');
+    expect(updatedConfig.strapi.url).toBe('https://cms.example.com');
+    expect(updatedConfig.stripe.publicKey).toBe('pk_test_custom');
+    expect(updatedConfig.stripe.ticketPrice).toBe('price_custom123');
+
+    // Clean up
+    envMock.cleanup();
   });
 
   // Type check test

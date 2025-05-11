@@ -1,34 +1,44 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { post } from '@/pages/api/create-checkout-session';
+import { setupEnvMocks } from '../../../setup/mocks/env-mocks';
+
+// Pre-define mocks before vi.mock() calls to avoid hoisting issues
+const createSessionMock = vi.fn();
+const stripeMock = {
+  checkout: {
+    sessions: {
+      create: createSessionMock,
+    },
+  },
+};
 
 // Mock stripe client
 vi.mock('@/lib/api/stripe-client', () => ({
-  default: {
-    checkout: {
-      sessions: {
-        create: vi.fn(),
-      },
-    },
-  },
+  default: stripeMock,
 }));
 
 // Import after mocking
 import stripe from '@/lib/api/stripe-client';
 
-// Mock environment variables
-vi.mock('import.meta.env', () => ({
+// Set up environment variables
+const envMock = setupEnvMocks({
   PUBLIC_TICKET_PRICE_ID: 'price_test123',
-  SITE_URL: 'https://test.example.com',
-}));
+  PUBLIC_SITE_URL: 'https://test.example.com',
+});
 
 describe('create-checkout-session API', () => {
   beforeEach(() => {
     vi.resetAllMocks();
   });
 
+  afterAll(() => {
+    // Clean up environment mocks
+    envMock.cleanup();
+  });
+
   it('creates a Stripe checkout session with the correct data', async () => {
     // Mock Stripe's response
-    (stripe.checkout.sessions.create as any).mockResolvedValue({
+    createSessionMock.mockResolvedValue({
       id: 'sess_123',
       url: 'https://checkout.stripe.com/pay/cs_test_123',
     });
@@ -95,7 +105,7 @@ describe('create-checkout-session API', () => {
 
   it('includes gift recipient info in metadata when isGift is true', async () => {
     // Mock Stripe's response
-    (stripe.checkout.sessions.create as any).mockResolvedValue({
+    createSessionMock.mockResolvedValue({
       id: 'sess_gift123',
       url: 'https://checkout.stripe.com/pay/cs_test_gift123',
     });
@@ -145,9 +155,7 @@ describe('create-checkout-session API', () => {
 
   it('handles errors from Stripe', async () => {
     // Mock Stripe throwing an error
-    (stripe.checkout.sessions.create as any).mockRejectedValue(
-      new Error('Invalid API key')
-    );
+    createSessionMock.mockRejectedValue(new Error('Invalid API key'));
 
     // Test data
     const testData = {

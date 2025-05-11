@@ -1,25 +1,35 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { experimental_AstroContainer as AstroContainer } from 'astro/container';
 
-// Mock clients
-vi.mock('@/lib/api/stripe-client', () => ({
-  default: {
-    checkout: {
-      sessions: {
-        retrieve: vi.fn(),
-      },
+// Import our centralized mocks
+import { createStripeMock } from '../../setup/mocks/api-mocks';
+import { createStrapiMock } from '../../setup/mocks/api-mocks';
+
+// Pre-define mocks before vi.mock() calls to avoid hoisting issues
+const stripeMock = {
+  checkout: {
+    sessions: {
+      retrieve: vi.fn(),
     },
   },
+};
+
+// Create mocks for Strapi
+const findMock = vi.fn();
+const strapiMock = {
+  single: vi.fn().mockReturnValue({
+    find: findMock,
+  }),
+};
+
+// Mock clients
+vi.mock('@/lib/api/stripe-client', () => ({
+  default: stripeMock,
 }));
 
-// Create a better mock for Strapi
-const findMock = vi.fn();
 vi.mock('@/lib/api/strapi-client', () => ({
-  default: {
-    single: vi.fn().mockReturnValue({
-      find: findMock,
-    }),
-  },
+  default: strapiMock,
+  __findMock: findMock, // Export mock for reference
 }));
 
 // Import after mocking
@@ -54,7 +64,7 @@ describe('Thank You page', () => {
 
   it('renders thank you page with session data when session_id is present', async () => {
     // Mock Stripe session response
-    (stripe.checkout.sessions.retrieve as any).mockResolvedValue({
+    stripeMock.checkout.sessions.retrieve.mockResolvedValue({
       id: 'cs_test_123',
       customer_details: {
         name: 'John Doe',
@@ -107,7 +117,7 @@ describe('Thank You page', () => {
 
   it('handles errors from Stripe gracefully', async () => {
     // Mock Stripe throwing an error
-    (stripe.checkout.sessions.retrieve as any).mockRejectedValue(
+    stripeMock.checkout.sessions.retrieve.mockRejectedValue(
       new Error('Invalid session ID')
     );
 

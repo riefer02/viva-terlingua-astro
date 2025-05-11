@@ -3,19 +3,19 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import TicketsForm from '@/components/tickets/TicketsForm';
-import { setupEnvironment } from './tickets-form-setup';
+import { setupBrowserEnvironment } from '../../setup/mocks/browser-mocks';
+import { setupFetchMock, fetchMock } from '../../setup/mocks/api-mocks';
 
-// Setup the test environment
-setupEnvironment();
-
-// Mock fetch API
-global.fetch = vi.fn();
+// Setup the test environment using our centralized mocks
+setupBrowserEnvironment();
+setupFetchMock();
 
 describe('TicketsForm', () => {
   beforeEach(() => {
     vi.resetAllMocks();
-    // Mock successful Stripe checkout response
-    global.fetch = vi.fn().mockResolvedValue({
+
+    // Mock successful Stripe checkout response using our centralized fetchMock
+    fetchMock.mockResolvedValue({
       ok: true,
       json: () =>
         Promise.resolve({
@@ -33,7 +33,7 @@ describe('TicketsForm', () => {
     await user.click(screen.getByRole('button', { name: /purchase/i }));
 
     // Verify form wasn't submitted (fetch not called)
-    expect(global.fetch).not.toHaveBeenCalled();
+    expect(fetchMock).not.toHaveBeenCalled();
   });
 
   it('validates email confirmation match', async () => {
@@ -54,7 +54,7 @@ describe('TicketsForm', () => {
     await user.click(screen.getByRole('button', { name: /purchase/i }));
 
     // Verify form wasn't submitted (fetch not called)
-    expect(global.fetch).not.toHaveBeenCalled();
+    expect(fetchMock).not.toHaveBeenCalled();
   });
 
   it('toggles the gift checkbox', async () => {
@@ -94,13 +94,13 @@ describe('TicketsForm', () => {
     // Verify form submission and redirect
     await waitFor(() => {
       // Check that fetch was called with the right endpoint
-      expect(global.fetch).toHaveBeenCalledWith(
+      expect(fetchMock).toHaveBeenCalledWith(
         '/api/create-checkout-session',
         expect.any(Object)
       );
 
       // Check that the correct data was sent
-      const requestOptions = (global.fetch as any).mock.calls[0][1];
+      const requestOptions = fetchMock.mock.calls[0][1];
       const requestData = JSON.parse(requestOptions.body);
       expect(requestData).toMatchObject({
         firstName: 'John',
@@ -120,7 +120,7 @@ describe('TicketsForm', () => {
 
   it('handles API errors and shows an error message', async () => {
     // Mock a failed API response
-    global.fetch = vi.fn().mockResolvedValue({
+    fetchMock.mockResolvedValue({
       ok: false,
       json: () => Promise.resolve({ error: 'Payment service unavailable' }),
     });

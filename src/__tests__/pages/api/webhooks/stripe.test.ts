@@ -1,33 +1,41 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { post } from '@/pages/api/webhooks/stripe';
+import { setupEnvMocks } from '../../../setup/mocks/env-mocks';
+
+// Pre-define mocks before vi.mock() calls to avoid hoisting issues
+const constructEventMock = vi.fn();
+const stripeMock = {
+  webhooks: {
+    constructEvent: constructEventMock,
+  },
+};
+
+// Create a more robust mock for Strapi
+const createMock = vi.fn().mockResolvedValue({ data: { id: 1 } });
+const strapiMock = {
+  collection: vi.fn().mockReturnValue({
+    create: createMock,
+  }),
+};
 
 // Mock stripe and strapi clients
 vi.mock('@/lib/api/stripe-client', () => ({
-  default: {
-    webhooks: {
-      constructEvent: vi.fn(),
-    },
-  },
+  default: stripeMock,
 }));
 
-// Create a more robust mock for Strapi that properly implements the collection method
-const createMock = vi.fn().mockResolvedValue({ data: { id: 1 } });
 vi.mock('@/lib/api/strapi-client', () => ({
-  default: {
-    collection: vi.fn().mockReturnValue({
-      create: createMock,
-    }),
-  },
+  default: strapiMock,
+  __createMock: createMock, // Export mock for reference
 }));
 
 // Import after mocking
 import stripe from '@/lib/api/stripe-client';
 import strapi from '@/lib/api/strapi-client';
 
-// Mock environment variables
-vi.mock('import.meta.env', () => ({
+// Setup environment variables
+const envMock = setupEnvMocks({
   STRIPE_WEBHOOK_SECRET: 'whsec_test123',
-}));
+});
 
 describe('stripe-webhook API', () => {
   beforeEach(() => {
@@ -35,7 +43,12 @@ describe('stripe-webhook API', () => {
 
     // Reset specific mocks
     createMock.mockClear();
-    (stripe.webhooks.constructEvent as any).mockReset();
+    constructEventMock.mockReset();
+  });
+
+  afterAll(() => {
+    // Clean up environment mocks
+    envMock.cleanup();
   });
 
   it('verifies webhook signature and processes checkout.session.completed events', async () => {
@@ -62,7 +75,7 @@ describe('stripe-webhook API', () => {
     };
 
     // Mock webhook verification
-    (stripe.webhooks.constructEvent as any).mockReturnValue(mockEvent);
+    constructEventMock.mockReturnValue(mockEvent);
 
     // Create request with signature
     const request = new Request('http://localhost:4321/api/webhooks/stripe', {
@@ -130,7 +143,7 @@ describe('stripe-webhook API', () => {
 
   it('handles signature verification errors', async () => {
     // Mock webhook verification throwing an error
-    (stripe.webhooks.constructEvent as any).mockImplementation(() => {
+    constructEventMock.mockImplementation(() => {
       throw new Error('Invalid signature');
     });
 
@@ -170,7 +183,7 @@ describe('stripe-webhook API', () => {
     };
 
     // Mock webhook verification
-    (stripe.webhooks.constructEvent as any).mockReturnValue(mockEvent);
+    constructEventMock.mockReturnValue(mockEvent);
 
     // Create request
     const request = new Request('http://localhost:4321/api/webhooks/stripe', {
