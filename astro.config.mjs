@@ -9,14 +9,30 @@ import partytown from '@astrojs/partytown';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://abowlofred.com', // Production site URL
-  output: 'static', // Updated from 'hybrid' to 'static' for Astro v5 compatibility
+  site: 'https://abowlofred.com',
+  output: 'static',
   adapter: netlify({
-    imageCDN: true, // Enable Netlify's image CDN
-    cacheOnDemandPages: true, // Enable caching for better performance
+    imageCDN: true,
+    cacheOnDemandPages: true,
   }),
   vite: {
-    plugins: [tailwindcss()],
+    plugins: [
+      tailwindcss(),
+      {
+        name: 'exclude-test-files',
+        resolveId(id) {
+          // Prevent test files from being processed during development
+          if (
+            id.includes('__tests__') ||
+            id.endsWith('.test.ts') ||
+            id.endsWith('.test.tsx')
+          ) {
+            return { id, external: true };
+          }
+          return null;
+        },
+      },
+    ],
   },
   integrations: [
     react(),
@@ -24,7 +40,7 @@ export default defineConfig({
     partytown({
       config: {
         debug: import.meta.env.DEV,
-        forward: ['dataLayer.push'], // Forward GA4 events
+        forward: ['dataLayer.push'],
       },
     }),
   ],

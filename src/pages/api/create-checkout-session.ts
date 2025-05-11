@@ -4,7 +4,7 @@ import stripe from '@/lib/api/stripe-client';
 // Disable static generation for this API route
 export const prerender = false;
 
-export const post: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request }) => {
   try {
     // Parse request body from form submission
     const data = await request.json();
@@ -78,4 +78,17 @@ export const post: APIRoute = async ({ request }) => {
       }
     );
   }
+};
+
+// Optional: Add other HTTP methods if needed
+export const GET: APIRoute = async () => {
+  return new Response(
+    JSON.stringify({ message: 'This endpoint requires a POST request' }),
+    {
+      status: 405,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
 };

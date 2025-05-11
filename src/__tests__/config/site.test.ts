@@ -3,16 +3,10 @@ import { setupEnvMocks } from '@tests/setup/mocks/env-mocks';
 import config, { type SiteConfig } from '@/config/site';
 
 describe('Site Configuration', () => {
-  // Store the original module so we can re-import it with different env vars
-  let originalModule: typeof config;
-
   beforeEach(() => {
     // Clear any mocked environment variables between tests
     vi.resetModules();
     vi.unstubAllEnvs();
-
-    // Store original module
-    originalModule = { ...config };
   });
 
   afterEach(() => {
