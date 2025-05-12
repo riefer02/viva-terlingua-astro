@@ -31,21 +31,21 @@ export const POST: APIRoute = async ({ request }) => {
       const metadata = session.metadata;
 
       // Create ticket record in Strapi
-      await strapi.collection('ticket-purchases').create({
+      await strapi.collection('ticket-holders').create({
         data: {
-          sessionId: session.id,
-          firstName: metadata?.firstName,
-          lastName: metadata?.lastName,
+          transaction_id: session.id,
+          first_name: metadata?.firstName,
+          last_name: metadata?.lastName,
           email: metadata?.email,
-          phone: metadata?.phone,
-          ticketCount: session.line_items?.data[0]?.quantity || 1,
-          isGift: metadata?.isGift === 'true',
-          recipientFirstName: metadata?.recipientFirstName,
-          recipientLastName: metadata?.recipientLastName,
-          purchaseDate: new Date().toISOString(),
-          status: 'completed',
-          totalPaid: session.amount_total,
-          paymentId: session.payment_intent as string,
+          phone_number: metadata?.phone
+            ? metadata.phone.replace(/\D/g, '')
+            : null,
+          number_of_tickets: session.line_items?.data[0]?.quantity || 1,
+          recipient_first_name: metadata?.recipientFirstName,
+          recipient_last_name: metadata?.recipientLastName,
+          time_of_purchase: new Date().toISOString(),
+          cook_off_year: new Date().getFullYear(),
+          customer_id: session.payment_intent as string,
         },
       });
 

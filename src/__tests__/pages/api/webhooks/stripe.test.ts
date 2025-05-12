@@ -151,22 +151,23 @@ describe('stripe-webhook API', () => {
     );
 
     // Verify Strapi was called to create a ticket record
-    expect(strapi.collection).toHaveBeenCalledWith('ticket-purchases');
+    expect(strapi.collection).toHaveBeenCalledWith('ticket-holders');
 
     // Get the create mock directly from our implementation
-    const createMock = vi.mocked(strapi.collection('ticket-purchases').create);
+    const createMock = vi.mocked(strapi.collection('ticket-holders').create);
     expect(createMock).toHaveBeenCalledWith({
       data: expect.objectContaining({
-        sessionId: 'cs_test_123',
-        firstName: 'John',
-        lastName: 'Doe',
+        transaction_id: 'cs_test_123',
+        first_name: 'John',
+        last_name: 'Doe',
         email: 'john@example.com',
-        phone: '(555) 555-5555',
-        ticketCount: 2,
-        isGift: false,
-        status: 'completed',
-        totalPaid: 5000,
-        paymentId: 'pi_123',
+        phone_number: '5555555555',
+        number_of_tickets: 2,
+        cook_off_year: expect.any(Number),
+        time_of_purchase: expect.any(String),
+        customer_id: 'pi_123',
+        recipient_first_name: undefined,
+        recipient_last_name: undefined,
       }),
     });
   });
