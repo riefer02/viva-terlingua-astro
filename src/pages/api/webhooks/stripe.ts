@@ -5,7 +5,7 @@ import strapi from '@/lib/api/strapi-client';
 // Disable static generation for this API route
 export const prerender = false;
 
-export const post: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request }) => {
   try {
     // Get the webhook signature
     const signature = request.headers.get('stripe-signature');

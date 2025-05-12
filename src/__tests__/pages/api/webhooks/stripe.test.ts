@@ -19,7 +19,7 @@ vi.mock('@/lib/api/strapi-client', () => {
 });
 
 // Import the component after mocking
-import { post } from '@/pages/api/webhooks/stripe';
+import { POST } from '@/pages/api/webhooks/stripe';
 
 // Setup environment variables
 const envMock = setupEnvMocks({
@@ -136,7 +136,7 @@ describe('stripe-webhook API', () => {
     request.text = vi.fn().mockResolvedValue(JSON.stringify(mockEvent));
 
     // Call the webhook handler
-    const response = await post({ request } as any);
+    const response = await POST({ request } as any);
     const responseData = await response.json();
 
     // Verify response
@@ -181,7 +181,7 @@ describe('stripe-webhook API', () => {
     });
 
     // Call the webhook handler
-    const response = await post({ request } as any);
+    const response = await POST({ request } as any);
 
     // Verify response
     expect(response.status).toBe(400);
@@ -210,7 +210,7 @@ describe('stripe-webhook API', () => {
     request.text = vi.fn().mockResolvedValue('{}');
 
     // Call the webhook handler
-    const response = await post({ request } as any);
+    const response = await POST({ request } as any);
     const responseData = await response.json();
 
     // Verify error response
@@ -256,7 +256,7 @@ describe('stripe-webhook API', () => {
     request.text = vi.fn().mockResolvedValue(JSON.stringify(mockEvent));
 
     // Call the webhook handler
-    const response = await post({ request } as any);
+    const response = await POST({ request } as any);
 
     // Verify response is still successful
     expect(response.status).toBe(200);
