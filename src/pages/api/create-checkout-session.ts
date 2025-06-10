@@ -1,12 +1,10 @@
 import type { APIRoute } from 'astro';
 import stripe from '@/lib/api/stripe-client';
 
-// Disable static generation for this API route
 export const prerender = false;
 
 export const POST: APIRoute = async ({ request }) => {
   try {
-    // Parse request body from form submission
     const data = await request.json();
     const {
       firstName,
@@ -19,13 +17,11 @@ export const POST: APIRoute = async ({ request }) => {
       recipientLastName,
     } = data;
 
-    // Build client reference ID to store customer data
     let clientReferenceId = `${firstName}—${lastName}—${ticketCount}—${phone}—${Date.now()}`;
     if (isGift) {
       clientReferenceId += `—${recipientFirstName}—${recipientLastName}`;
     }
 
-    // Create checkout session
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       mode: 'payment',
@@ -50,7 +46,6 @@ export const POST: APIRoute = async ({ request }) => {
       },
     });
 
-    // Return session ID and URL to client
     return new Response(
       JSON.stringify({
         id: session.id,
@@ -80,7 +75,6 @@ export const POST: APIRoute = async ({ request }) => {
   }
 };
 
-// Optional: Add other HTTP methods if needed
 export const GET: APIRoute = async () => {
   return new Response(
     JSON.stringify({ message: 'This endpoint requires a POST request' }),

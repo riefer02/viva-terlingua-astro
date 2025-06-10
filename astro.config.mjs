@@ -7,7 +7,6 @@ import { redirects } from './src/config/redirects';
 import sitemap from '@astrojs/sitemap';
 import partytown from '@astrojs/partytown';
 
-// https://astro.build/config
 export default defineConfig({
   site: 'https://abowlofred.com',
   output: 'static',
@@ -16,23 +15,7 @@ export default defineConfig({
     cacheOnDemandPages: true,
   }),
   vite: {
-    plugins: [
-      tailwindcss(),
-      {
-        name: 'exclude-test-files',
-        resolveId(id) {
-          // Prevent test files from being processed during development
-          if (
-            id.includes('__tests__') ||
-            id.endsWith('.test.ts') ||
-            id.endsWith('.test.tsx')
-          ) {
-            return { id, external: true };
-          }
-          return null;
-        },
-      },
-    ],
+    plugins: [tailwindcss()],
   },
   integrations: [
     react(),

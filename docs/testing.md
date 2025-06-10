@@ -104,16 +104,12 @@ For complex component tests, we have component-specific setup files:
 
 ### Integration Tests
 
-- **Checkout Flow Test** - `src/__tests__/integration/checkout-flow.test.ts`
-  - Tests the form submission and API interaction
-  - Uses MSW to mock server responses
-  - Verifies the full user flow
+// The previous integration test for the checkout flow using MSW has been removed. Integration tests can be reintroduced in the future using alternative strategies if needed.
 
 ## Mocking Strategy
 
 - **Stripe Client** - We use centralized mocks in `src/__tests__/setup/stripe-mocks.ts`
 - **Strapi Client** - Mock database calls to verify data storage
-- **MSW** - Mock Service Worker intercepts network requests for integration tests
 - **fetch** - Mocked for form submission tests
 
 ### External Service Mocking

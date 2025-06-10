@@ -9,7 +9,7 @@ import Features from '@/components/Features.astro';
 import BlogCarouselSection from '@/components/blog/BlogCarouselSection.astro';
 import config from '@/config/site';
 import strapi from '@/lib/api/strapi-client';
-import type { HomePageResponse, HomePage } from '@/types/strapi';
+import type { HomePage } from '@/types/strapi';
 
 const response = await strapi.single('home-page').find({
   populate: {
