@@ -7,13 +7,12 @@ import { redirects } from './src/config/redirects';
 import sitemap from '@astrojs/sitemap';
 import partytown from '@astrojs/partytown';
 
-// https://astro.build/config
 export default defineConfig({
-  site: 'https://abowlofred.com', // Production site URL
+  site: 'https://abowlofred.com',
   output: 'static',
   adapter: netlify({
-    imageCDN: true, // Enable Netlify's image CDN
-    cacheOnDemandPages: true, // Enable caching for better performance
+    imageCDN: true,
+    cacheOnDemandPages: true,
   }),
   vite: {
     plugins: [tailwindcss()],
@@ -24,7 +23,7 @@ export default defineConfig({
     partytown({
       config: {
         debug: import.meta.env.DEV,
-        forward: ['dataLayer.push'], // Forward GA4 events
+        forward: ['dataLayer.push'],
       },
     }),
   ],

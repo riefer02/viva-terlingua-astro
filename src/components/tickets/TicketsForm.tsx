@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import type { Resolver } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Button } from '@/components/ui/button';
@@ -17,7 +18,6 @@ import {
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { getStripe } from '@/lib/stripe';
 
 // Phone regex for US/CA numbers
 const phoneRegex = /^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/;
@@ -63,8 +63,11 @@ const TicketsForm = () => {
     watch,
     formState: { errors },
   } = useForm<TicketFormValues>({
-    // @ts-expect-error -- Type instantiation error with complex Zod schema
-    resolver: zodResolver(ticketFormSchema),
+    // The zodResolver has a known type issue with complex Zod schemas
+    resolver: zodResolver(ticketFormSchema) as unknown as Resolver<
+      TicketFormValues,
+      unknown
+    >,
     mode: 'onChange',
     defaultValues: {
       firstName: '',
@@ -86,37 +89,24 @@ const TicketsForm = () => {
       setLoading(true);
       setError(null);
 
-      let clientReferenceId = `${data.firstName}—${data.lastName}—${
-        data.ticketCount
-      }—${data.phone}—${Date.now()}`;
-
-      if (data.isGift) {
-        clientReferenceId += `—${data.recipientFirstName}—${data.recipientLastName}`;
-      }
-
-      const stripe = await getStripe();
-
-      if (!stripe) {
-        throw new Error('Stripe failed to initialize');
-      }
-
-      const { error: stripeError } = await stripe.redirectToCheckout({
-        mode: 'payment',
-        lineItems: [
-          {
-            price: import.meta.env.PUBLIC_STRIPE_PRICE_ID,
-            quantity: data.ticketCount,
-          },
-        ],
-        customerEmail: data.email,
-        successUrl: `${import.meta.env.SITE_URL}/thank-you?session_id={CHECKOUT_SESSION_ID}`,
-        cancelUrl: `${import.meta.env.SITE_URL}/tickets`,
-        clientReferenceId,
+      // Call server-side API to create Stripe checkout session
+      const response = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
       });
 
-      if (stripeError) {
-        throw new Error(stripeError.message);
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to create checkout session');
       }
+
+      const { url } = await response.json();
+
+      // Redirect to Stripe Checkout
+      window.location.href = url;
     } catch (err) {
       setError(
         err instanceof Error ? err.message : 'An error occurred during checkout'

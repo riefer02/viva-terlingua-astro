@@ -4,49 +4,52 @@ import { cleanup } from '@testing-library/react';
 import { afterEach, beforeEach, vi } from 'vitest';
 import { experimental_AstroContainer as AstroContainer } from 'astro/container';
 
-// Mock TextEncoder and TextDecoder for Node environment
-class NodeTextEncoder implements TextEncoder {
-  encoding = 'utf-8';
-  encode(input?: string): Uint8Array {
-    return new Uint8Array(Buffer.from(input || ''));
-  }
-  encodeInto(
-    source: string,
-    destination: Uint8Array
-  ): TextEncoderEncodeIntoResult {
-    const encoded = this.encode(source);
-    destination.set(encoded);
-    return {
-      read: source.length,
-      written: encoded.length,
-    };
-  }
-}
+// Import centralized mocks
+import { setupBrowserEnvironment } from '@tests/setup/mocks/browser-mocks';
+import { setupFetchMock } from '@tests/setup/mocks/api-mocks';
+import { setupEnvMocks } from '@tests/setup/mocks/env-mocks';
 
-class NodeTextDecoder implements TextDecoder {
-  encoding = 'utf-8';
-  fatal = false;
-  ignoreBOM = false;
-  decode(input?: BufferSource | undefined): string {
-    if (!input) return '';
-    return Buffer.from(input as Uint8Array).toString();
-  }
-}
+/**
+ * Test setup file for Vitest
+ *
+ * This file handles necessary polyfills and global setup for tests.
+ * It integrates the centralized mock system for consistent test behavior.
+ *
+ * The main issues addressed here:
+ * 1. TextEncoder/Decoder - esbuild checks require proper implementations
+ * 2. Browser API mocks - window, navigator, clipboard, etc.
+ * 3. Fetch API mocks - for consistent API testing
+ * 4. Environment variable mocks - for consistent environment
+ * 5. Astro Container - needed for testing Astro components
+ */
 
-globalThis.TextEncoder = NodeTextEncoder as unknown as typeof TextEncoder;
-globalThis.TextDecoder = NodeTextDecoder as unknown as typeof TextDecoder;
-
-let container: Awaited<ReturnType<typeof AstroContainer.create>> | null = null;
-
-beforeEach(async () => {
-  container = await AstroContainer.create();
-});
-
-afterEach(() => {
-  container = null;
-});
-
-// runs a cleanup after each test case
+// Clear React testing library's render
 afterEach(() => {
   cleanup();
 });
+
+// Initialize browser environment before each test
+beforeEach(() => {
+  // Setup centralized mocks
+  setupBrowserEnvironment();
+  setupFetchMock();
+  setupEnvMocks();
+
+  // Reset all mocks before each test
+  vi.resetAllMocks();
+});
+
+// Polyfill TextEncoder/Decoder for esbuild checks
+if (typeof global.TextEncoder === 'undefined') {
+  const { TextEncoder, TextDecoder } = require('util');
+  global.TextEncoder = TextEncoder;
+  global.TextDecoder = TextDecoder;
+  global.ArrayBuffer = ArrayBuffer;
+}
+
+// Make AstroContainer available to tests - avoid directly manipulating global
+try {
+  (global as any).AstroContainer = AstroContainer;
+} catch (e) {
+  console.warn('Could not set AstroContainer:', e);
+}
