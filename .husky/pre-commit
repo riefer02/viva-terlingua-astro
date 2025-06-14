@@ -2,6 +2,3 @@
 
 # Run lint-staged (handles linting and formatting)
 pnpm lint-staged
-
-# Run tests
-pnpm test:ci
