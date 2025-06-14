@@ -65,34 +65,17 @@ if (sessionId) {
       {
         sessionData ? (
           <div class="bg-muted p-6 rounded-lg space-y-4">
-            <h2 class="scroll-m-20 text-3xl font-semibold tracking-tight first:mt-0">
-              Order Confirmation
-            </h2>
-            <p class="leading-7 [&:not(:first-child)]:mt-6">
-              Thank you, {sessionData.customerName}!
-            </p>
-            <p class="leading-7 [&:not(:first-child)]:mt-6">
-              Your ticket purchase has been confirmed.
-            </p>
-            {/* <p>
-              We've sent a confirmation email to {sessionData.customerEmail}
-            </p> */}
+            <h2 class="text-3xl font-semibold">Order Confirmation</h2>
+            <p>Thank you, {sessionData.customerName}!</p>
+            <p>Your ticket purchase has been confirmed.</p>
             <div class="border-t border-border pt-4 mt-4">
-              <h3 class="scroll-m-20 text-2xl font-semibold tracking-tight">
-                Order Details
-              </h3>
-              <p class="leading-7 [&:not(:first-child)]:mt-6">
-                Tickets: {sessionData.ticketCount}
-              </p>
-              <p class="leading-7 [&:not(:first-child)]:mt-6">
-                Total: ${sessionData.totalAmount}
-              </p>
+              <h3 class="text-2xl font-semibold">Order Details</h3>
+              <p>Tickets: {sessionData.ticketCount}</p>
+              <p>Total: ${sessionData.totalAmount}</p>
             </div>
           </div>
         ) : (
-          <p class="text-xl text-muted-foreground leading-7 [&:not(:first-child)]:mt-6">
-            {pageData.message}
-          </p>
+          <p class="text-xl text-muted-foreground">{pageData.message}</p>
         )
       }
     </div>
