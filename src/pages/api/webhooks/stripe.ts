@@ -27,8 +27,6 @@ export const POST: APIRoute = async ({ request }) => {
       const session = event.data.object;
       const metadata = session.metadata;
 
-      console.log('Stripe session metadata:', metadata);
-
       if (!metadata?.email || !session.id || !session.payment_intent) {
         throw new Error(
           'Missing required fields: email, session ID, or payment intent'
@@ -60,11 +58,6 @@ export const POST: APIRoute = async ({ request }) => {
         },
       };
 
-      console.log(
-        'Sending to Strapi:',
-        JSON.stringify(ticketHolderData, null, 2)
-      );
-
       try {
         const response = await fetch(`${STRAPI_API_URL}/ticket-holders`, {
           method: 'POST',
@@ -75,7 +68,6 @@ export const POST: APIRoute = async ({ request }) => {
           body: JSON.stringify(ticketHolderData),
         });
         const result = await response.json();
-        console.log('Strapi response:', result);
         if (!response.ok) {
           throw new Error(
             `Strapi error: ${response.status} ${JSON.stringify(result)}`
